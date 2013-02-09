@@ -10,7 +10,7 @@ import "io"
 import "time"
 
 type LockServer struct {
-  mu sync.Mutex
+  mu sync.Mutex            // Will be used to synchronize access to the LockServer instance
   l net.Listener
   dead bool  // for test_test.go
   dying bool // for test_test.go
@@ -18,20 +18,20 @@ type LockServer struct {
   am_primary bool // am I the primary?
   backup string   // backup's port
 
-  // for each lock name, is it locked?
+  // string lockname keys and bool values indicating whether lock is locked.
+  // Reading non-present keys will return a zero valued bool, i.e. false.
   locks map[string]bool
 }
 
 
-//
-// server Lock RPC handler.
-//
-// you will have to modify this function
-//
+/* server Lock RPC handler method.
+   If the lockname was held, the client reply is an unsuccesful false. If the 
+   lockname was not held, the lockname is held (or locked) and the client response
+   is a successful true.
+*/
 func (ls *LockServer) Lock(args *LockArgs, reply *LockReply) error {
   ls.mu.Lock()
   defer ls.mu.Unlock()
-
 
   locked, _ := ls.locks[args.Lockname]
 
@@ -45,10 +45,25 @@ func (ls *LockServer) Lock(args *LockArgs, reply *LockReply) error {
   return nil
 }
 
-//
-// server Unlock RPC handler.
-//
+/* server Unlock RPC handler method.
+   If lockname was held, the lockname is released and the client reply is a successful
+   true. If lockname was not held, the client reply is an unsuccessful false (and the
+   lockname does not need to be released).
+*/
 func (ls *LockServer) Unlock(args *UnlockArgs, reply *UnlockReply) error {
+    ls.mu.Lock()
+    defer ls.mu.Unlock()
+
+    locked, _ := ls.locks[args.Lockname]
+    if locked {
+      // lockname is currently locked, unlock it.
+      reply.OK = true
+      ls.locks[args.Lockname] = false
+    } else {
+      // lockname not currently locked.
+      reply.OK = false
+    }
+
 
   // Your code here.
 

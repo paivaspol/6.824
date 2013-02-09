@@ -66,9 +66,10 @@ func (ck *Clerk) Lock(lockname string) bool {
   // send an RPC request, wait for the reply.
   ok := call(ck.servers[0], "LockServer.Lock", args, &reply)
   if ok == false {
+    // Call was not able to contact server or a timeout occurred.
     return false
   }
-  
+  // Return the server's response to the client program.
   return reply.OK
 }
 
@@ -80,8 +81,17 @@ func (ck *Clerk) Lock(lockname string) bool {
 //
 
 func (ck *Clerk) Unlock(lockname string) bool {
+  // prepare the arguments
+  args := &UnlockArgs{}      // Declare and initialize struct with zero-valued fields. Return ptr to the UnlockArgs struct.
+  args.Lockname = lockname
+  var reply UnlockReply      // Declare 
 
-  // Your code here.
-
-  return false
+  // send an RPC request, wait for the reply.
+  ok := call(ck.servers[0], "LockServer.Unlock", args, &reply)
+  if ok == false {
+    // Call was not able to contact server or a timeout occurred.
+    return false
+  }
+  // Return the server's response to the client program.
+  return reply.OK
 }
