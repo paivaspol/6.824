@@ -1,13 +1,21 @@
 package lockservice
 
-import "net/rpc"
+import (
+  "net/rpc"
+  "fmt"
+)
 
 //
-// the lockservice Clerk lives in the client
+// the lockservice Clerk lives in the client and wrap
 // and maintains a little state.
 //
+/*
+  lockservice Clerk lives in the client and wraps the server's exposed LockServer methods.
+  Clerk provides client programs with stubs for LockServer's Lock and Unlock methods; calling the stubs
+  generated RPC calls which request the appropriate service and return the response.
+*/
 type Clerk struct {
-  servers [2]string // primary port, backup port
+  servers [2]string      // primary port, backup port
   // Your definitions here.
 }
 
@@ -17,6 +25,71 @@ func MakeClerk(primary string, backup string) *Clerk {
   ck.servers[1] = backup
   // Your initialization code here.
   return ck
+}
+
+//
+// ask the lock service for a lock.
+// returns true if the lock service
+// granted the lock, false otherwise.
+//
+// you will have to modify this function.
+//
+func (ck *Clerk) Lock(lockname string) bool {
+  // prepare the arguments.
+  args := &LockArgs{}
+  args.Lockname = lockname
+  var reply LockReply
+  
+  // send an RPC request, wait for the reply.
+  ok := call(ck.servers[0], "LockServer.Lock", args, &reply)
+
+  if ok == false {
+    // Call was not able to contact primary server.
+    fmt.Println("Contacting backup for Lock")
+    retry := call(ck.servers[1], "LockServer.Lock", args, &reply)
+    
+    if retry == false {
+      // Cannot contact either server. This case is outside the scope of lab 1.
+      return false
+    }
+    // Return the backup server's response to the client program.
+    return reply.OK
+  }
+
+  // Return the primary server's response to the client program.
+  return reply.OK
+}
+
+
+//
+// ask the lock service to unlock a lock.
+// returns true if the lock was previously held,
+// false otherwise.
+//
+func (ck *Clerk) Unlock(lockname string) bool {
+  // prepare the arguments
+  args := &UnlockArgs{}      // Declare and initialize struct with zero-valued fields. Return ptr to the UnlockArgs struct.
+  args.Lockname = lockname
+  var reply UnlockReply      // Declare 
+
+  // send an RPC request, wait for the reply.
+  ok := call(ck.servers[0], "LockServer.Unlock", args, &reply)
+
+  if ok == false {
+    // Call was not able to contact primary server.
+    fmt.Println("Contacting backup for Unlock")
+    retry := call(ck.servers[1], "LockServer.Unlock", args, &reply)
+
+    if retry == false {
+      // Cannot contact either server. This case is outside the scope of lab 1.
+      return false
+    }
+    // Return the backup server's response to the client program
+    return reply.OK
+  }
+
+  // Return the primary server's response to the client program.
+  return reply.OK
 }
 
 //
@@ -50,48 +123,4 @@ func call(srv string, rpcname string,
   return false
 }
 
-//
-// ask the lock service for a lock.
-// returns true if the lock service
-// granted the lock, false otherwise.
-//
-// you will have to modify this function.
-//
-func (ck *Clerk) Lock(lockname string) bool {
-  // prepare the arguments.
-  args := &LockArgs{}
-  args.Lockname = lockname
-  var reply LockReply
-  
-  // send an RPC request, wait for the reply.
-  ok := call(ck.servers[0], "LockServer.Lock", args, &reply)
-  if ok == false {
-    // Call was not able to contact server or a timeout occurred.
-    return false
-  }
-  // Return the server's response to the client program.
-  return reply.OK
-}
 
-
-//
-// ask the lock service to unlock a lock.
-// returns true if the lock was previously held,
-// false otherwise.
-//
-
-func (ck *Clerk) Unlock(lockname string) bool {
-  // prepare the arguments
-  args := &UnlockArgs{}      // Declare and initialize struct with zero-valued fields. Return ptr to the UnlockArgs struct.
-  args.Lockname = lockname
-  var reply UnlockReply      // Declare 
-
-  // send an RPC request, wait for the reply.
-  ok := call(ck.servers[0], "LockServer.Unlock", args, &reply)
-  if ok == false {
-    // Call was not able to contact server or a timeout occurred.
-    return false
-  }
-  // Return the server's response to the client program.
-  return reply.OK
-}

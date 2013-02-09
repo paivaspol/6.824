@@ -38,6 +38,11 @@ func (ls *LockServer) Lock(args *LockArgs, reply *LockReply) error {
   if locked {
     reply.OK = false
   } else {
+    if ls.am_primary {
+      fmt.Println("Sending to backup server")
+      ok := call(ls.backup, "LockServer.Lock", args, &reply)
+      fmt.Println(ok)
+    }
     reply.OK = true
     ls.locks[args.Lockname] = true
   }
@@ -57,6 +62,11 @@ func (ls *LockServer) Unlock(args *UnlockArgs, reply *UnlockReply) error {
     locked, _ := ls.locks[args.Lockname]
     if locked {
       // lockname is currently locked, unlock it.
+      if ls.am_primary {
+        fmt.Println("Sending to backup server")
+        ok := call(ls.backup, "LockServer.Unlock", args, &reply)
+        fmt.Println(ok)
+      }
       reply.OK = true
       ls.locks[args.Lockname] = false
     } else {
