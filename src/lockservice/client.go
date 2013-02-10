@@ -5,10 +5,6 @@ import (
   "fmt"
 )
 
-//
-// the lockservice Clerk lives in the client and wrap
-// and maintains a little state.
-//
 /*
   lockservice Clerk lives in the client and wraps the server's exposed LockServer methods.
   Clerk provides client programs with stubs for LockServer's Lock and Unlock methods; calling the stubs
@@ -67,7 +63,6 @@ func (ck *Clerk) Lock(lockname string) bool {
 
   if ok == false {
     // Call was not able to contact primary server.
-    fmt.Println("Contacting backup for Lock")
     retry := call(ck.servers[1], "LockServer.Lock", args, &reply)
     
     if retry == false {
@@ -101,7 +96,6 @@ func (ck *Clerk) Unlock(lockname string) bool {
 
   if ok == false {
     // Call was not able to contact primary server.
-    fmt.Println("Contacting backup for Unlock")
     retry := call(ck.servers[1], "LockServer.Unlock", args, &reply)
 
     if retry == false {

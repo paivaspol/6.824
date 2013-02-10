@@ -43,11 +43,11 @@ func (ls *LockServer) Lock(args *LockArgs, reply *LockReply) error {
     if locked {
       // lockname is currently locked, someone else may not lock it.
       reply.OK = false
+      call(ls.backup, "LockServer.Lock", args, &reply)
     } else {
       // lockname is not locked. Lock it, notify backup server of the change to the locks map, and return true.
       ls.locks[args.Lockname] = true
       reply.OK = true
-      fmt.Println("Notify backup server of Lock")
       call(ls.backup, "LockServer.Lock", args, &reply)
       // If rpc to backup fails, we technically do not need to bother sending it updates anymore since lab 1 guarantees at most 1 fail-stop.
     }
@@ -57,30 +57,38 @@ func (ls *LockServer) Lock(args *LockArgs, reply *LockReply) error {
   } 
 
   // Backup Server
-  fmt.Println(ls.old_requests)
-  fmt.Println(args.Client_id)
-  fmt.Println(args.Request_id)
   /* Backup must check whether it has seen the request before. Primary does not need to check because primary 
   never receives updates from another server, only directly from the client (and there are no network failures 
   so either primary gets the request and responds, or the primary crashes at some point and is no longer expected 
   to maintain synchronized data - backup is in charge now).*/
-  ok_status, present := ls.old_requests[args.Client_id][args.Request_id]
-  fmt.Println(ok_status, present)
+  old_status, present := ls.old_requests[args.Client_id][args.Request_id]
   if present {
-    fmt.Println("We've already seen this message!!!!")
-    reply.OK = ok_status
+    reply.OK = old_status
     return nil
   }
 
   if locked {
     // lockname is currently locked, someone else may not lock it.
     reply.OK = false
-    ls.old_requests[args.Client_id] = map[int]bool{args.Request_id: false}
+    // Update the old_requests map.
+    _, present := ls.old_requests[args.Client_id]
+    if present {
+      ls.old_requests[args.Client_id][args.Request_id] = false
+    } else {
+      ls.old_requests[args.Client_id] = map[int]bool{args.Request_id: false}
+    }
+
   } else {
     // lockname is not locked. Lock it and return true.
     ls.locks[args.Lockname] = true
     reply.OK = true
-    ls.old_requests[args.Client_id] = map[int]bool{args.Request_id: true}
+    // Update the old_requests map.
+    _, present := ls.old_requests[args.Client_id]
+    if present {
+      ls.old_requests[args.Client_id][args.Request_id] = true
+    } else {
+      ls.old_requests[args.Client_id] = map[int]bool{args.Request_id: true}
+    }
   }
   // Done preparing the response.
   return nil 
@@ -106,12 +114,12 @@ func (ls *LockServer) Unlock(args *UnlockArgs, reply *UnlockReply) error {
       // lockname is locked. Unlock it, notify backup server of the change, and return true.
       ls.locks[args.Lockname] = false
       reply.OK = true
-      fmt.Println("Notify backup server of Unlock")
       call(ls.backup, "LockServer.Unlock", args, &reply)
       // If rpc to backup fails, backup must have failed and we technically do not need to update it any more.
     } else {
       // lockname is not locked. Return false reply.
       reply.OK = false
+      call(ls.backup, "LockServer.Unlock", args, &reply)
     }
     // Done preparing the response.
     return nil
@@ -119,13 +127,33 @@ func (ls *LockServer) Unlock(args *UnlockArgs, reply *UnlockReply) error {
 
   // Backup Server
 
+  old_status, present := ls.old_requests[args.Client_id][args.Request_id]
+  if present {
+    reply.OK = old_status
+    return nil
+  }
+
   if locked {
     // lockname is locked. Unlock it, notify backup server of the change, and return true.
     ls.locks[args.Lockname] = false
     reply.OK = true
+    // Update the old_requests dictionary.
+    _, present := ls.old_requests[args.Client_id]
+    if present {
+      ls.old_requests[args.Client_id][args.Request_id] = true
+    } else {
+      ls.old_requests[args.Client_id] = map[int]bool{args.Request_id: true}
+    }
   } else {
     // lockname is not locked. Return false reply.
     reply.OK = false
+    // Update the old_requests dictionary.
+    _, present := ls.old_requests[args.Client_id]
+    if present {
+      ls.old_requests[args.Client_id][args.Request_id] = false
+    } else {
+      ls.old_requests[args.Client_id] = map[int]bool{args.Request_id: false}
+    }
   }
   // Done preparing the response.
   return nil 
