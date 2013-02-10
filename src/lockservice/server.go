@@ -21,6 +21,7 @@ type LockServer struct {
   // string lockname keys and bool values indicating whether lock is locked.
   // Reading non-present keys will return a zero valued bool, i.e. false.
   locks map[string]bool
+
 }
 
 
@@ -35,20 +36,40 @@ func (ls *LockServer) Lock(args *LockArgs, reply *LockReply) error {
 
   locked, _ := ls.locks[args.Lockname]
 
+  if ls.am_primary {
+    // Primary Server
+
+    if locked {
+      // lockname is currently locked, someone else may not lock it.
+      reply.OK = false
+    } else {
+      // lockname is not locked. Lock it, notify backup server of the change to the locks map, and return true.
+      ls.locks[args.Lockname] = true
+      reply.OK = true
+      fmt.Println("Notify backup server of Lock")
+      call(ls.backup, "LockServer.Lock", args, &reply)
+      // If rpc to backup fails, we technically do not need to bother sending it updates anymore since lab 1 guarantees at most 1 fail-stop.
+    }
+    // Done preparing the response.
+    return nil
+
+  } 
+
+  // Backup Server
+
   if locked {
+    // lockname is currently locked, someone else may not lock it.
     reply.OK = false
   } else {
-    if ls.am_primary {
-      fmt.Println("Sending to backup server")
-      ok := call(ls.backup, "LockServer.Lock", args, &reply)
-      fmt.Println(ok)
-    }
-    reply.OK = true
+    // lockname is not locked. Lock it and return true.
     ls.locks[args.Lockname] = true
+    reply.OK = true
   }
+  // Done preparing the response.
+  return nil 
 
-  return nil
 }
+
 
 /* server Unlock RPC handler method.
    If lockname was held, the lockname is released and the client reply is a successful
@@ -56,29 +77,45 @@ func (ls *LockServer) Lock(args *LockArgs, reply *LockReply) error {
    lockname does not need to be released).
 */
 func (ls *LockServer) Unlock(args *UnlockArgs, reply *UnlockReply) error {
-    ls.mu.Lock()
-    defer ls.mu.Unlock()
+  ls.mu.Lock()
+  defer ls.mu.Unlock()
 
-    locked, _ := ls.locks[args.Lockname]
+  locked, _ := ls.locks[args.Lockname]
+
+  if ls.am_primary {
+    // Primary Server
+
     if locked {
-      // lockname is currently locked, unlock it.
-      if ls.am_primary {
-        fmt.Println("Sending to backup server")
-        ok := call(ls.backup, "LockServer.Unlock", args, &reply)
-        fmt.Println(ok)
-      }
-      reply.OK = true
+      // lockname is locked. Unlock it, notify backup server of the change, and return true.
       ls.locks[args.Lockname] = false
+      reply.OK = true
+      fmt.Println("Notify backup server of Unlock")
+      call(ls.backup, "LockServer.Unlock", args, &reply)
+      // If rpc to backup fails, backup must have failed and we technically do not need to update it any more.
     } else {
-      // lockname not currently locked.
+      // lockname is not locked. Return false reply.
       reply.OK = false
     }
+    // Done preparing the response.
+    return nil
+  } 
 
+  // Backup Server
 
-  // Your code here.
+  if locked {
+    // lockname is locked. Unlock it, notify backup server of the change, and return true.
+    ls.locks[args.Lockname] = false
+    reply.OK = true
+  } else {
+    // lockname is not locked. Return false reply.
+    reply.OK = false
+  }
+  // Done preparing the response.
+  return nil 
 
-  return nil
 }
+
+
 
 //
 // tell the server to shut itself down.
