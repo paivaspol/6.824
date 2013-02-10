@@ -15,15 +15,35 @@ import (
   generated RPC calls which request the appropriate service and return the response.
 */
 type Clerk struct {
-  servers [2]string      // primary port, backup port
-  // Your definitions here.
+  servers [2]string                 // primary port, backup port
+  id int                            // unqiue clerk_id serves as a client identifier
+  request_id_generator func() int   // func to generate next unqiue(among other requests by this Clerk) request id.
 }
+
+/*
+  make_id_generator returns a function which will generate unique id's based on an enclosed base_id
+  and incrementing the base_id by one each time the id_generator is called.
+  The base_id starts at 0 so the first returned id is 1. This was done since it would be possible to 
+  confuse an id of 0 with a default zero-valued int field (also 0).
+*/
+func make_id_generator() (func() int) {
+  base_id := 0
+  return func() int {
+    base_id += 1
+    return base_id
+  }
+}
+
+// Unique id generator for initializing Clerks
+var clerk_id_generator = make_id_generator()
+
 
 func MakeClerk(primary string, backup string) *Clerk {
   ck := new(Clerk)
   ck.servers[0] = primary
   ck.servers[1] = backup
-  // Your initialization code here.
+  ck.id = clerk_id_generator()              
+  ck.request_id_generator = make_id_generator()
   return ck
 }
 
@@ -36,9 +56,11 @@ func MakeClerk(primary string, backup string) *Clerk {
 //
 func (ck *Clerk) Lock(lockname string) bool {
   // prepare the arguments.
-  args := &LockArgs{}
+  args := &LockArgs{}                           // Declare and init struct with zero-valued fields. Return ptr to the struct.
   args.Lockname = lockname
-  var reply LockReply
+  args.Client_id = ck.id                        // Clerk id is a unique client identifier
+  args.Request_id = ck.request_id_generator()   // Each rpc request will have a unique identifier
+  var reply LockReply                           // Declare
   
   // send an RPC request, wait for the reply.
   ok := call(ck.servers[0], "LockServer.Lock", args, &reply)
@@ -68,9 +90,11 @@ func (ck *Clerk) Lock(lockname string) bool {
 //
 func (ck *Clerk) Unlock(lockname string) bool {
   // prepare the arguments
-  args := &UnlockArgs{}      // Declare and initialize struct with zero-valued fields. Return ptr to the UnlockArgs struct.
+  args := &UnlockArgs{}                         // Declare and init struct with zero-valued fields. Return ptr to the struct.
   args.Lockname = lockname
-  var reply UnlockReply      // Declare 
+  args.Client_id = ck.id                        // Clerk id is a unique client identifier
+  args.Request_id = ck.request_id_generator()   // Each request will have a unique identifier
+  var reply UnlockReply                         // Declare 
 
   // send an RPC request, wait for the reply.
   ok := call(ck.servers[0], "LockServer.Unlock", args, &reply)

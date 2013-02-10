@@ -14,6 +14,8 @@ type LockArgs struct {
   // Go's net/rpc requires that these field
   // names start with upper case letters!
   Lockname string  // lock name
+  Client_id int    // client id
+  Request_id int   // request id
 }
 
 type LockReply struct {
@@ -25,7 +27,9 @@ type LockReply struct {
 // It returns OK=false if the lock was not held.
 //
 type UnlockArgs struct {
-  Lockname string
+  Lockname string   // lock name
+  Client_id int     // client id
+  Request_id int    // request id
 }
 
 type UnlockReply struct {

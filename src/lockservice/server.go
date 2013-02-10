@@ -18,9 +18,10 @@ type LockServer struct {
   am_primary bool // am I the primary?
   backup string   // backup's port
 
-  // string lockname keys and bool values indicating whether lock is locked.
-  // Reading non-present keys will return a zero valued bool, i.e. false.
-  locks map[string]bool
+  locks map[string]bool               // key,value: lockname string, lock state bool
+  old_requests map[int]map[int]bool   // key Client_id, Val map[int]bool: key Request_id, Value: bool OK value to be placed in response.
+
+  // Go map note: reading non-present keys will return a zero valued bool, i.e. false.
 
 }
 
@@ -56,14 +57,30 @@ func (ls *LockServer) Lock(args *LockArgs, reply *LockReply) error {
   } 
 
   // Backup Server
+  fmt.Println(ls.old_requests)
+  fmt.Println(args.Client_id)
+  fmt.Println(args.Request_id)
+  /* Backup must check whether it has seen the request before. Primary does not need to check because primary 
+  never receives updates from another server, only directly from the client (and there are no network failures 
+  so either primary gets the request and responds, or the primary crashes at some point and is no longer expected 
+  to maintain synchronized data - backup is in charge now).*/
+  ok_status, present := ls.old_requests[args.Client_id][args.Request_id]
+  fmt.Println(ok_status, present)
+  if present {
+    fmt.Println("We've already seen this message!!!!")
+    reply.OK = ok_status
+    return nil
+  }
 
   if locked {
     // lockname is currently locked, someone else may not lock it.
     reply.OK = false
+    ls.old_requests[args.Client_id] = map[int]bool{args.Request_id: false}
   } else {
     // lockname is not locked. Lock it and return true.
     ls.locks[args.Lockname] = true
     reply.OK = true
+    ls.old_requests[args.Client_id] = map[int]bool{args.Request_id: true}
   }
   // Done preparing the response.
   return nil 
@@ -151,10 +168,9 @@ func StartServer(primary string, backup string, am_primary bool) *LockServer {
   ls := new(LockServer)
   ls.backup = backup
   ls.am_primary = am_primary
+  // Your initialization code here
   ls.locks = map[string]bool{}
-
-  // Your initialization code here.
-
+  ls.old_requests = map[int]map[int]bool{}
 
   me := ""
   if am_primary {
