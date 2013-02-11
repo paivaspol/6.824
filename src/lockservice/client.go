@@ -2,6 +2,7 @@ package lockservice
 
 import (
   "net/rpc"
+  "math/rand"
   //"fmt"
 )
 
@@ -31,14 +32,15 @@ func make_id_generator() (func() int) {
 }
 
 // Unique id generator for initializing Clerks
-var clerk_id_generator = make_id_generator()
+// var clerk_id_generator = make_id_generator()
 
 
 func MakeClerk(primary string, backup string) *Clerk {
   ck := new(Clerk)
   ck.servers[0] = primary
   ck.servers[1] = backup
-  ck.id = clerk_id_generator()              
+  // Switched to using random cleint/clerk ids because clients running isolated from one another cannot all use a shared generator function to generate unique ids.
+  ck.id = rand.Int()                   //clerk_id_generator()
   ck.request_id_generator = make_id_generator()
   return ck
 }
