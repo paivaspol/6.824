@@ -22,6 +22,7 @@ type ViewServer struct {
 // server Ping RPC handler.
 //
 func (vs *ViewServer) Ping(args *PingArgs, reply *PingReply) error {
+  fmt.Println("Got a ping")
 
   // Your code here.
 
@@ -32,9 +33,11 @@ func (vs *ViewServer) Ping(args *PingArgs, reply *PingReply) error {
 // server Get() RPC handler.
 //
 func (vs *ViewServer) Get(args *GetArgs, reply *GetReply) error {
-
+  fmt.Println("Server Get called. Client wants to know the View state")
   // Your code here.
+  //reply.View = View{Viewnum: 1, Primary: "cat", Backup: "dog"}
 
+  // done preparing the reply
   return nil
 }
 
@@ -60,7 +63,7 @@ func (vs *ViewServer) Kill() {
 }
 
 func StartServer(me string) *ViewServer {
-  vs := new(ViewServer)
+  vs := new(ViewServer)     // Return ptr to ViewServer struct with zero-valued fields.
   vs.me = me
   // Your vs.* initializations here.
 
