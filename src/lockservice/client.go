@@ -34,7 +34,6 @@ func make_id_generator() (func() int) {
 // Unique id generator for initializing Clerks
 // var clerk_id_generator = make_id_generator()
 
-
 func MakeClerk(primary string, backup string) *Clerk {
   ck := new(Clerk)
   ck.servers[0] = primary
