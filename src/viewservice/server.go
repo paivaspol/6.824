@@ -20,16 +20,33 @@ type ViewServer struct {
 
 type PingData struct {
   time time.Time
-  viewnum uint
+  latest_viewnum uint       // most recently pinged viewnum
+  highest_viewnum uint      // highest viewnum the client has acked since last boot (dying and restarting should reset?)
 }
 
 //
 // server Ping RPC handler.
 //
 func (vs *ViewServer) Ping(args *PingArgs, reply *PingReply) error {
-  fmt.Printf("Ping: viewnum %d from %s\n", args.Viewnum, args.Me)
-  // Add or update viewservice client's entry in client_map of most recent ping data.
-  vs.client_map[args.Me] = PingData{time: time.Now(), viewnum: args.Viewnum}
+  ls.mu.Lock()
+  defer ls.mu.Unlock()
+  fmt.Printf("Ping: from %s: latest_viewnum %d and highest_viewnum %d\n", "server" + args.Me[len(args.Me)-1:], args.Viewnum, vs.client_map[args.Me].highest_viewnum)
+  // Add or update viewservice client's entry in client_map of client to client ping data.
+  ping_data, found := vs.client_map[args.Me]
+  if found {
+    vs.client_map[args.Me] = PingData{
+      time: time.Now(),
+      latest_viewnum: args.Viewnum,
+      highest_viewnum: maxUint(ping_data.highest_viewnum, args.Viewnum),
+    }
+  } else {
+    vs.client_map[args.Me] = PingData{
+      time: time.Now(), 
+      latest_viewnum: args.Viewnum,
+      highest_viewnum: args.Viewnum,
+    }
+  }
+  // Always return current view, idle servers should keep sending pings with viewnum = 0
   reply.View = vs.view
   // done preparing the reply
   return nil
@@ -66,8 +83,7 @@ func (vs *ViewServer) tick() {
   } else {
     // Primary is dead or viewservice is initializing
     if vs.view.Viewnum == 0 {
-      // initialize viewservice with a Primary
-      fmt.Println("Initialize Primary")
+      // initialize viewservice with a Primary directly from idle clients
       name, found := vs.find_idle_client()
       if found {
         vs.view.Viewnum += 1
@@ -106,7 +122,7 @@ and returns "" and false if no idle server was found.
 */
 func (vs *ViewServer) find_idle_client() (name string, found bool) {
   for name, ping_data := range vs.client_map {
-    if ping_data.viewnum == 0 && name != vs.view.Primary && name != vs.view.Backup && vs.check_live(name) {
+    if ping_data.latest_viewnum == 0 && name != vs.view.Primary && name != vs.view.Backup && vs.check_live(name) {
       return name, true
     }
   }
@@ -114,11 +130,13 @@ func (vs *ViewServer) find_idle_client() (name string, found bool) {
 }
 
 /*
-Helper method checks whether the Primary client has acknowledged the current 
-viewnum.
+Helper method checks whether the Primary client has ever acknowledged the current 
+viewnum. Checks that the current viewnum is equal to the highest acked viewnum from
+the Primary since the Primary can never ack a viewnum greater than the current 
+viewnum (viewnum of the viewservice's current view never decreases).
 */
 func (vs *ViewServer) primary_has_acked() bool {
-  if vs.client_map[vs.view.Primary].viewnum == vs.view.Viewnum {
+  if vs.client_map[vs.view.Primary].highest_viewnum == vs.view.Viewnum {
     return true
   }
   return false
@@ -143,14 +161,14 @@ func (vs *ViewServer) check_live(name string) bool {
 }
 
 /*
-Helper function that determines whether the server is Pinging viewnum = 0 which
-indicates that the client is idle (it may have crashed and restarted).
+Determines whether client's most recent Ping contained viewnum = 0, indicating
+it is idle (it may have crashed and restarted).
 Accepts server name. Returns true if the client's last ping contained viewnum = 0 
 and returns false otherwise.
 */
 func (vs *ViewServer) is_idle(name string) bool {
   last_ping, present := vs.client_map[name]
-  if present && last_ping.viewnum == 0 {
+  if present && last_ping.latest_viewnum == 0 {
     return true
   }
   return false
@@ -208,6 +226,16 @@ func (vs *ViewServer) attempt_promote_backup() {
     vs.view.Primary = vs.view.Backup
     vs.view.Backup = ""
   }
+}
+
+/*
+Returns the maximum of two uints. If the two are equal, returns the second.
+*/
+func maxUint(x,y uint) uint {
+  if x > y {
+    return x
+  }
+  return y
 }
 
 
