@@ -106,10 +106,9 @@ func (pb *PBServer) tick() {
     fmt.Println(error)
 
   } else {
-    fmt.Println(pb.me, pb.kvstore)
     pb.role, pb.viewnum, pb.primary, pb.backup = read_view(pb.me, view)
     fmt.Printf("tick: %s, %d, P%s, B%s\n", pb.role, pb.viewnum, pb.primary, pb.backup)
-    if pb.role == "primary" && original_backup != pb.backup {
+    if pb.role == "primary" && original_backup != pb.backup && pb.backup != "" {
       // Initiate safe (locking) transfer of key/value pairs from primary to new backup.
       pb.transfer_kvstore()
     }
@@ -129,11 +128,13 @@ func (pb *PBServer) transfer_kvstore() {
   fmt.Println("Transferring kvstore!", pb.me, pb.kvstore)
 
   var args = &KVStoreArgs{}   // declare and init struct with zero-valued fields. Reference struct.
-  args.kvstore = pb.kvstore
+  args.Kvstore = pb.kvstore
   var reply KVStoreReply      // declare reply to be populated by RPC
   // Attempt RPC call to transfer key/value pairs, until receiving successful response.
-  ok := call(pb.backup, "PBServer.Receive_kvstore", args, &reply)
-  fmt.Println(ok, reply)
+  for call(pb.backup, "PBServer.Receive_kvstore", args, &reply) == false {
+    fmt.Println("Retry transfer of kvstore")
+  }
+  fmt.Println(reply)
 
 }
 
@@ -148,12 +149,15 @@ func (pb *PBServer) Receive_kvstore(args *KVStoreArgs, reply *KVStoreReply) erro
   pb.mu.Lock()                // Although a Primary should not be able to forward requests mid-transfer, lock the backup PBServer to be cautious.          
   defer pb.mu.Unlock()
 
-  fmt.Println("Receiving kvstore!", pb.me, pb.kvstore)
-  fmt.Println(args.kvstore)
+  if pb.role == "backup" {
+    fmt.Println("Receiving kvstore!", pb.me, pb.kvstore)
+    fmt.Println(args.Kvstore)
 
-  pb.kvstore = args.kvstore
-  reply.Err = "OK"
-
+    pb.kvstore = args.Kvstore
+    reply.Err = OK
+  } else {
+    reply.Err = ErrWrongServer  // Server is currently idle and will become backup at next viewservice check
+  }
   // done preparing the reply.
   return nil
 }
