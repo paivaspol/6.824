@@ -69,7 +69,7 @@ func (vs *ViewServer) Get(args *GetArgs, reply *GetReply) error {
 //
 // tick() is called once per PingInterval; it should notice
 // if servers have died or recovered, and change the view
-// accordingly.
+// accordingly (if the Primary has acked).
 //
 func (vs *ViewServer) tick() {
   vs.mu.Lock()
@@ -78,22 +78,25 @@ func (vs *ViewServer) tick() {
   fmt.Print("tick: ")
   vs.dump_view_state()
 
-  if !vs.check_live(vs.view.Primary) && !vs.check_live(vs.view.Backup) {
-    // Either initialization or both Primary and Backup have died.
-    if vs.view.Viewnum == 0 {
-      // initialize viewservice with a Primary directly from idle clients
-      name, found := vs.find_idle_client()
-      if found {
-        vs.view.Viewnum += 1
-        vs.view.Primary = name
-      }
-    } else {
-      // Perhaps the viewserivce is disconnected from Primary and Backup clients and they
-      // are still operating fine. Wait.
+  if vs.check_live(vs.view.Primary) && vs.check_live(vs.view.Backup) {
+    // Both Primary and Backup are live (sent recent pings).
+
+    // Check if Primary fail-restarted (i.e. failed and restarted without missing a Ping, so it now Pings viewnum = 0)
+    if vs.is_idle(vs.view.Primary) {
+      // If the primary failed and restarted, it now Pings viewnum = 0
+      fmt.Println("Primary failed and restarted")
+      // If Primary has not acked, cannot change viewservice view. 
+      // Primary does not have data on it, promote backup 
+      vs.attempt_promote_backup()
+      // vs.view.Viewnum += 1
+      // vs.view.Primary = vs.view.Backup        // backup may not be present
+      // vs.view.Backup = ""
     }
+
   } else if vs.check_live(vs.view.Primary) && !vs.check_live(vs.view.Backup) {
     // Primary is currently alive and Backup is dead.
 
+    // Check if Primary fail-restarted.
     if vs.is_idle(vs.view.Primary) {
       // If the primary failed and restarted, it now Pings viewnum = 0
       fmt.Println("Primary failed and restarted")
@@ -106,61 +109,41 @@ func (vs *ViewServer) tick() {
     }
 
     // Backup has not been initialized, it was promoted to Primary, or it died
-    if vs.view.Backup != "" {
-      // Backup died and an idle client should replace it (increment view) or it should be set to "" (increment view)
-      vs.attempt_remove_replace_backup()
-    } else {
+    if vs.view.Backup == "" {
       // Backup client is set to "" (Backup has not been initialized or it was promoted). An idle client should replace it (increment View) or do nothing.
       vs.attempt_assign_backup()
+    } else {
+      // Backup died and an idle client should replace it (increment view) or it should be set to "" (increment view)
+      vs.attempt_remove_replace_backup()
     }
 
   } else if !vs.check_live(vs.view.Primary) && vs.check_live(vs.view.Backup) {
     // Primary is currently dead and Backup is alive
 
-    // primary has died (no recent pings), attempt to promote backup if primary has acked
-    vs.attempt_promote_backup()
-  } else {
+    // If Backup fail-restarted, it is as if a new Backup has been assigned. Replacing with a
+    // new idle server (which also has no data) is pointless. Primary is responsible for replicating
+    // records to the restarted Backup. 
 
-    if vs.is_idle(vs.view.Primary) {
-      // If the primary failed and restarted, it now Pings viewnum = 0
-      fmt.Println("Primary failed and restarted")
-      // If Primary has not acked, cannot change viewservice view. 
-      // Primary does not have data on it, promote backup 
-      vs.attempt_promote_backup()
-      // vs.view.Viewnum += 1
-      // vs.view.Primary = vs.view.Backup        // backup may not be present
-      // vs.view.Backup = ""
+    // Primary has died (no recent pings), attempt to promote backup
+    vs.attempt_promote_backup()
+
+  } else {
+    // Either initialization or both Primary and Backup have died.
+
+    if vs.view.Viewnum == 0 {
+      // initialize viewservice with a Primary directly from idle clients
+      name, found := vs.find_idle_client()
+      if found {
+        vs.view.Viewnum += 1
+        vs.view.Primary = name
+      }
+    } else {
+      // Perhaps the viewserivce is disconnected from Primary and Backup clients and they are still 
+      // operating fine and network will be repaired. Wait. Otherwise intolerable P/B failure has 
+      // occurred, primary and replicated data has all been lost, and system is not expected to recover.
     }
 
-
-
-
   }
-
-
-  // } else {
-  //   // primary has died (no recent pings), attempt to promote backup if primary has acked
-  //   vs.attempt_promote_backup()
-  // }
-
-  // // Backup Client
-  // /////////////////////////////////////////////////////////////////////////////
-
-  // if vs.check_live(vs.view.Backup) {
-  //   // pass
-  //   if vs.is_idle(vs.view.Backup) {
-  //     fmt.Println("!!!!!!!!!!!!!!!!\n!!!!!!!!!!!!\n!!!!!!!!!!!!!!")
-  //   }
-  // } else {
-  //   // Backup has not been initialized, it was promoted to Primary, or it died
-  //   if vs.view.Backup != "" {
-  //     // Backup died and an idle client should replace it (increment view) or it should be set to "" (increment view)
-  //     vs.attempt_remove_replace_backup()
-  //   } else {
-  //     // Backup client is set to "" (Backup has not been initialized or it was promoted). An idle client should replace it (increment View) or do nothing.
-  //     vs.attempt_assign_backup()
-  //   }
-  // }
 
 }
 
@@ -172,8 +155,8 @@ Returns the name of the found idle server and true if an idle server was found
 and returns "" and false if no idle server was found.
 */
 func (vs *ViewServer) find_idle_client() (name string, found bool) {
-  for name, ping_data := range vs.client_map {
-    if ping_data.latest_viewnum == 0 && name != vs.view.Primary && name != vs.view.Backup && vs.check_live(name) {
+  for name, _ := range vs.client_map {
+    if vs.is_idle(name) && name != vs.view.Primary && name != vs.view.Backup {
       return name, true
     }
   }
@@ -212,14 +195,14 @@ func (vs *ViewServer) check_live(name string) bool {
 }
 
 /*
-Determines whether client's most recent Ping contained viewnum = 0, indicating
-it is idle (it may have crashed and restarted).
-Accepts server name. Returns true if the client's last ping contained viewnum = 0 
+Determines whether a live client's most recent Ping contained viewnum = 0, indicating it is 
+an idle client (it may have crashed and restarted).
+Accepts server name. Returns true if the client is live and its last ping contained viewnum = 0 
 and returns false otherwise.
 */
 func (vs *ViewServer) is_idle(name string) bool {
   last_ping, present := vs.client_map[name]
-  if present && last_ping.latest_viewnum == 0 {
+  if present && last_ping.latest_viewnum == 0 && vs.check_live(name) {
     return true
   }
   return false
