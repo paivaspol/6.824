@@ -56,9 +56,6 @@ func (vs *ViewServer) Ping(args *PingArgs, reply *PingReply) error {
 // server Get() RPC handler.
 //
 func (vs *ViewServer) Get(args *GetArgs, reply *GetReply) error {
-  fmt.Print("get: ")
-  vs.dump_view_state()
-
   // Always return current view, idle servers should keep sending pings with viewnum = 0
   reply.View = vs.view
   // done preparing the reply
@@ -75,15 +72,15 @@ func (vs *ViewServer) tick() {
   vs.mu.Lock()
   defer vs.mu.Unlock()
 
-  fmt.Print("tick: ")
+  fmt.Print("vs_tick: ")
   vs.dump_view_state()
 
   if vs.check_live(vs.view.Primary) && vs.check_live(vs.view.Backup) {
     // Both Primary and Backup are live (sent recent pings).
 
     // Check if Primary fail-restarted (i.e. failed and restarted without missing a Ping, so it now Pings viewnum = 0)
-    if vs.is_idle(vs.view.Primary) {
-      // If the primary failed and restarted, it now Pings viewnum = 0
+    if vs.is_idle(vs.view.Primary) && vs.primary_has_acked() {
+      // Primary acked (so recognized it had become Primary) and then failed-restarted (now pings viewnum = 0)
       fmt.Println("Primary failed and restarted")
       // If Primary has not acked, cannot change viewservice view. 
       // Primary does not have data on it, promote backup 
@@ -97,8 +94,8 @@ func (vs *ViewServer) tick() {
     // Primary is currently alive and Backup is dead.
 
     // Check if Primary fail-restarted.
-    if vs.is_idle(vs.view.Primary) {
-      // If the primary failed and restarted, it now Pings viewnum = 0
+    if vs.is_idle(vs.view.Primary) && vs.primary_has_acked() {
+      // Primary acked (so recognized it had become Primary) and then failed-restarted (now pings viewnum = 0)
       fmt.Println("Primary failed and restarted")
       // If Primary has not acked, cannot change viewservice view. 
       // Primary does not have data on it, promote backup 

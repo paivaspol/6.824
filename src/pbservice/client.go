@@ -33,22 +33,20 @@ func MakeClerk(vshost string, me string) *Clerk {
 // primary replies with the value or the primary
 // says the key doesn't exist (has never been Put().
 //
-func (ck *Clerk) Get(key string) string {
-  var args = &GetArgs{}   // declare and init struct with zero-valued fields. Reference struct
+func (ck *Clerk) Get(key string) (value string) {
+  var args = &GetArgs{}   // declare and init struct with zero-valued fields. Reference struct.
   args.Key = key
   var reply GetReply      // declare reply to be poulated by RPC
 
-  primary_name := ck.vs.Primary()     // Call viewservice Clerk stub which retrieves the primary server name from the ViewServer
-
-  ok := call(primary_name, "PBServer.Get",args, &reply)
-
-  fmt.Println(ok, reply) 
-
+  var primary_server = ck.vs.Primary()    // Clerk's viewservice Clerk's Primary stub retrieves primary name from viewservice.
+  for call(primary_server, "PBServer.Get", args, &reply) == false {
+    // repeat RPC call until Primary replies
+  }
+  fmt.Println(reply) 
   if reply.Err == OK {
     return reply.Value
   }
-  // Key does not exist
-  return ""
+  return ""               // Key does not exist   
 }
 
 //
@@ -56,19 +54,16 @@ func (ck *Clerk) Get(key string) string {
 // must keep trying until it succeeds.
 //
 func (ck *Clerk) Put(key string, value string) {
-  fmt.Println("Called Put!!")
-  var args = &PutArgs{}    // declare and init struct with zero-valued fields. Reference struct. 
+  var args = &PutArgs{}   // declare and init struct with zero-valued fields. Reference struct. 
   args.Key = key
   args.Value = value
   var reply PutReply      // declare reply to be populated by RPC
 
-  primary_name := ck.vs.Primary()   // Call viewservice Clerk stub which retrieves the primary server name from the ViewServer
-  
-  // call should take Pointers to PutArgs and ReplyArgs should be passed in 
-  ok := call(primary_name, "PBServer.Put", args, &reply)
-
-  fmt.Println(ok, reply)
-  
+  var primary_server = ck.vs.Primary()    // Clerk's viewservice Clerk's Primary stub retrieves primary name from viewservice.  
+  for call(primary_server, "PBServer.Put", args, &reply) == false {
+    // repeat RPC call until Primary replies
+  }
+  fmt.Println(reply)
 }
 
 

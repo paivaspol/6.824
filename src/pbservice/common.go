@@ -30,3 +30,13 @@ type PutReply struct {
 }
 
 // Your RPC definitions here.
+
+type KVStoreArgs struct {
+	kvstore map[string]string
+}
+
+type KVStoreReply struct {
+	Err string
+}
+
+
