@@ -2,10 +2,20 @@ package pbservice
 
 import "viewservice"
 import "net/rpc"
+import "fmt"
 // You'll probably need to uncomment this:
 // import "time"
 
 
+
+/*
+The pbservice Clerk wraps the pbservice's servers' exposed PBServer methods.
+The Clerk provides stubs for the PBServer's exposed methods so that calling a clerk stub 
+generates an appropriate RPC call to the pbservice (more specifically, to the current
+primary server in the pbservice).
+Clerk maintains a bit of state about the name of the viewservice server it should talk to
+to learn about the current View state.
+*/
 type Clerk struct {
   vs *viewservice.Clerk
 }
@@ -14,6 +24,51 @@ func MakeClerk(vshost string, me string) *Clerk {
   ck := new(Clerk)
   ck.vs = viewservice.MakeClerk(me, vshost)
   return ck
+}
+
+//
+// fetch a key's value from the current primary;
+// if they key has never been set, return "".
+// Get() must keep trying until it either the
+// primary replies with the value or the primary
+// says the key doesn't exist (has never been Put().
+//
+func (ck *Clerk) Get(key string) string {
+  var args = &GetArgs{}   // declare and init struct with zero-valued fields. Reference struct
+  args.Key = key
+  var reply GetReply      // declare reply to be poulated by RPC
+
+  primary_name := ck.vs.Primary()     // Call viewservice Clerk stub which retrieves the primary server name from the ViewServer
+
+  ok := call(primary_name, "PBServer.Get",args, &reply)
+
+  fmt.Println(ok, reply) 
+
+  if reply.Err == OK {
+    return reply.Value
+  }
+  // Key does not exist
+  return ""
+}
+
+//
+// tell the primary to update key's value.
+// must keep trying until it succeeds.
+//
+func (ck *Clerk) Put(key string, value string) {
+  fmt.Println("Called Put!!")
+  var args = &PutArgs{}    // declare and init struct with zero-valued fields. Reference struct. 
+  args.Key = key
+  args.Value = value
+  var reply PutReply      // declare reply to be populated by RPC
+
+  primary_name := ck.vs.Primary()   // Call viewservice Clerk stub which retrieves the primary server name from the ViewServer
+  
+  // call should take Pointers to PutArgs and ReplyArgs should be passed in 
+  ok := call(primary_name, "PBServer.Put", args, &reply)
+
+  fmt.Println(ok, reply)
+  
 }
 
 
@@ -48,25 +103,4 @@ func call(srv string, rpcname string,
   return false
 }
 
-//
-// fetch a key's value from the current primary;
-// if they key has never been set, return "".
-// Get() must keep trying until it either the
-// primary replies with the value or the primary
-// says the key doesn't exist (has never been Put().
-//
-func (ck *Clerk) Get(key string) string {
 
-  // Your code here.
-
-  return "???"
-}
-
-//
-// tell the primary to update key's value.
-// must keep trying until it succeeds.
-//
-func (ck *Clerk) Put(key string, value string) {
-
-  // Your code here.
-}

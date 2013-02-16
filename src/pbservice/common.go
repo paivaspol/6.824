@@ -7,14 +7,7 @@ const (
 )
 type Err string
 
-type PutArgs struct {
-  Key string
-  Value string
-}
-
-type PutReply struct {
-  Err Err
-}
+// Get RPC
 
 type GetArgs struct {
   Key string
@@ -25,5 +18,15 @@ type GetReply struct {
   Value string
 }
 
+// Put RPC
+
+type PutArgs struct {
+  Key string
+  Value string
+}
+
+type PutReply struct {
+  Err Err
+}
 
 // Your RPC definitions here.
