@@ -30,7 +30,7 @@ type PingData struct {
 func (vs *ViewServer) Ping(args *PingArgs, reply *PingReply) error {
   vs.mu.Lock()
   defer vs.mu.Unlock()
-  fmt.Printf("ping: from %s: latest_viewnum %d and highest_viewnum %d\n", "server" + args.Me[len(args.Me)-1:], args.Viewnum, vs.client_map[args.Me].highest_viewnum)
+  //fmt.Printf("ping: from %s: latest_viewnum %d and highest_viewnum %d\n", "server" + args.Me[len(args.Me)-1:], args.Viewnum, vs.client_map[args.Me].highest_viewnum)
   // Add or update viewservice client's entry in client_map of client to client ping data.
   ping_data, found := vs.client_map[args.Me]
   if found {
@@ -72,8 +72,8 @@ func (vs *ViewServer) tick() {
   vs.mu.Lock()
   defer vs.mu.Unlock()
 
-  fmt.Print("vs_tick: ")
-  vs.dump_view_state()
+  //fmt.Print("vs_tick: ")
+  //vs.dump_view_state()
 
   if vs.check_live(vs.view.Primary) && vs.check_live(vs.view.Backup) {
     // Both Primary and Backup are live (sent recent pings).
@@ -88,6 +88,10 @@ func (vs *ViewServer) tick() {
       // vs.view.Viewnum += 1
       // vs.view.Primary = vs.view.Backup        // backup may not be present
       // vs.view.Backup = ""
+    }
+
+    if vs.is_idle(vs.view.Backup) && vs.primary_has_acked() {
+      fmt.Println("Backup fail restarted")
     }
 
   } else if vs.check_live(vs.view.Primary) && !vs.check_live(vs.view.Backup) {
@@ -108,14 +112,20 @@ func (vs *ViewServer) tick() {
     // Backup has not been initialized, it was promoted to Primary, or it died
     if vs.view.Backup == "" {
       // Backup client is set to "" (Backup has not been initialized or it was promoted). An idle client should replace it (increment View) or do nothing.
+      //fmt.Println("Finding new backup")
       vs.attempt_assign_backup()
     } else {
       // Backup died and an idle client should replace it (increment view) or it should be set to "" (increment view)
+      //fmt.Println("Need to replace dead backup")
       vs.attempt_remove_replace_backup()
     }
 
   } else if !vs.check_live(vs.view.Primary) && vs.check_live(vs.view.Backup) {
     // Primary is currently dead and Backup is alive
+
+    if vs.is_idle(vs.view.Backup) && vs.primary_has_acked() {
+      fmt.Println("Backup fail restarted")
+    }
 
     // If Backup fail-restarted, it is as if a new Backup has been assigned. Replacing with a
     // new idle server (which also has no data) is pointless. Primary is responsible for replicating

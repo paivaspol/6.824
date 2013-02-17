@@ -38,8 +38,8 @@ func (ck *Clerk) Get(key string) (value string) {
   args.Key = key
   var reply GetReply      // declare reply to be poulated by RPC
 
-  var primary_server = ck.vs.Primary()    // Clerk's viewservice Clerk's Primary stub retrieves primary name from viewservice.
-  for call(primary_server, "PBServer.Get", args, &reply) == false {
+  //var primary_server = ck.vs.Primary()    // Clerk's viewservice Clerk's Primary stub retrieves primary name from viewservice.
+  for call(ck.vs.Primary(), "PBServer.Get", args, &reply) == false || reply.Err == ErrWrongServer {
     // repeat RPC call until Primary replies with success (i.e. OK)
   }
   if reply.Err == OK {
@@ -59,8 +59,8 @@ func (ck *Clerk) Put(key string, value string) {
   args.Value = value
   var reply PutReply      // declare reply to be populated by RPC
 
-  var primary_server = ck.vs.Primary()    // Clerk's viewservice Clerk's Primary stub retrieves primary name from viewservice.  
-  for call(primary_server, "PBServer.Put", args, &reply) == false {
+  //var primary_server = ck.vs.Primary()    // Clerk's viewservice Clerk's Primary stub retrieves primary name from viewservice.  
+  for call(ck.vs.Primary(), "PBServer.Put", args, &reply) == false || reply.Err == ErrWrongServer {
     // repeat RPC call until Primary replies
   }
 }

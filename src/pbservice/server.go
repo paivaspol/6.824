@@ -41,7 +41,8 @@ func (pb *PBServer) Get(args *GetArgs, reply *GetReply) error {
 
   // Primary Server
   fmt.Printf("(server %s)primary get: %s -> \n", format_server_name(pb.me), args.Key)
-  if pb.is_backup() {
+  if pb.has_backup() {
+    fmt.Println("Contacting backup")
     var backup_args = &InternalGetArgs{}   // declare and init struct with zero-valued fields.
     backup_args.Key = args.Key
     var backup_reply InternalGetReply      // declare reply to be populated by Backup server via RPC
@@ -53,6 +54,10 @@ func (pb *PBServer) Get(args *GetArgs, reply *GetReply) error {
       return nil
     }
   } 
+  fmt.Println(pb.has_backup())
+  fmt.Println(pb.me)
+  fmt.Println(pb.Primary)
+  fmt.Println(pb.Backup)
   // Backup has been updated or there is no backup. Make local kvstore update and responding to client.
   value, present := pb.kvstore[args.Key]
   if present {
@@ -78,7 +83,7 @@ func (pb *PBServer) Put(args *PutArgs, reply *PutReply) error {
 
   // Primary Server
   fmt.Printf("(server %s)primary put: %s -> %s\n", format_server_name(pb.me), args.Key, args.Value)
-  if pb.is_backup() {
+  if pb.has_backup() {
     var backup_args = &InternalPutArgs{}   // declare and init struct with zero-valued fields.
     backup_args.Key = args.Key
     backup_args.Value = args.Value
@@ -112,15 +117,13 @@ func (pb *PBServer) tick() {
   defer pb.mu.Unlock()
   
   var original_backup = pb.backup
-  //fmt.Println("Original backup:", original_backup, pb.me)
   view, error := pb.vs.Ping(pb.viewnum)
 
   if error != nil {
     fmt.Println(error)
-
   } else {
     pb.role, pb.viewnum, pb.primary, pb.backup = read_view(pb.me, view)
-    //fmt.Printf("tick: %s, %d, P%s, B%s\n", pb.role, pb.viewnum, pb.primary, pb.backup)
+    fmt.Printf("tick: %s, %d, P%s, B%s\n", pb.role, pb.viewnum, pb.primary, pb.backup)
     if pb.role == "primary" && original_backup != pb.backup && pb.backup != "" {
       // Initiate safe (locking) transfer of key/value pairs from primary to new backup.
       pb.transfer_kvstore()
@@ -144,10 +147,10 @@ func (pb *PBServer) transfer_kvstore() {
   args.Kvstore = pb.kvstore
   var reply KVStoreReply      // declare reply to be populated by RPC
   // Attempt RPC call to transfer key/value pairs, until receiving successful response.
-  for call(pb.backup, "PBServer.Receive_kvstore", args, &reply) == false {
-    fmt.Println("Retry transfer of kvstore")
+  for call(pb.backup, "PBServer.Receive_kvstore", args, &reply) == false || reply.Err != OK {
+    //fmt.Println("Retry transfer of kvstore")
   }
-  fmt.Println(reply)
+  //fmt.Println(reply)
 }
 
 /*
@@ -162,10 +165,9 @@ func (pb *PBServer) Receive_kvstore(args *KVStoreArgs, reply *KVStoreReply) erro
   defer pb.mu.Unlock()
 
   if pb.role == "backup" {
-    fmt.Println("Receiving kvstore!", pb.me, pb.kvstore)
-    fmt.Println(args.Kvstore)
-
+    //fmt.Println("Receiving kvstore!", pb.me)
     pb.kvstore = args.Kvstore
+    fmt.Printf("(server %s)received and setup: %v\n", format_server_name(pb.me), pb.kvstore)
     reply.Err = OK
   } else {
     reply.Err = ErrWrongServer  // Server is currently idle and will become backup at next viewservice check
@@ -246,7 +248,7 @@ func read_view(pbserver_name string, view viewservice.View) (role string, viewnu
 }
 
 /* Returns whether or not the current View has a backup. */
-func (pb *PBServer) is_backup() bool {
+func (pb *PBServer) has_backup() bool {
   return !(pb.backup == "")
 }
 
