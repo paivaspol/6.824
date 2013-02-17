@@ -2,7 +2,7 @@ package pbservice
 
 import "viewservice"
 import "net/rpc"
-import "fmt"
+//import "fmt"
 // You'll probably need to uncomment this:
 // import "time"
 
@@ -40,14 +40,14 @@ func (ck *Clerk) Get(key string) (value string) {
 
   var primary_server = ck.vs.Primary()    // Clerk's viewservice Clerk's Primary stub retrieves primary name from viewservice.
   for call(primary_server, "PBServer.Get", args, &reply) == false {
-    // repeat RPC call until Primary replies
+    // repeat RPC call until Primary replies with success (i.e. OK)
   }
-  fmt.Println(reply) 
   if reply.Err == OK {
     return reply.Value
   }
   return ""               // Key does not exist   
 }
+
 
 //
 // tell the primary to update key's value.
@@ -63,7 +63,6 @@ func (ck *Clerk) Put(key string, value string) {
   for call(primary_server, "PBServer.Put", args, &reply) == false {
     // repeat RPC call until Primary replies
   }
-  fmt.Println(reply)
 }
 
 

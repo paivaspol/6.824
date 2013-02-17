@@ -40,12 +40,18 @@ func (pb *PBServer) Get(args *GetArgs, reply *GetReply) error {
   }
 
   // Primary Server
-  fmt.Printf("get: %s -> \n", args.Key)
+  fmt.Printf("(server %s)primary get: %s -> \n", format_server_name(pb.me), args.Key)
   if pb.is_backup() {
-    fmt.Println("There is a backup in place for get")
-    fmt.Println(pb.backup)
-    //ok := call()
+    var backup_args = &InternalGetArgs{}   // declare and init struct with zero-valued fields.
+    backup_args.Key = args.Key
+    var backup_reply InternalGetReply      // declare reply to be populated by Backup server via RPC
 
+    ok := call(pb.backup, "PBServer.InternalGet", backup_args, &backup_reply)
+    if !ok || reply.Err == ErrWrongServer {
+      reply.Err = ErrWrongServer
+      // done preparing reply, client is responsible for retrying
+      return nil
+    }
   } 
   // Backup has been updated or there is no backup. Make local kvstore update and responding to client.
   value, present := pb.kvstore[args.Key]
@@ -71,15 +77,22 @@ func (pb *PBServer) Put(args *PutArgs, reply *PutReply) error {
   }
 
   // Primary Server
-  fmt.Printf("put: %s -> %s\n", args.Key, args.Value)
-
+  fmt.Printf("(server %s)primary put: %s -> %s\n", format_server_name(pb.me), args.Key, args.Value)
   if pb.is_backup() {
-    fmt.Println("There is a backup in place for put")
+    var backup_args = &InternalPutArgs{}   // declare and init struct with zero-valued fields.
+    backup_args.Key = args.Key
+    backup_args.Value = args.Value
+    var backup_reply InternalPutReply      // declare reply to be populated by Backup server via RPC
 
+    ok := call(pb.backup, "PBServer.InternalPut", backup_args, &backup_reply)
+    if !ok || reply.Err == ErrWrongServer {
+      reply.Err = ErrWrongServer
+      // done preparing reply, client is responsible for retrying
+      return nil
+    }
   }
-    // Backup has been updated or there is no backup. Make local kvstore update and responding to client.
+  // Backup has been updated or there is no backup. Make local kvstore update and responding to client.
   pb.kvstore[args.Key] = args.Value
-  
   reply.Err = OK
 
   // done preparing the reply
@@ -99,7 +112,7 @@ func (pb *PBServer) tick() {
   defer pb.mu.Unlock()
   
   var original_backup = pb.backup
-  fmt.Println("Original backup:", original_backup, pb.me)
+  //fmt.Println("Original backup:", original_backup, pb.me)
   view, error := pb.vs.Ping(pb.viewnum)
 
   if error != nil {
@@ -107,7 +120,7 @@ func (pb *PBServer) tick() {
 
   } else {
     pb.role, pb.viewnum, pb.primary, pb.backup = read_view(pb.me, view)
-    fmt.Printf("tick: %s, %d, P%s, B%s\n", pb.role, pb.viewnum, pb.primary, pb.backup)
+    //fmt.Printf("tick: %s, %d, P%s, B%s\n", pb.role, pb.viewnum, pb.primary, pb.backup)
     if pb.role == "primary" && original_backup != pb.backup && pb.backup != "" {
       // Initiate safe (locking) transfer of key/value pairs from primary to new backup.
       pb.transfer_kvstore()
@@ -135,7 +148,6 @@ func (pb *PBServer) transfer_kvstore() {
     fmt.Println("Retry transfer of kvstore")
   }
   fmt.Println(reply)
-
 }
 
 /*
@@ -162,6 +174,59 @@ func (pb *PBServer) Receive_kvstore(args *KVStoreArgs, reply *KVStoreReply) erro
   return nil
 }
 
+/*
+Get request to retrieve a key/value pair, sent from a PBServer (the Primary) rather than
+from a client. All server instances except the Backup server should respond with an 
+error to let the Primary know that the server it thought to be a backup was not. 
+Client is then responsible for retrying the request.
+*/
+func (pb *PBServer) InternalGet(args *InternalGetArgs, reply *InternalGetReply) error {
+  pb.mu.Lock()
+  defer pb.mu.Unlock()
+
+  if pb.role != "backup" {
+    reply.Err = ErrWrongServer
+    return nil
+  }
+
+  // Backup Server
+  fmt.Printf("(server %s)backup get: %s -> \n", format_server_name(pb.me), args.Key)
+  value, present := pb.kvstore[args.Key]
+  if present {
+    reply.Value = value
+    reply.Err = OK
+  } else {
+    reply.Value = ""
+    reply.Err = ErrNoKey
+  }
+  // done preparing the reply
+  return nil
+}
+  
+/*
+Put request to store a key/value pair, sent from a PBServer (the Primary) rather than
+from a client. All server instances except the Backup server should respond with an 
+error to let the Primary know that the server it thought to be a backup was not. 
+Client is then responsible for retrying the request.
+*/
+func (pb *PBServer) InternalPut(args *InternalPutArgs, reply *InternalPutReply) error {
+  pb.mu.Lock()
+  defer pb.mu.Unlock()
+
+  if pb.role != "backup" {
+    reply.Err = ErrWrongServer
+    return nil
+  }
+
+  // Backup Server
+  fmt.Printf("(server %s)backup put: %s -> %s\n", format_server_name(pb.me), args.Key, args.Value)
+  pb.kvstore[args.Key] = args.Value
+  reply.Err = OK
+  // done preparing the reply
+  return nil
+}
+
+
 
 /*
 Read a View returned by the viewservice and determine the role the named PBServer instance
@@ -185,9 +250,17 @@ func (pb *PBServer) is_backup() bool {
   return !(pb.backup == "")
 }
 
-
-
-
+/*
+If the server name is not "", returns the last character (which is typically a number
+that identifies the server and is more readable than the full length name).
+Accepts a server's full name and returns a shortened version.
+*/
+func format_server_name(name string) string {
+  if len(name) > 0 {
+    return name[len(name)-1:]
+  }
+  return ""
+}
 
 
 

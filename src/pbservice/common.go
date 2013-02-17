@@ -39,4 +39,22 @@ type KVStoreReply struct {
 	Err string
 }
 
+type InternalGetArgs struct {
+	Key string
+}
+
+type InternalGetReply struct {
+	Err Err
+	Value string
+}
+
+type InternalPutArgs struct {
+	Key string
+	Value string
+}
+
+type InternalPutReply struct {
+	Err Err
+}
+
 
