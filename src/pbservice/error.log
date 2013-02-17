@@ -2,1309 +2,1023 @@ warning: building out-of-date packages:
 	viewservice
 installing these packages with 'go test -i' will speed future tests.
 
-2013/02/17 00:33:47 method Kill has wrong number of ins: 1
-2013/02/17 00:33:56 method Kill has wrong number of ins: 1
-2013/02/17 00:34:03 method Kill has wrong number of ins: 1
-2013/02/17 00:34:13 method Kill has wrong number of ins: 1
-2013/02/17 00:34:15 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:15 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:15 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:15 rpc: writing response: use of closed network connection
-2013/02/17 00:34:15 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:15 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:15 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:15 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:15 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:15 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:15 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:15 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:15 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:15 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:15 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:15 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:15 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:15 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:15 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:15 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:15 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:15 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:15 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:15 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:16 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:16 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: writing response: use of closed network connection
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:17 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: writing response: use of closed network connection
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:17 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:17 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:17 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: writing response: use of closed network connection
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:18 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:18 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:18 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:18 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:18 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:18 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:19 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:19 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:19 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:19 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:19 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: writing response: use of closed network connection
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:19 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: writing response: use of closed network connection
-2013/02/17 00:34:19 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:19 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:20 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:20 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:20 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:20 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: writing response: use of closed network connection
-2013/02/17 00:34:20 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-2: connection reset by peer
-2013/02/17 00:34:20 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:20 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:21 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-csu-1: connection reset by peer
-2013/02/17 00:34:21 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:24 method Kill has wrong number of ins: 1
-2013/02/17 00:34:28 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rc-2: connection reset by peer
-2013/02/17 00:34:49 method Kill has wrong number of ins: 1
-2013/02/17 00:34:50 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:50 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: use of closed network connection
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-2: connection reset by peer
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-2: connection reset by peer
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-2: connection reset by peer
-2013/02/17 00:34:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-2: connection reset by peer
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-2: connection reset by peer
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:51 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:51 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-2: connection reset by peer
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-2: connection reset by peer
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-2: connection reset by peer
-2013/02/17 00:34:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: use of closed network connection
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:52 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:52 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:53 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:53 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:53 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:53 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:53 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:53 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:53 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:53 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:53 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:53 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:53 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:53 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:53 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:53 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:53 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:53 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:53 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:53 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:53 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:53 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:54 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:54 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:54 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:54 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:54 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:54 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:54 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:54 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:54 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:54 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:54 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:54 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:54 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:54 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:54 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:54 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:54 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:54 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:55 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:55 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:55 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:55 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:56 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:56 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:56 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:56 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:56 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:56 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:56 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:56 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:56 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:56 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:56 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:56 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:56 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:56 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:56 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:56 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:56 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:56 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:56 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:56 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:56 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:56 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:56 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:56 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:56 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:56 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:56 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:56 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:56 rpc: writing response: use of closed network connection
-2013/02/17 00:34:56 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:56 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:56 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:56 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:56 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:56 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:56 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:56 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:56 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:56 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:56 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:56 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:56 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:56 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:56 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:56 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:56 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:56 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:57 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:57 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:57 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:57 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:57 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:57 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:57 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:57 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:57 rpc: writing response: use of closed network connection
-2013/02/17 00:34:57 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:57 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:57 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:57 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:57 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:57 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:57 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:57 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:57 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:57 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:57 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:57 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:57 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:57 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:57 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:57 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:57 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:57 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:57 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:57 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:57 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:57 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:58 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:58 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:58 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:58 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:58 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:58 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:58 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:58 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:58 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:58 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:58 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:58 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:58 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:58 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:58 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:58 rpc: writing response: use of closed network connection
-2013/02/17 00:34:58 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:58 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:58 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:58 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:58 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:58 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:58 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:58 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:58 rpc: writing response: use of closed network connection
-2013/02/17 00:34:58 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:58 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:59 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:59 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:34:59 rpc: client protocol error: unexpected EOF
-2013/02/17 00:34:59 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:00 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:00 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:00 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:00 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:00 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:00 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:00 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:00 rpc: writing response: use of closed network connection
-2013/02/17 00:35:00 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:00 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:00 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:00 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:00 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:00 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:00 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:00 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:00 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:00 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:00 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:00 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:00 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:00 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:00 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:00 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:00 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:00 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:00 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:00 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:00 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:00 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:00 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:00 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:00 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:00 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:00 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:00 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:00 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:00 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:00 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:00 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:00 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:00 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:00 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:01 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:01 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:01 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:01 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:01 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:01 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:01 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:02 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:02 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:02 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:02 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:02 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:02 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:02 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:02 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:02 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:02 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:02 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:02 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:02 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:02 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:02 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:02 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:02 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:02 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:02 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:02 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:02 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:02 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:02 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:02 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:02 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:02 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:02 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:02 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:02 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:02 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:02 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:02 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:02 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:02 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:02 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:02 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:02 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:02 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:03 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:03 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:03 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:03 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:03 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:03 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:03 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:03 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:03 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:03 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:03 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:03 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:03 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:03 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:03 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:03 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:03 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:03 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:03 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:03 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:03 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:03 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:03 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:03 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:03 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:03 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:03 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:03 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:03 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:03 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:03 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:03 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:03 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:03 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:03 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:03 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:03 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:03 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:03 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:03 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:03 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:03 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:04 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:04 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:04 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:04 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:04 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:04 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:04 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:04 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:04 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:04 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:04 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:04 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:04 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:04 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:04 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:04 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:04 rpc: writing response: use of closed network connection
-2013/02/17 00:35:04 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:04 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:04 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:04 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:04 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:04 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:04 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:04 rpc: writing response: use of closed network connection
-2013/02/17 00:35:04 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:04 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:04 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:04 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:04 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:05 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:05 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:05 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:05 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:05 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:05 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:05 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:05 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:05 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:05 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:05 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:05 rpc: writing response: use of closed network connection
-2013/02/17 00:35:05 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:05 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:05 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:05 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:05 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:05 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:05 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:05 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:05 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:05 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:05 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:05 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:05 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:05 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:05 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:05 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:05 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:05 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:05 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:05 rpc: writing response: use of closed network connection
-2013/02/17 00:35:06 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:06 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:06 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:06 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:06 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:06 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:06 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:06 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:06 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:06 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:06 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:06 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:06 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:06 rpc: writing response: use of closed network connection
-2013/02/17 00:35:06 rpc: writing response: use of closed network connection
-2013/02/17 00:35:06 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:06 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:06 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:06 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:06 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:06 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:06 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:06 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:06 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:06 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:06 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:06 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:06 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:06 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:06 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:06 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:06 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:06 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:06 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:06 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:06 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:06 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:06 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:06 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:07 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:07 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:07 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:07 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:07 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:07 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:07 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:07 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:07 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:07 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:07 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:07 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:07 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:07 rpc: writing response: use of closed network connection
-2013/02/17 00:35:07 rpc: writing response: use of closed network connection
-2013/02/17 00:35:07 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:07 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:07 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:07 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:07 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:07 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:07 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:07 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:07 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:07 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:07 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:07 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:07 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:07 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:07 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:07 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:07 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:07 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:08 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:08 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:08 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:08 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:08 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:08 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:08 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:08 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:08 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:08 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:08 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:08 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:08 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:08 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:08 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:08 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:08 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:08 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:08 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:08 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:08 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:08 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:08 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:08 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:08 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:09 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:09 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:09 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:09 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:09 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:09 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:09 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:09 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:09 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:09 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:09 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:09 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:09 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:09 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:09 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:09 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:09 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:09 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:09 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:09 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:09 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:09 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:09 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:09 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:09 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:09 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:09 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:09 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:09 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:09 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:09 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:09 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:09 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:09 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:09 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:09 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:09 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:09 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:09 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:09 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:10 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:10 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:10 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:10 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:10 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:10 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:10 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:10 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:10 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:10 rpc: writing response: use of closed network connection
-2013/02/17 00:35:10 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:10 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:10 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:10 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:10 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:10 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:10 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:10 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:10 rpc: client protocol error: read unix /var/tmp/824-1000/pb-7772-rcu-3: connection reset by peer
-2013/02/17 00:35:10 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:10 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:10 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:10 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:10 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:10 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:11 rpc: client protocol error: unexpected EOF
-2013/02/17 00:35:11 rpc: writing response: write unix @: broken pipe
-2013/02/17 00:35:14 method Kill has wrong number of ins: 1
-2013/02/17 00:35:22 method Kill has wrong number of ins: 1
+2013/02/17 01:07:22 method Kill has wrong number of ins: 1
+2013/02/17 01:07:30 method Kill has wrong number of ins: 1
+2013/02/17 01:07:37 method Kill has wrong number of ins: 1
+2013/02/17 01:07:48 method Kill has wrong number of ins: 1
+2013/02/17 01:07:49 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:49 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:49 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:49 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:50 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:50 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: use of closed network connection
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: use of closed network connection
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:51 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:51 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: use of closed network connection
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: writing response: use of closed network connection
+2013/02/17 01:07:52 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:52 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: use of closed network connection
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: writing response: use of closed network connection
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:53 rpc: writing response: use of closed network connection
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: use of closed network connection
+2013/02/17 01:07:53 rpc: writing response: use of closed network connection
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:53 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: use of closed network connection
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: use of closed network connection
+2013/02/17 01:07:54 rpc: writing response: use of closed network connection
+2013/02/17 01:07:54 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:54 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:55 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:55 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:55 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:55 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:55 rpc: writing response: use of closed network connection
+2013/02/17 01:07:55 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:55 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:55 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:55 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:55 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:55 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:55 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:55 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:55 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:55 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:55 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:55 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:55 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:55 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:55 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:55 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-2: connection reset by peer
+2013/02/17 01:07:55 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:55 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:55 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:55 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:55 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:55 rpc: writing response: use of closed network connection
+2013/02/17 01:07:55 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:55 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-csu-1: connection reset by peer
+2013/02/17 01:07:55 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:56 rpc: client protocol error: unexpected EOF
+2013/02/17 01:07:56 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:07:58 method Kill has wrong number of ins: 1
+2013/02/17 01:08:23 method Kill has wrong number of ins: 1
+2013/02/17 01:08:25 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:25 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:25 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:25 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:25 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:25 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:25 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:25 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:25 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:25 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:25 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:25 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:25 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:25 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:25 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:25 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:25 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:25 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:25 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:25 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:25 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:25 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:25 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:25 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: use of closed network connection
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: writing response: use of closed network connection
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:26 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:26 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:26 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:27 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:27 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:27 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:27 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:27 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:27 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:27 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:27 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:27 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:27 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:27 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:27 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:27 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:27 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:27 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:27 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:27 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:27 rpc: writing response: use of closed network connection
+2013/02/17 01:08:27 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:27 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:27 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:27 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:27 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:27 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:27 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:27 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:27 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:27 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:27 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:27 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:27 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:27 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:27 rpc: writing response: use of closed network connection
+2013/02/17 01:08:27 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:27 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:27 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:27 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:27 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:27 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-3: connection reset by peer
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:28 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: writing response: use of closed network connection
+2013/02/17 01:08:28 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:28 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:29 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:29 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:29 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: writing response: use of closed network connection
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:29 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: writing response: use of closed network connection
+2013/02/17 01:08:30 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: writing response: use of closed network connection
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:30 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: writing response: use of closed network connection
+2013/02/17 01:08:30 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:30 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:30 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:30 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:30 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:30 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:30 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: writing response: use of closed network connection
+2013/02/17 01:08:30 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:30 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:30 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:30 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:30 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:30 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:30 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:31 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:31 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:31 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:31 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:31 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:31 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:31 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:31 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:31 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:31 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:31 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:31 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:31 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:31 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:31 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:31 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:31 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:31 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:31 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:31 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:31 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:31 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:31 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:31 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:31 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:31 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:31 rpc: writing response: use of closed network connection
+2013/02/17 01:08:31 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:31 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:31 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:31 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:31 rpc: client protocol error: unexpected EOF
+2013/02/17 01:08:31 rpc: writing response: write unix @: broken pipe
+2013/02/17 01:08:31 rpc: client protocol error: read unix /var/tmp/824-1000/pb-8379-rcu-2: connection reset by peer
+2013/02/17 01:08:48 method Kill has wrong number of ins: 1
+2013/02/17 01:08:57 method Kill has wrong number of ins: 1
