@@ -2,7 +2,7 @@ package pbservice
 
 import "viewservice"
 import "net/rpc"
-//import "fmt"
+// import "fmt"
 // You'll probably need to uncomment this:
 // import "time"
 
@@ -18,11 +18,13 @@ to learn about the current View state.
 */
 type Clerk struct {
   vs *viewservice.Clerk
+  current_view viewservice.View   // cached current viewservice view
 }
 
 func MakeClerk(vshost string, me string) *Clerk {
   ck := new(Clerk)
   ck.vs = viewservice.MakeClerk(me, vshost)
+  ck.current_view, _ = ck.vs.Get()
   return ck
 }
 
@@ -38,9 +40,13 @@ func (ck *Clerk) Get(key string) (value string) {
   args.Key = key
   var reply GetReply      // declare reply to be poulated by RPC
 
-  //var primary_server = ck.vs.Primary()    // Clerk's viewservice Clerk's Primary stub retrieves primary name from viewservice.
-  for call(ck.vs.Primary(), "PBServer.Get", args, &reply) == false || reply.Err == ErrWrongServer {
-    // repeat RPC call until Primary replies with success (i.e. OK)
+  if ck.current_view.Primary == "" {
+    ck.update_view()
+  }
+
+  for call(ck.current_view.Primary, "PBServer.Get", args, &reply) == false || reply.Err == ErrWrongServer {
+    // repeat RPC call until Primary replies with success (i.e. OK). 
+    ck.update_view()    // If PBServer is not replying or says it is no longer the Primary, get updated view from the viewservice.
   }
   if reply.Err == OK {
     return reply.Value
@@ -59,10 +65,29 @@ func (ck *Clerk) Put(key string, value string) {
   args.Value = value
   var reply PutReply      // declare reply to be populated by RPC
 
-  //var primary_server = ck.vs.Primary()    // Clerk's viewservice Clerk's Primary stub retrieves primary name from viewservice.  
-  for call(ck.vs.Primary(), "PBServer.Put", args, &reply) == false || reply.Err == ErrWrongServer {
-    // repeat RPC call until Primary replies
+  if ck.current_view.Primary == "" {
+    ck.update_view()
   }
+
+  //var primary_server = ck.vs.Primary()    // Clerk's viewservice Clerk's Primary stub retrieves primary name from viewservice.  
+  for call(ck.current_view.Primary, "PBServer.Put", args, &reply) == false || reply.Err == ErrWrongServer {
+    // repeat RPC call until Primary replies
+    ck.update_view()
+  }
+}
+
+/*
+Calls the viewservice Get stub repeatedly until success to update the current View. The 
+viewservice client Get stub makes an RPC request to the viewservice server.
+*/
+func (ck *Clerk) update_view() {
+  var succeeded bool
+  ck.current_view, succeeded = ck.vs.Get()
+  for !succeeded {
+    // Continue requesting from the viewserice
+    ck.current_view, succeeded = ck.vs.Get()
+  }
+  // Completes when succeeded == true, so current_view has been updated.
 }
 
 
