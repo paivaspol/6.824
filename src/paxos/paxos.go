@@ -20,6 +20,16 @@ package paxos
 // px.Min() int -- instances before this seq have been forgotten
 //
 
+/*
+Library implementing the Paxos protocol and managing a set of agreed upon values. Each
+kvpaxos server will have an instance of this library which allows it to start agreement
+negotiation about a new Paxos instance/run and retrieve the decision that was made. All 
+library calls are stubs which use RPC communication with other peers to send messages 
+back and forth and eventually reach agreements. To support systems that run for a long 
+time, the agreement map is cleaned up by removing entries that all kvpaxos servers have 
+indicated they will no longer need using the Done call.
+*/
+
 import "net"
 import "net/rpc"
 import "log"
@@ -37,56 +47,28 @@ type Paxos struct {
   unreliable bool
   rpcCount int
   peers []string
-  me int // index into peers[]
-
-
+  me int                       // index into peers[]
   // Your data here.
+  state map[int]PSIState      // Paxos Sequence Instance State
+
 }
 
-//
-// call() sends an RPC to the rpcname handler on server srv
-// with arguments args, waits for the reply, and leaves the
-// reply in reply. the reply argument should be a pointer
-// to a reply structure.
-//
-// the return value is true if the server responded, and false
-// if call() was not able to contact the server. in particular,
-// the replys contents are only valid if call() returned true.
-//
-// you should assume that call() will time out and return an
-// error after a while if it does not get a reply from the server.
-//
-// please use call() to send all RPCs, in client.go and server.go.
-// please do not change this function.
-//
-func call(srv string, name string, args interface{}, reply interface{}) bool {
-  c, err := rpc.Dial("unix", srv)
-  if err != nil {
-    err1 := err.(*net.OpError)
-    if err1.Err != syscall.ENOENT && err1.Err != syscall.ECONNREFUSED {
-      fmt.Printf("paxos Dial() failed: %v\n", err1)
-    }
-    return false
-  }
-  defer c.Close()
-    
-  err = c.Call(name, args, reply)
-  if err == nil {
-    return true
-  }
-  return false
+type PSIState struct {
+  n_prepare int     // number of highest prepare seen
+  n_accept int      // number of highest numbered accept
+  v_accept int      // accepted value (every higher numbered accepted proposal has same v)
 }
 
 
-//
-// the application wants paxos to start agreement on
-// instance seq, with proposed value v.
-// Start() returns right away; the application will
-// call Status() to find out if/when agreement
-// is reached.
-//
+/*
+The application wants paxos to start agreement on instance seq, with proposed value v.
+Start() returns right away; the application will call Status() to find out if/when 
+agreement is reached.
+*/
 func (px *Paxos) Start(seq int, v interface{}) {
   // Your code here.
+  fmt.Println(px.me, px.peers, px.state)
+
 }
 
 //
@@ -158,6 +140,42 @@ func (px *Paxos) Status(seq int) (bool, interface{}) {
 }
 
 
+
+//
+// call() sends an RPC to the rpcname handler on server srv
+// with arguments args, waits for the reply, and leaves the
+// reply in reply. the reply argument should be a pointer
+// to a reply structure.
+//
+// the return value is true if the server responded, and false
+// if call() was not able to contact the server. in particular,
+// the replys contents are only valid if call() returned true.
+//
+// you should assume that call() will time out and return an
+// error after a while if it does not get a reply from the server.
+//
+// please use call() to send all RPCs, in client.go and server.go.
+// please do not change this function.
+//
+func call(srv string, name string, args interface{}, reply interface{}) bool {
+  c, err := rpc.Dial("unix", srv)
+  if err != nil {
+    err1 := err.(*net.OpError)
+    if err1.Err != syscall.ENOENT && err1.Err != syscall.ECONNREFUSED {
+      fmt.Printf("paxos Dial() failed: %v\n", err1)
+    }
+    return false
+  }
+  defer c.Close()
+    
+  err = c.Call(name, args, reply)
+  if err == nil {
+    return true
+  }
+  return false
+}
+
+
 //
 // tell the peer to shut itself down.
 // for testing.
@@ -170,6 +188,7 @@ func (px *Paxos) Kill() {
   }
 }
 
+
 //
 // the application wants to create a paxos peer.
 // the ports of all the paxos peers (including this one)
@@ -179,9 +198,8 @@ func Make(peers []string, me int, rpcs *rpc.Server) *Paxos {
   px := &Paxos{}
   px.peers = peers
   px.me = me
-
-
   // Your initialization code here.
+  px.state = map[int]PSIState{}
 
   if rpcs != nil {
     // caller will create socket &c
