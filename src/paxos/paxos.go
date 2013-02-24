@@ -48,12 +48,8 @@ type Paxos struct {
   rpcCount int
   peers []string
   me int                         // index into peers[]
-  // Your data here.
   state map[int]AgreementState   // Key: Agreement instance number -> Value: Agreement State
-  highest_proposal_number int    // Highest proposal number that has been observed        
 }
-
-
 
 
 /*
@@ -63,17 +59,22 @@ Start() returns right away; the application will call Status() to find out if/wh
 agreement is reached.
 */
 func (px *Paxos) Start(sequence_number int, proposal_value interface{}) {
+  // px.mu.Lock()
+  // defer px.mu.Unlock()
+
   fmt.Println(px.me, px.peers, px.state, sequence_number, proposal_value)
-  px.state[sequence_number] = AgreementState{}     // declare and init struct with zero-valued fields.
+  //px.state[sequence_number] = AgreementState{}     // declare and init struct with zero-valued fields.
 
-  //propose RPC call send to all peers
-  var proposal_number = px.highest_proposal_number + 1
-  px.highest_proposal_number += 1
-
+  // propose RPC call send to all peers
+  //var proposal_number = px.state[sequence_number].highest_seen + 1
+  var proposal_number = 4
+  // agreement_state := px.state[sequence_number]
+  // agreement_state.highest_seen += 1
+  // px.state[sequence_number] = agreement_state
+  
   // Spawn a thread to act as the proposer
   go px.proposer_role(sequence_number, proposal_number, proposal_value)
 
-  fmt.Println("Finished Start")
   return  
 }
 
@@ -154,17 +155,20 @@ proposal for agreement instance 'sequence_number' to all the acceptors.
 ?????
 */
 func (px *Paxos) proposer_role(sequence_number int, proposal_number int, proposal_value interface{}) {
-  // Propose proposal for Agreement instance 'sequence_number'
-
+  // Send RPC prepare request to each Paxos acceptor with a proposal for Agreement 
+  // instance 'sequence_number'.
+  //prepare_replies
   for _, peer := range px.peers {
     args := &PrepareArgs{}       // declare and init struct with zero-valued fields. 
     args.Sequence_number = sequence_number
-    args.N_proposal = proposal_number
+    args.Proposal_number = proposal_number
     var reply PrepareReply       // declare reply so it is ready to be modified by called Prepare_handler
     
-    ok := call(peer, "Paxos.Prepare_handler", args, &reply)
+    fmt.Println(peer, args, reply)
+    ok := call(px.peers[2], "Paxos.Prepare_handler", args, &reply)
+    fmt.Println("Completed call")
     fmt.Println(ok)
-    fmt.Println(reply)
+    fmt.Println("Reply", reply)
   }
 
 }
@@ -176,8 +180,34 @@ Accepts pointers to PrepageArgs and PrepareReply. Method will populate the Prepa
 and return any errors.
 */
 func (px *Paxos) Prepare_handler(args *PrepareArgs, reply *PrepareReply) error {
-  fmt.Println("PrepareHandler")
-  fmt.Println(px.peers[px.me])
+  // px.mu.Lock()
+  // defer px.mu.Unlock()
+  fmt.Println("prepare received ", px.peers[px.me])
+  return nil
+
+  
+  // fmt.Println("Args", args)
+  // var sequence_number = args.Sequence_number
+  // var n = args.Proposal_number
+  // fmt.Println(px.state)
+  // agreement_state, present := px.state[sequence_number]
+  // if !present {
+  //   fmt.Println("Initializing map entry")
+  //   px.state[sequence_number] = AgreementState{}
+  //   agreement_state = px.state[sequence_number]
+  // } 
+  // if n > agreement_state.number_promised {
+  //   agreement_state.number_promised = n
+  //   px.state[sequence_number] = agreement_state
+
+  //   reply.Prepare_ok = true
+  //   reply.Number_promised = n
+  //   reply.Accepted_proposal =  px.state[sequence_number].accepted_proposal
+  //   fmt.Println("Success")
+  //   return nil
+  // }
+  // fmt.Println("Sadness")
+  // reply.Prepare_ok = false
   return nil
 }
 
@@ -191,6 +221,31 @@ func (px *Paxos) Accept_handler(args *AcceptArgs, reply *AcceptReply) error {
   fmt.Println("AcceptHandler")
   return nil
 }
+
+/* 
+Representation of a Proposal which is what a proposer proposes to acceptors which 
+has a unique number per Agreement instance and a value that the proposer wants to 
+become the decided value for the agreement instance
+*/
+type Proposal struct {
+  number int               // proposal number (unqiue per Argeement instance)
+  value interface{}        // value of the Proposal
+}
+
+/* 
+Represents the state stored by a Paxos library instance per Agreement instance.
+'number_promised' is the number returned in prepare_ok replies to promise not to 
+accept any more proposals numbered less than 'number_promised'
+accepted_proposal is the highest numbered proposal that has been accepted.
+highest_seen is the highest proposal number the paxos library instance has seen - this
+is needed for paxos instances acting as proposers.
+*/
+type AgreementState struct {
+  number_promised int           // highest proposal number promised in a prepare_ok reply
+  highest_seen int              // highest proposal number seen
+  accepted_proposal Proposal    // highest numbered proposal that has been accepted
+}
+
 
 
 
@@ -255,12 +310,7 @@ func Make(peers []string, me int, rpcs *rpc.Server) *Paxos {
   px.me = me
   // Your initialization code here.
   px.state = map[int]AgreementState{}
-  px.highest_proposal_number = 0
-  /* The default highest should be 0 so that no proposal with number 0 is ever made.
-  Reason for this is that structs with fields which track proposal numbers default 
-  to 0 when initialized. */
-
-
+  
   if rpcs != nil {
     // caller will create socket &c
     rpcs.Register(px)

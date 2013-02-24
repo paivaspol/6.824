@@ -1,18 +1,49 @@
-2013/02/23 19:51:21 method Done has wrong number of ins: 2
-2013/02/23 19:51:21 method Kill has wrong number of ins: 1
-2013/02/23 19:51:21 method Max has wrong number of ins: 1
-2013/02/23 19:51:21 method Min has wrong number of ins: 1
-2013/02/23 19:51:21 method Start reply type not a pointer: interface {}
-2013/02/23 19:51:21 method Status has wrong number of ins: 2
-2013/02/23 19:51:21 method Done has wrong number of ins: 2
-2013/02/23 19:51:21 method Kill has wrong number of ins: 1
-2013/02/23 19:51:21 method Max has wrong number of ins: 1
-2013/02/23 19:51:21 method Min has wrong number of ins: 1
-2013/02/23 19:51:21 method Start reply type not a pointer: interface {}
-2013/02/23 19:51:21 method Status has wrong number of ins: 2
-2013/02/23 19:51:21 method Done has wrong number of ins: 2
-2013/02/23 19:51:21 method Kill has wrong number of ins: 1
-2013/02/23 19:51:21 method Max has wrong number of ins: 1
-2013/02/23 19:51:21 method Min has wrong number of ins: 1
-2013/02/23 19:51:21 method Start reply type not a pointer: interface {}
-2013/02/23 19:51:21 method Status has wrong number of ins: 2
+2013/02/23 20:58:52 method Done has wrong number of ins: 2
+2013/02/23 20:58:52 method Kill has wrong number of ins: 1
+2013/02/23 20:58:52 method Max has wrong number of ins: 1
+2013/02/23 20:58:52 method Min has wrong number of ins: 1
+2013/02/23 20:58:52 method Start reply type not a pointer: interface {}
+2013/02/23 20:58:52 method Status has wrong number of ins: 2
+2013/02/23 20:58:52 method Done has wrong number of ins: 2
+2013/02/23 20:58:52 method Kill has wrong number of ins: 1
+2013/02/23 20:58:52 method Max has wrong number of ins: 1
+2013/02/23 20:58:52 method Min has wrong number of ins: 1
+2013/02/23 20:58:52 method Start reply type not a pointer: interface {}
+2013/02/23 20:58:52 method Status has wrong number of ins: 2
+2013/02/23 20:58:52 method Done has wrong number of ins: 2
+2013/02/23 20:58:52 method Kill has wrong number of ins: 1
+2013/02/23 20:58:52 method Max has wrong number of ins: 1
+2013/02/23 20:58:52 method Min has wrong number of ins: 1
+2013/02/23 20:58:52 method Start reply type not a pointer: interface {}
+2013/02/23 20:58:52 method Status has wrong number of ins: 2
+2013/02/23 20:58:52 rpc: writing response: gob: type paxos.Proposal has no exported fields
+2013/02/23 20:59:23 method Done has wrong number of ins: 2
+2013/02/23 20:59:23 method Kill has wrong number of ins: 1
+2013/02/23 20:59:23 method Max has wrong number of ins: 1
+2013/02/23 20:59:23 method Min has wrong number of ins: 1
+2013/02/23 20:59:23 method Start reply type not a pointer: interface {}
+2013/02/23 20:59:23 method Status has wrong number of ins: 2
+2013/02/23 20:59:23 method Done has wrong number of ins: 2
+2013/02/23 20:59:23 method Kill has wrong number of ins: 1
+2013/02/23 20:59:23 method Max has wrong number of ins: 1
+2013/02/23 20:59:23 method Min has wrong number of ins: 1
+2013/02/23 20:59:23 method Start reply type not a pointer: interface {}
+2013/02/23 20:59:23 method Status has wrong number of ins: 2
+2013/02/23 20:59:23 method Done has wrong number of ins: 2
+2013/02/23 20:59:23 method Kill has wrong number of ins: 1
+2013/02/23 20:59:23 method Max has wrong number of ins: 1
+2013/02/23 20:59:23 method Min has wrong number of ins: 1
+2013/02/23 20:59:23 method Start reply type not a pointer: interface {}
+2013/02/23 20:59:23 method Status has wrong number of ins: 2
+2013/02/23 20:59:23 method Done has wrong number of ins: 2
+2013/02/23 20:59:23 method Kill has wrong number of ins: 1
+2013/02/23 20:59:23 method Max has wrong number of ins: 1
+2013/02/23 20:59:23 method Min has wrong number of ins: 1
+2013/02/23 20:59:23 method Start reply type not a pointer: interface {}
+2013/02/23 20:59:23 method Status has wrong number of ins: 2
+2013/02/23 20:59:23 method Done has wrong number of ins: 2
+2013/02/23 20:59:23 method Kill has wrong number of ins: 1
+2013/02/23 20:59:23 method Max has wrong number of ins: 1
+2013/02/23 20:59:23 method Min has wrong number of ins: 1
+2013/02/23 20:59:23 method Start reply type not a pointer: interface {}
+2013/02/23 20:59:23 method Status has wrong number of ins: 2
