@@ -19,14 +19,10 @@ type PrepareReply struct {
 
 type AcceptArgs struct {
 	Sequence_number int         // sequence number of the agreement instance
-	N_proposal int              // proposal number     
-	V_proposal interface{}      
-	/* value of highest numbered accepted proposal among the prepare_ok reponses or the 
-	value the proposer wishes to propose if responses returned no proposals */
+	Proposal *Proposal          // Proposal to contend to be the decided proposal
 }
 
 
 type AcceptReply struct {
-	accept_ok bool              // whether the accept proposal request was accepted
-	N_accepted int              // number of highest accepted proposal
+	Accept_ok bool              // whether the accept proposal request was accepted
 }
