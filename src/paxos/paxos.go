@@ -47,28 +47,34 @@ type Paxos struct {
   unreliable bool
   rpcCount int
   peers []string
-  me int                       // index into peers[]
+  me int                         // index into peers[]
   // Your data here.
-  state map[int]PSIState      // Paxos Sequence Instance State
-
+  state map[int]AgreementState   // Key: Agreement instance number -> Value: Agreement State
+  highest_proposal_number int    // Highest proposal number that has been observed        
 }
 
-type PSIState struct {
-  n_prepare int     // number of highest prepare seen
-  n_accept int      // number of highest numbered accept
-  v_accept int      // accepted value (every higher numbered accepted proposal has same v)
-}
+
 
 
 /*
-The application wants paxos to start agreement on instance seq, with proposed value v.
+The application wants paxos to start agreement instance with number sequence_number, 
+with proposed value 'value'.
 Start() returns right away; the application will call Status() to find out if/when 
 agreement is reached.
 */
-func (px *Paxos) Start(seq int, v interface{}) {
-  // Your code here.
-  fmt.Println(px.me, px.peers, px.state)
+func (px *Paxos) Start(sequence_number int, proposal_value interface{}) {
+  fmt.Println(px.me, px.peers, px.state, sequence_number, proposal_value)
+  px.state[sequence_number] = AgreementState{}     // declare and init struct with zero-valued fields.
 
+  //propose RPC call send to all peers
+  var proposal_number = px.highest_proposal_number + 1
+  px.highest_proposal_number += 1
+
+  // Spawn a thread to act as the proposer
+  go px.proposer_role(sequence_number, proposal_number, proposal_value)
+
+  fmt.Println("Finished Start")
+  return  
 }
 
 //
@@ -140,6 +146,55 @@ func (px *Paxos) Status(seq int) (bool, interface{}) {
 }
 
 
+/*
+Acts in the Paxos proposer role to first propose a proposal to the acceptors for 
+agreement instance 'sequence_number' and if a majority reply with prepare_ok then
+the proposer proceeds to phase 2. In this phase, it sends an accept request for the
+proposal for agreement instance 'sequence_number' to all the acceptors.
+?????
+*/
+func (px *Paxos) proposer_role(sequence_number int, proposal_number int, proposal_value interface{}) {
+  // Propose proposal for Agreement instance 'sequence_number'
+
+  for _, peer := range px.peers {
+    args := &PrepareArgs{}       // declare and init struct with zero-valued fields. 
+    args.Sequence_number = sequence_number
+    args.N_proposal = proposal_number
+    var reply PrepareReply       // declare reply so it is ready to be modified by called Prepare_handler
+    
+    ok := call(peer, "Paxos.Prepare_handler", args, &reply)
+    fmt.Println(ok)
+    fmt.Println(reply)
+  }
+
+}
+
+
+/*
+Paxos library instances communicate with one another via exported RPC methods.
+Accepts pointers to PrepageArgs and PrepareReply. Method will populate the PrepareReply
+and return any errors.
+*/
+func (px *Paxos) Prepare_handler(args *PrepareArgs, reply *PrepareReply) error {
+  fmt.Println("PrepareHandler")
+  fmt.Println(px.peers[px.me])
+  return nil
+}
+
+
+/*
+Paxos library instances communicate with one another via exported RPC methods.
+Accepts pointers to PrepageArgs and PrepareReply. Method will populate the PrepareReply
+and return any errors.
+*/
+func (px *Paxos) Accept_handler(args *AcceptArgs, reply *AcceptReply) error {
+  fmt.Println("AcceptHandler")
+  return nil
+}
+
+
+
+
 
 //
 // call() sends an RPC to the rpcname handler on server srv
@@ -199,7 +254,12 @@ func Make(peers []string, me int, rpcs *rpc.Server) *Paxos {
   px.peers = peers
   px.me = me
   // Your initialization code here.
-  px.state = map[int]PSIState{}
+  px.state = map[int]AgreementState{}
+  px.highest_proposal_number = 0
+  /* The default highest should be 0 so that no proposal with number 0 is ever made.
+  Reason for this is that structs with fields which track proposal numbers default 
+  to 0 when initialized. */
+
 
   if rpcs != nil {
     // caller will create socket &c
