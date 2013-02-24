@@ -48,6 +48,7 @@ type Paxos struct {
   rpcCount int
   peers []string
   me int                         // index into peers[]
+  peer_count int                 // Number of Paxos Peers
   state map[int]AgreementState   // Key: Agreement instance number -> Value: Agreement State
 }
 
@@ -59,23 +60,26 @@ Start() returns right away; the application will call Status() to find out if/wh
 agreement is reached.
 */
 func (px *Paxos) Start(sequence_number int, proposal_value interface{}) {
-  // px.mu.Lock()
-  // defer px.mu.Unlock()
-
+  px.mu.Lock()
+  defer px.mu.Unlock()
   fmt.Println(px.me, px.peers, px.state, sequence_number, proposal_value)
-  //px.state[sequence_number] = AgreementState{}     // declare and init struct with zero-valued fields.
+
+  agreement_state, present := px.state[sequence_number]
+  if !present {
+    fmt.Println("Initializing Agreement entry during Start")
+    px.state[sequence_number] = AgreementState{}   // declare and init struct with zero-valued fields    
+    agreement_state = px.state[sequence_number]
+  } 
 
   // propose RPC call send to all peers
-  //var proposal_number = px.state[sequence_number].highest_seen + 1
-  var proposal_number = 4
-  // agreement_state := px.state[sequence_number]
-  // agreement_state.highest_seen += 1
-  // px.state[sequence_number] = agreement_state
+  var proposal_number = px.state[sequence_number].highest_seen + 1
+  agreement_state.highest_seen += 1
+  px.state[sequence_number] = agreement_state
   
   // Spawn a thread to act as the proposer
   go px.proposer_role(sequence_number, proposal_number, proposal_value)
 
-  return  
+  return
 }
 
 //
@@ -155,21 +159,23 @@ proposal for agreement instance 'sequence_number' to all the acceptors.
 ?????
 */
 func (px *Paxos) proposer_role(sequence_number int, proposal_number int, proposal_value interface{}) {
-  // Send RPC prepare request to each Paxos acceptor with a proposal for Agreement 
-  // instance 'sequence_number'.
-  //prepare_replies
-  for _, peer := range px.peers {
+  // Send RPC prepare request to each Paxos acceptor with a proposal for Agreement instance 'sequence_number'.
+
+  var replies_from_prepare = make([]PrepareReply, px.peer_count)   // declare and init
+
+  for index, peer := range px.peers {
     args := &PrepareArgs{}       // declare and init struct with zero-valued fields. 
     args.Sequence_number = sequence_number
     args.Proposal_number = proposal_number
     var reply PrepareReply       // declare reply so it is ready to be modified by called Prepare_handler
-    
-    fmt.Println(peer, args, reply)
-    ok := call(px.peers[2], "Paxos.Prepare_handler", args, &reply)
-    fmt.Println("Completed call")
+    // Attempt to contact peer. No reply is equivalent to a no vote.
+    ok := call(peer, "Paxos.Prepare_handler", args, &reply)
     fmt.Println(ok)
-    fmt.Println("Reply", reply)
+
+    replies_from_prepare[index] = reply
   }
+
+  fmt.Println("Replies", replies_from_prepare)
 
 }
 
@@ -180,34 +186,29 @@ Accepts pointers to PrepageArgs and PrepareReply. Method will populate the Prepa
 and return any errors.
 */
 func (px *Paxos) Prepare_handler(args *PrepareArgs, reply *PrepareReply) error {
-  // px.mu.Lock()
-  // defer px.mu.Unlock()
+  px.mu.Lock()
+  defer px.mu.Unlock()
   fmt.Println("prepare received ", px.peers[px.me])
-  return nil
+  fmt.Println("Args", args)
+  var sequence_number = args.Sequence_number
+  var n = args.Proposal_number
+  fmt.Println(px.state)
+  agreement_state, present := px.state[sequence_number]
+  if !present {
+    fmt.Println("Initializing map entry")
+    px.state[sequence_number] = AgreementState{}
+    agreement_state = px.state[sequence_number]
+  } 
+  if n > agreement_state.highest_promised {
+    agreement_state.highest_promised = n
+    px.state[sequence_number] = agreement_state
 
-  
-  // fmt.Println("Args", args)
-  // var sequence_number = args.Sequence_number
-  // var n = args.Proposal_number
-  // fmt.Println(px.state)
-  // agreement_state, present := px.state[sequence_number]
-  // if !present {
-  //   fmt.Println("Initializing map entry")
-  //   px.state[sequence_number] = AgreementState{}
-  //   agreement_state = px.state[sequence_number]
-  // } 
-  // if n > agreement_state.number_promised {
-  //   agreement_state.number_promised = n
-  //   px.state[sequence_number] = agreement_state
-
-  //   reply.Prepare_ok = true
-  //   reply.Number_promised = n
-  //   reply.Accepted_proposal =  px.state[sequence_number].accepted_proposal
-  //   fmt.Println("Success")
-  //   return nil
-  // }
-  // fmt.Println("Sadness")
-  // reply.Prepare_ok = false
+    reply.Prepare_ok = true
+    reply.Number_promised = n
+    reply.Accepted_proposal = agreement_state.accepted_proposal
+    return nil
+  }
+  reply.Prepare_ok = false
   return nil
 }
 
@@ -228,8 +229,8 @@ has a unique number per Agreement instance and a value that the proposer wants t
 become the decided value for the agreement instance
 */
 type Proposal struct {
-  number int               // proposal number (unqiue per Argeement instance)
-  value interface{}        // value of the Proposal
+  Number int               // proposal number (unqiue per Argeement instance)
+  Value interface{}        // value of the Proposal
 }
 
 /* 
@@ -241,9 +242,9 @@ highest_seen is the highest proposal number the paxos library instance has seen 
 is needed for paxos instances acting as proposers.
 */
 type AgreementState struct {
-  number_promised int           // highest proposal number promised in a prepare_ok reply
+  highest_promised int          // highest proposal number promised in a prepare_ok reply
   highest_seen int              // highest proposal number seen
-  accepted_proposal Proposal    // highest numbered proposal that has been accepted
+  accepted_proposal *Proposal   // highest numbered proposal that has been accepted
 }
 
 
@@ -309,7 +310,9 @@ func Make(peers []string, me int, rpcs *rpc.Server) *Paxos {
   px.peers = peers
   px.me = me
   // Your initialization code here.
+  px.peer_count = len(peers)
   px.state = map[int]AgreementState{}
+
   
   if rpcs != nil {
     // caller will create socket &c
