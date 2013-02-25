@@ -39,6 +39,30 @@ import "sync"
 import "fmt"
 import "math/rand"
 
+/* 
+Representation of a Proposal which is what a proposer proposes to acceptors which 
+has a unique number per Agreement instance and a value that the proposer wants to 
+become the decided value for the agreement instance
+*/
+type Proposal struct {
+  Number int               // proposal number (unqiue per Argeement instance)
+  Value interface{}        // value of the Proposal
+}
+
+/* 
+Represents the state stored by a Paxos library instance per Agreement instance.
+'number_promised' is the number returned in prepare_ok replies to promise not to 
+accept any more proposals numbered less than 'number_promised'
+accepted_proposal is the highest numbered proposal that has been accepted.
+highest_seen is the highest proposal number the paxos library instance has seen - this
+is needed for paxos instances acting as proposers.
+*/
+type AgreementState struct {
+  highest_promised int          // highest proposal number promised in a prepare_ok reply
+  highest_seen int              // highest proposal number seen
+  accepted_proposal *Proposal   // highest numbered proposal that has been accepted
+}
+
 
 type Paxos struct {
   mu sync.Mutex
@@ -138,15 +162,12 @@ func (px *Paxos) Min() int {
   return 0
 }
 
-//
-// the application wants to know whether this
-// peer thinks an instance has been decided,
-// and if so what the agreed value is. Status()
-// should just inspect the local peers state;
-// it should not contact other Paxos peers.
-//
+/* The application wants to know whether this peer thinks an Agreement 
+instance has been decided upon, and if so what the agreed value is. 
+Status() should just inspect the local peers state; it should not contact 
+other Paxos peers.
+*/
 func (px *Paxos) Status(sequence_number int) (bool, interface{}) {
-  // Your code here.
   agreement_state, present := px.state[sequence_number]
   if present && agreement_state.accepted_proposal != nil {
     return true, agreement_state.accepted_proposal.Value
@@ -304,30 +325,6 @@ func (px *Paxos) Accept_handler(args *AcceptArgs, reply *AcceptReply) error {
   return nil
 }
 
-/* 
-Representation of a Proposal which is what a proposer proposes to acceptors which 
-has a unique number per Agreement instance and a value that the proposer wants to 
-become the decided value for the agreement instance
-*/
-type Proposal struct {
-  Number int               // proposal number (unqiue per Argeement instance)
-  Value interface{}        // value of the Proposal
-}
-
-/* 
-Represents the state stored by a Paxos library instance per Agreement instance.
-'number_promised' is the number returned in prepare_ok replies to promise not to 
-accept any more proposals numbered less than 'number_promised'
-accepted_proposal is the highest numbered proposal that has been accepted.
-highest_seen is the highest proposal number the paxos library instance has seen - this
-is needed for paxos instances acting as proposers.
-*/
-type AgreementState struct {
-  highest_promised int          // highest proposal number promised in a prepare_ok reply
-  highest_seen int              // highest proposal number seen
-  accepted_proposal *Proposal   // highest numbered proposal that has been accepted
-}
-
 
 /*
 Accepts the number of affirmative/ok replies from acceptors.
@@ -342,8 +339,56 @@ func (px *Paxos) is_majority(ok_reply_count int) bool {
 }
 
 
+/*
+To guarantee unique proposal numbers, the first proposal number used in any Agreement
+instance should be the px.me number. A unique sequence of proposal numbers is 
+generated from this by passing the previous_number to the px.next_number(int) method.
+*/
+func (px *Paxos) first_number() int {
+  return px.me
+}
+
+/*
+Accepts the previous proposal number a proposer_role used and increments it to
+return the next proposal number that should be used. The returned proposal int
+is guaranteed to be higher than the previous proposal number and also unique among 
+proposal numbers used by any peer replica server. Works because peer replica servers 
+have unique px.me values which can be used to generate unique sequences.
+*/
+func (px *Paxos) next_number(previous_number int) int {
+  return previous_number + px.peer_count
+}
 
 
+/*
+Accepts an agreement instance number and a Proposal to broadcast out prepare requests
+for to all the Paxos peers. Collects and returns a list of PrepareReply.
+Does NOT mutate local px instance or take out any locks.
+*/
+func (px *Paxos) broadcast_prepare(sequence_number int, proposal *Proposal) []PrepareReply {
+  
+  var replies_array = make([]PrepareReply, px.peer_count)    // declare and init
+  for index, peer := range px.peers {
+    args := &PrepareArgs{}       // declare and init struct with zero-valued fields. 
+    args.Sequence_number = sequence_number
+    args.Proposal_number = proposal.Number
+    var reply PrepareReply       // declare reply so ready to be modified by callee
+    // Attempt to contact peer. No reply is equivalent to a vote no.
+    call(peer, "Paxos.Prepare_handler", args, &reply)
+    replies_array[index] = reply
+  }
+  fmt.Println("Prepare Replies", replies_array)
+
+  return replies_array
+}
+
+
+
+
+
+
+// Make/Kill Paxos instances, RPC call helper
+///////////////////////////////////////////////////////////////////////////////
 
 
 //
@@ -406,7 +451,6 @@ func Make(peers []string, me int, rpcs *rpc.Server) *Paxos {
   // Your initialization code here.
   px.peer_count = len(peers)
   px.state = map[int]AgreementState{}
-
   
   if rpcs != nil {
     // caller will create socket &c
