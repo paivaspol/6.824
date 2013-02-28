@@ -94,7 +94,8 @@ type Paxos struct {
   peers []string
   me int                         // index into peers[]
   peer_count int                 // Number of Paxos Peers
-  state map[int]*AgreementState   // Key: Agreement instance number -> Value: Agreement State
+  state map[int]*AgreementState  // Key: Agreement instance number -> Value: Agreement State
+  done map[string]int            // Key: Server name, Value: The most recently received value for that server's highest done value.
 }
 
 /*
@@ -130,24 +131,40 @@ func (px *Paxos) Start(agreement_number int, proposal_value interface{}) {
   return
 }
 
-//
-// the application on this machine is done with
-// all instances <= seq.
-//
-// see the comments for Min() for more explanation.
-//
-func (px *Paxos) Done(seq int) {
-  // Your code here.
+/*
+A client application of the Paxos library will call this method when it no longer
+needs to call px.Status() for a particular agreement number. 
+All replica servers keep track of Done calls they have received since any entries in
+the px.state table for agreement instances below the minimum Done call agreement_number
+can be deleted since all replica servers have indicated they no longer need to retrieve
+the decision that was made for that agreement instance.
+rs have received a 
+Client replica server is done with all instances <= agreement_number.
+*/
+func (px *Paxos) Done(agreement_number int) {
+  px.mu.Lock()
+  defer px.mu.Unlock()
+
+  // Update the record the highest agreement_number that has been marked as done by the client of this Paxos instance.
+  if agreement_number > px.done[px.peers[px.me]] {
+    px.done[px.peers[px.me]] = agreement_number
+  }
 }
 
-//
-// the application wants to know the
-// highest instance sequence known to
-// this peer.
-//
+/* 
+The client application would like to know the highest agreement instance number 
+known to this peer. Returns -1 if no agreement instances are known (i.e. no 
+AgreementState entries have been added to the px.state map)
+*/
 func (px *Paxos) Max() int {
-  // Your code here.
-  return 0
+  max_agreement_instance_number := -1
+  for index, _ := range px.state {
+    if index > max_agreement_instance_number {
+      max_agreement_instance_number = index
+    }
+  }
+  fmt.Println(max_agreement_instance_number)
+  return max_agreement_instance_number
 }
 
 //
@@ -182,8 +199,13 @@ func (px *Paxos) Max() int {
 // instances.
 // 
 func (px *Paxos) Min() int {
-  // You code here.
-  return 0
+  var min_done int
+  for _, val := range px.done {
+    if val < min_done {
+      min_done = val
+    }
+  }
+  return min_done + 1
 }
 
 /* The application wants to know whether this peer thinks an Agreement 
@@ -212,7 +234,6 @@ proposal for agreement instance 'sequence_number' to all the acceptors.
 */
 func (px *Paxos) proposer_role(agreement_number int, proposal_number int, proposal_value interface{}) {
 
-
   // Broadcast prepare request for agreement instance 'agreement_number' to Paxos acceptors.
   var proposal = &Proposal{Number: proposal_number, Value: proposal_value}
   fmt.Printf("Propser [PrepareStage] (%s): agreement_number: %d, p_number: %d, p_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal_value)
@@ -233,12 +254,9 @@ func (px *Paxos) proposer_role(agreement_number int, proposal_number int, propos
   // Otherwise, the value may be kept at what the application calling px.Start requested.
   fmt.Printf("Propser [AcceptStage] (%s): agreement_number: %d, p_number: %d, p_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal_value)
   replies_from_accept := px.broadcast_accept(agreement_number, proposal)
-
   //fmt.Println(replies_from_accept)
-
   majority_accept := px.evaluate_accept_replies(replies_from_accept)
   //fmt.Println(majority_accept)
-
   if majority_accept {
     fmt.Printf("Propser [DecisionReached] (%s): agreement_number: %d, p_number: %d, p_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal_value)
   }
@@ -555,6 +573,11 @@ func Make(peers []string, me int, rpcs *rpc.Server) *Paxos {
   // Your initialization code here.
   px.peer_count = len(peers)
   px.state = map[int]*AgreementState{}
+  px.done = map[string]int{}
+  for _, peer := range px.peers {
+    // First agreement instance agreement_number is 0. Initially clients have not marked it done.
+    px.done[peer] = -1     
+  }
   
   if rpcs != nil {
     // caller will create socket &c
