@@ -66,12 +66,15 @@ type AgreementState struct {
   accepted_proposal *Proposal   // highest numbered proposal that has been accepted
 }
 
-// func (agrst *AgreementState) next_proposal_number() int {
-//   if agrst.proposal_number == 0 {
-//     // 
-//   }
+/*
+Sets the value for the highest_promised field of an AgreementState instance
+Caller is responsible for attaining a lock on the AgreementState in some way
+before calling
+*/
+func (agrst *AgreementState) set_highest_promised(new_highest_promised int) {
+  agrst.highest_promised = new_highest_promised
+}
 
-// }
 
 type Paxos struct {
   mu sync.Mutex
@@ -82,7 +85,7 @@ type Paxos struct {
   peers []string
   me int                         // index into peers[]
   peer_count int                 // Number of Paxos Peers
-  state map[int]AgreementState   // Key: Agreement instance number -> Value: Agreement State
+  state map[int]*AgreementState   // Key: Agreement instance number -> Value: Agreement State
 }
 
 /*
@@ -103,7 +106,7 @@ func (px *Paxos) Start(agreement_number int, proposal_value interface{}) {
   fmt.Printf("Paxos Start (%s): agreement_number: %d, proposal_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_value)
   if !present {
     fmt.Println("Initializing Agreement entry during Start")
-    px.state[agreement_number] = AgreementState{}   // declare and init struct with zero-valued fields    
+    px.state[agreement_number] = &AgreementState{highest_promised: -1, highest_seen: -1}   
   } else {
     fmt.Println("State already present!")
   }
@@ -207,44 +210,42 @@ func (px *Paxos) proposer_role(agreement_number int, proposal_number int, propos
 
   // Broadcast prepare request for agreement instance 'agreement_number' to Paxos acceptors.
   var proposal = &Proposal{Number: proposal_number, Value: proposal_value}
-  var replies_from_prepare = px.broadcast_prepare(agreement_number, proposal)
+  replies_from_prepare := px.broadcast_prepare(agreement_number, proposal)
   fmt.Println(replies_from_prepare)
 
   majority, high_val_found, high_val := px.evaluate_prepare_replies(replies_from_prepare)
-  fmt.Printf("Propser role (%s): agreement_number: %d, proposal_number: %d, proposal_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal_value)
+  fmt.Printf("Propser [PrepareStage] (%s): agreement_number: %d, proposal_number: %d, proposal_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal_value)
 
   fmt.Println(majority, high_val_found, high_val)
-
-  fmt.Println("Received evaluated results")
 
   if !majority {
     fmt.Println("Not majorty, kill")
     return
   }
 
-  fmt.Println("Continue to accept requests")
+  if high_val_found {
+    // Accept request should have value v, where v is the value of highest-number among prepare replies
+    proposal.Value = high_val
+  }
+  // Otherwise, the value may be kept at what the 
+  replies_from_accept := px.broadcast_accept(agreement_number, proposal)
 
-  // var replies_from_accept = make([]AcceptReply, px.peer_count)   // declare and init
+  fmt.Printf("Propser [AcceptStage] (%s): agreement_number: %d, proposal_number: %d, proposal_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal_value)
 
-  // for index, peer := range px.peers {
-  //   args := &AcceptArgs{}       // declare and init struct with zero-valued fields. 
-  //   args.Sequence_number = sequence_number
-  //   args.Proposal = proposal_ptr
-  //   var reply AcceptReply       // declare reply so it is ready to be modified by called Accept_handler
-    
-  //   // Attempt to contact peer. No reply is equivalent to a vote no.
-  //   call(peer, "Paxos.Accept_handler", args, &reply)
-    
-  //   replies_from_accept[index] = reply
-  // }
-  // fmt.Println("Accept Replies", replies_from_accept) 
+  fmt.Println(replies_from_accept)
 
-  // ok_count = 0
-  // for _, reply := range replies_from_accept {
-  //   if reply.Accept_ok {
-  //     ok_count += 1
-  //   }
-  // } 
+  majority_accept := px.evaluate_accept_replies(replies_from_accept)
+
+  fmt.Println(majority_accept)
+
+  if majority_accept {
+    fmt.Println("Majority accepted!!")
+
+
+    px.state[agreement_number].accepted_proposal = proposal
+
+
+  }
 
   // fmt.Println(ok_count, px.peer_count / 2)
   // if px.is_majority(ok_count) {
@@ -270,25 +271,26 @@ func (px *Paxos) Prepare_handler(args *PrepareArgs, reply *PrepareReply) error {
   px.mu.Lock()
   defer px.mu.Unlock()
 
+  var agreement_number = args.Agreement_number
+  var proposal_number = args.Proposal_number
   fmt.Printf("Prepare_handler (%s): agreement_number: %d, proposal_number: %v\n", short_name(px.peers[px.me], 7), args.Agreement_number, args.Proposal_number )
-  var sequence_number = args.Agreement_number
-  var n = args.Proposal_number
-  fmt.Println(px.state)
-  agreement_state, present := px.state[sequence_number]
+ 
+  _, present := px.state[agreement_number]
   if !present {
     fmt.Println("Initializing map entry")
-    px.state[sequence_number] = AgreementState{}
-    agreement_state = px.state[sequence_number]
+    px.state[agreement_number] = &AgreementState{highest_promised: -1, highest_seen: -1}
   } 
-  if n > agreement_state.highest_promised {
-    agreement_state.highest_promised = n
-    px.state[sequence_number] = agreement_state
+
+  if proposal_number > px.state[agreement_number].highest_promised {
+    // Promise not to accept proposals numbered less than n
+    px.state[agreement_number].set_highest_promised(proposal_number)
 
     reply.Prepare_ok = true
-    reply.Number_promised = n
-    reply.Accepted_proposal = agreement_state.accepted_proposal
+    reply.Number_promised = proposal_number
+    reply.Accepted_proposal = px.state[agreement_number].accepted_proposal
     return nil
   }
+
   reply.Prepare_ok = false
   return nil
 }
@@ -304,14 +306,14 @@ func (px *Paxos) Accept_handler(args *AcceptArgs, reply *AcceptReply) error {
   px.mu.Lock()
   defer px.mu.Unlock()
 
-  var sequence_number = args.Sequence_number
+  var sequence_number = args.Agreement_number
   var proposal = args.Proposal
   fmt.Println(proposal)
 
   agreement_state, present := px.state[sequence_number]
   if !present {
     fmt.Println("Initializing map entry")
-    px.state[sequence_number] = AgreementState{}
+    px.state[sequence_number] = &AgreementState{}
     agreement_state = px.state[sequence_number]
   } 
 
@@ -404,20 +406,20 @@ func (px *Paxos) broadcast_prepare(agreement_number int, proposal *Proposal) []P
 
 /*
 Accepts an agreement instance agreement_number and a reference to a Proposal that should
-be broadcast in a prepare request to all Paxos acceptors. Collects and returns a list 
-of PrepareReply elements.
+be broadcast in an accept request to all Paxos acceptors. Collects and returns a list 
+of AcceptReply elements.
 Does NOT mutate local px instance or take out any locks.
 */
-func (px *Paxos) broadcast_accept(agreement_number int, proposal *Proposal) []PrepareReply {
+func (px *Paxos) broadcast_accept(agreement_number int, proposal *Proposal) []AcceptReply {
   
-  var replies_array = make([]PrepareReply, px.peer_count)    // declare and init
+  var replies_array = make([]AcceptReply, px.peer_count)   // declare and init
   for index, peer := range px.peers {
-    args := &PrepareArgs{}       // declare and init struct with zero-valued fields. 
+    args := &AcceptArgs{}       // declare and init struct with zero-valued fields. 
     args.Agreement_number = agreement_number
-    args.Proposal_number = proposal.Number
-    var reply PrepareReply       // declare reply so ready to be modified by callee
+    args.Proposal = proposal
+    var reply AcceptReply       // declare reply so ready to be modified by callee
     // Attempt to contact peer. No reply is equivalent to a vote no.
-    call(peer, "Paxos.Prepare_handler", args, &reply)
+    call(peer, "Paxos.Accept_handler", args, &reply)
     replies_array[index] = reply
   }
   return replies_array
@@ -436,6 +438,7 @@ a highest accepted proposal was reported back by any acceptors, and the value fr
 numbered proposal reported by any acceptor in a reply to a prepare request. If no 
 highest accepted proposal was reported back, the reported highest_value is simply
 an empty interface instance.
+Does NOT mutate local px instance or take out any locks.
 */
 func (px *Paxos) evaluate_prepare_replies(replies_array []PrepareReply) (majority bool, found_highest_value bool, highest_value interface{}){
   var ok_count = 0                  // number replies with prepare_ok = true
@@ -464,6 +467,23 @@ func (px *Paxos) evaluate_prepare_replies(replies_array []PrepareReply) (majorit
   /* At least one Accepted_proposal was reported in a reply. The highest value among
   these is reported to be used in the accept request.*/
   return px.is_majority(ok_count), true, highest_proposal.Value
+}
+
+
+/*
+Evaluates the replies sent back by Paxos acceptors in response to accept requests
+and checks to see if a majority of them were accept_ok responses.
+Returns bool of whether a majority was reached or not.
+Does NOT mutate local px instance or take out any locks.
+*/
+func (px *Paxos) evaluate_accept_replies(replies_array []AcceptReply) (majority bool){
+  var ok_count = 0                  // number replies with accept_ok = true
+  for _, reply := range replies_array {
+    if reply.Accept_ok {
+      ok_count += 1
+    }
+  }
+  return px.is_majority(ok_count)
 }
 
 
@@ -550,7 +570,7 @@ func Make(peers []string, me int, rpcs *rpc.Server) *Paxos {
   px.me = me
   // Your initialization code here.
   px.peer_count = len(peers)
-  px.state = map[int]AgreementState{}
+  px.state = map[int]*AgreementState{}
   
   if rpcs != nil {
     // caller will create socket &c

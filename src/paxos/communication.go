@@ -18,7 +18,7 @@ type PrepareReply struct {
 
 
 type AcceptArgs struct {
-	Sequence_number int         // sequence number of the agreement instance
+	Agreement_number int         // sequence number of the agreement instance
 	Proposal *Proposal          // Proposal to contend to be the decided proposal
 }
 
