@@ -6,7 +6,7 @@ Strucs for RPC communication between Paxos Peer instances.
 
 
 type PrepareArgs struct {
-	Sequence_number int         // sequence number of the agreement instance
+	Agreement_number int         // sequence number of the agreement instance
 	Proposal_number int         // proposal number of the proposal
 }
 
