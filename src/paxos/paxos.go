@@ -69,7 +69,7 @@ type AgreementState struct {
 /*
 Sets the value for the highest_promised field of an AgreementState instance
 Caller is responsible for attaining a lock on the AgreementState in some way
-before calling
+before calling.
 */
 func (agrst *AgreementState) set_highest_promised(new_highest_promised int) {
   agrst.highest_promised = new_highest_promised
@@ -78,10 +78,19 @@ func (agrst *AgreementState) set_highest_promised(new_highest_promised int) {
 /*
 Sets the value for the accepted_proposal field of an AgreementState instance
 Caller is responsible for attaining a lock on the AgreementState in some way
-before calling
+before calling.
 */
 func (agrst *AgreementState) set_accepted_proposal(proposal *Proposal) {
   agrst.accepted_proposal = proposal
+}
+
+/*
+Sets the value for the proposal_number field of the AgreementState instance
+Caller is responsible for attaining a lock of the AgreementState in some way
+before calling.
+*/
+func (agrst *AgreementState) set_proposal_number(number int) {
+  agrst.proposal_number = number
 }
 
 
@@ -111,22 +120,23 @@ func (px *Paxos) Start(agreement_number int, proposal_value interface{}) {
   px.mu.Lock()
   defer px.mu.Unlock()
 
+  // This agreement instance has been decided and forgotten. Ignore Start request.
+  if agreement_number < px.Min() {
+    return
+  }
+
   // Add AgreementState to Paxos instance state, negotiating known to have begun.
   _, present := px.state[agreement_number]
   fmt.Printf("Paxos Start (%s): agreement_number: %d, proposal_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_value)
   if !present {
     fmt.Println("Initializing Agreement entry during Start")
-    px.state[agreement_number] = &AgreementState{highest_promised: -1, highest_seen: -1}   
+    px.state[agreement_number] = px.make_default_agreementstate()
   } else {
     fmt.Println("State already present!")
   }
-
-  // propose RPC call send to all peers
-  //proposal_number := px.state[agreement_number].next_proposal_number()
-  proposal_number := px.first_number()
   
   // Spawn a thread to construct proposal and act as the proposer
-  go px.proposer_role(agreement_number, proposal_number, proposal_value)
+  go px.proposer_role(agreement_number, proposal_value)
 
   return
 }
@@ -212,9 +222,15 @@ func (px *Paxos) Min() int {
 instance has been decided upon, and if so what the agreed value is.
 Status() should just inspect the local peers state; it should not contact 
 other Paxos peers.
+If an agreement was reached, but all replica server clients of Paxos instances 
+indicated they no longer needed the decided result, the result was deleted and 
+false should be returned.
 */
-func (px *Paxos) Status(sequence_number int) (bool, interface{}) {
-  agreement_state, present := px.state[sequence_number]
+func (px *Paxos) Status(agreement_number int) (bool, interface{}) {
+  if agreement_number < px.Min() {
+    return false, nil   // Client of Paxos instances indicated result could be deleted
+  }
+  agreement_state, present := px.state[agreement_number]
   if present && agreement_state.accepted_proposal != nil {
     return true, agreement_state.accepted_proposal.Value
   }
@@ -232,38 +248,48 @@ In phase 2, it sends an accept request for the
 proposal for agreement instance 'sequence_number' to all the acceptors.
 ?????
 */
-func (px *Paxos) proposer_role(agreement_number int, proposal_number int, proposal_value interface{}) {
+func (px *Paxos) proposer_role(agreement_number int, proposal_value interface{}) {
+  var done_proposing = false
+  
+  for !done_proposing {
+    
+    proposal_number := px.next_proposal_number(agreement_number)
 
-  // Broadcast prepare request for agreement instance 'agreement_number' to Paxos acceptors.
-  var proposal = &Proposal{Number: proposal_number, Value: proposal_value}
-  fmt.Printf("Propser [PrepareStage] (%s): agreement_number: %d, p_number: %d, p_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal_value)
-  replies_from_prepare := px.broadcast_prepare(agreement_number, proposal)
+    // Broadcast prepare request for agreement instance 'agreement_number' to Paxos acceptors.
+    var proposal = &Proposal{Number: proposal_number, Value: proposal_value}
+    fmt.Printf("Proposer [PrepareStage] (%s): agreement_number: %d, p_number: %d, p_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal_value)
+    replies_from_prepare := px.broadcast_prepare(agreement_number, proposal)
 
-  majority, high_val_found, high_val := px.evaluate_prepare_replies(replies_from_prepare)
-  //fmt.Println(majority, high_val_found, high_val)
+    majority, high_val_found, high_val := px.evaluate_prepare_replies(replies_from_prepare)
+    //fmt.Println(majority, high_val_found, high_val)
 
-  if !majority {
-    fmt.Printf("Propser [PrepareStage] (%s): agreement_number: %d, p_number: %d, Majority not reached\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number)
-    return
+    if !majority {
+      fmt.Printf("Proposer [PrepareStage] (%s): agreement_number: %d, p_number: %d, Majority not reached on prepare\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number)    
+      continue
+    }
+
+    if high_val_found {
+      // Accept request should have value v, where v is the value of highest-number among prepare replies
+      proposal.Value = high_val
+    }
+    // Otherwise, the value may be kept at what the application calling px.Start requested.
+    fmt.Printf("Proposer [AcceptStage] (%s): agreement_number: %d, p_number: %d, p_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal_value)
+    replies_from_accept := px.broadcast_accept(agreement_number, proposal)
+    //fmt.Println(replies_from_accept)
+    majority_accept := px.evaluate_accept_replies(replies_from_accept)
+    //fmt.Println(majority_accept)
+    if majority_accept {
+      px.save_accepted_proposal(agreement_number, proposal)
+      done_proposing = true
+      fmt.Printf("Proposer [DecisionReached] (%s): agreement_number: %d, p_number: %d, p_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal.Value)
+    } else {
+      fmt.Printf("Proposer [PrepareStage] (%s): agreement_number: %d, p_number: %d, Majority not reached on accept\n", short_name(px.peers[px.me], 7), agreement_number, proposal.Value)    
+      continue
+    }
+
+  // End of proposing loop  
   }
-
-  if high_val_found {
-    // Accept request should have value v, where v is the value of highest-number among prepare replies
-    proposal.Value = high_val
-  }
-  // Otherwise, the value may be kept at what the application calling px.Start requested.
-  fmt.Printf("Propser [AcceptStage] (%s): agreement_number: %d, p_number: %d, p_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal_value)
-  replies_from_accept := px.broadcast_accept(agreement_number, proposal)
-  //fmt.Println(replies_from_accept)
-  majority_accept := px.evaluate_accept_replies(replies_from_accept)
-  //fmt.Println(majority_accept)
-  if majority_accept {
-    fmt.Printf("Propser [DecisionReached] (%s): agreement_number: %d, p_number: %d, p_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal_value)
-  }
-
 }
-
-
 
 
 /*
@@ -345,25 +371,56 @@ func (px *Paxos) is_majority(ok_reply_count int) bool {
   return true
 }
 
-
 /*
-To guarantee unique proposal numbers, the first proposal number used in any Agreement
-instance should be the px.me number. A unique sequence of proposal numbers is 
-generated from this by passing the previous_number to the px.next_number(int) method.
+Assuming AgreementState was initialized 
+To guarantee unique proposal numbers, the proposal number is initialized with the index 
+of the Paxos instance minus the number of peer Paxos servers. On each call, the 
+proposal number is incremented by the number of Paxos peers. This ensures that proposal
+numbers used by Paxos peers are unique across the peer set and increasing.
+Even if Start is called more than once, notice that the number to use is stored
+for each paxos peer for each agreement state, meaning that even those instances will
+have unique numbers - the proposal_number in agreement state is updated atomically
+because of the lock taken out. 
+Note that the lock is kinda to coarse since we really
+only need to lock a specific AgreementState, but this is fine.
 */
-func (px *Paxos) first_number() int {
-  return px.me
+func (px *Paxos) next_proposal_number(agreement_number int) int {
+  // Formally only need to lock a specific AgreementState
+  px.mu.Lock()
+  defer px.mu.Unlock()
+
+  current_proposal_number := px.state[agreement_number].proposal_number
+  next_proposal_number := current_proposal_number + px.peer_count
+  px.state[agreement_number].set_proposal_number(next_proposal_number)
+  return next_proposal_number
 }
 
 /*
-Accepts the previous proposal number a proposer_role used and increments it to
-return the next proposal number that should be used. The returned proposal int
-is guaranteed to be higher than the previous proposal number and also unique among 
-proposal numbers used by any peer replica server. Works because peer replica servers 
-have unique px.me values which can be used to generate unique sequences.
+Returns a reference to an AgreementState instance initialized with the correct default
+values so that it is ready to be used in the px.state map.
+The highest seen and highest promised are set to -1 and the proposal number is set to
+the px.me index minux the number of peers since each time next_proposal_number is 
+called, the number is incremented by the number of peers.
 */
-func (px *Paxos) next_number(previous_number int) int {
-  return previous_number + px.peer_count
+func (px *Paxos) make_default_agreementstate() *AgreementState {
+  initial_proposal_number := px.me - px.peer_count
+  agrst := AgreementState{highest_promised: -1, 
+                          highest_seen: -1, 
+                          proposal_number: initial_proposal_number} 
+  return &agrst
+}
+
+/*
+Retreieves the AgreementState for agreement instance agreement_number from the 
+px.state mapping and saves proposal to the accepted_proposal field. Updating the
+accepted proposal is usually done by the Accept_handler, but in the case where the
+proposer is catching up with other servers by trying to propose and learning about
+decisions that were made, no other proposers are acting to cal the Accept_handler
+and the proposer running on this paxos instance must update its px.state mapping
+itself.
+*/
+func (px *Paxos) save_accepted_proposal(agreement_number int, proposal *Proposal) {
+  px.state[agreement_number].set_accepted_proposal(proposal)
 }
 
 
