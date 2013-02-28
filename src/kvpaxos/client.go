@@ -16,6 +16,55 @@ func MakeClerk(servers []string) *Clerk {
   return ck
 }
 
+
+//
+// fetch the current value for a key.
+// returns "" if the key does not exist.
+// keeps trying forever in the face of all other errors.
+//
+func (ck *Clerk) Get(key string) string {
+  // You will have to modify this function.
+
+  for {
+    // try each known server.
+    for _, srv := range ck.servers {
+      args := &GetArgs{}
+      args.Key = key
+      var reply GetReply
+      ok := call(srv, "KVPaxos.Get", args, &reply)
+      if ok && (reply.Err == OK || reply.Err == ErrNoKey) {
+        return reply.Value
+      }
+    }
+    time.Sleep(100 * time.Millisecond)
+  }
+  return ""
+}
+
+
+//
+// set the value for a key.
+// keeps trying until it succeeds.
+//
+func (ck *Clerk) Put(key string, value string) {
+  // You will have to modify this function.
+
+  for {
+    for _, srv := range ck.servers {
+      args := &PutArgs{}
+      args.Key = key
+      args.Value = value
+      var reply PutReply
+      ok := call(srv, "KVPaxos.Put", args, &reply)
+      if ok && reply.Err == OK {
+        return 
+      }
+    }
+    time.Sleep(100 * time.Millisecond)
+  }
+}
+
+
 //
 // call() sends an RPC to the rpcname handler on server srv
 // with arguments args, waits for the reply, and leaves the
@@ -47,48 +96,3 @@ func call(srv string, rpcname string,
   return false
 }
 
-//
-// fetch the current value for a key.
-// returns "" if the key does not exist.
-// keeps trying forever in the face of all other errors.
-//
-func (ck *Clerk) Get(key string) string {
-  // You will have to modify this function.
-
-  for {
-    // try each known server.
-    for _, srv := range ck.servers {
-      args := &GetArgs{}
-      args.Key = key
-      var reply GetReply
-      ok := call(srv, "KVPaxos.Get", args, &reply)
-      if ok && (reply.Err == OK || reply.Err == ErrNoKey) {
-        return reply.Value
-      }
-    }
-    time.Sleep(100 * time.Millisecond)
-  }
-  return ""
-}
-
-//
-// set the value for a key.
-// keeps trying until it succeeds.
-//
-func (ck *Clerk) Put(key string, value string) {
-  // You will have to modify this function.
-
-  for {
-    for _, srv := range ck.servers {
-      args := &PutArgs{}
-      args.Key = key
-      args.Value = value
-      var reply PutReply
-      ok := call(srv, "KVPaxos.Put", args, &reply)
-      if ok && reply.Err == OK {
-        return 
-      }
-    }
-    time.Sleep(100 * time.Millisecond)
-  }
-}
