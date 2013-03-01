@@ -217,7 +217,7 @@ func (px *Paxos) proposer_role(agreement_number int, proposal_value interface{})
     if !majority_prepare || !px.still_deciding(agreement_number) {
       //fmt.Printf("Proposer [PrepareStage] (%s): agree_num: %d, prop: %d, Majority not reached on prepare\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number)    
       //runtime.Gosched()
-      time.Sleep(100*time.Millisecond)
+      time.Sleep(time.Duration(rand.Intn(100)))
       continue
     }
 
@@ -234,12 +234,11 @@ func (px *Paxos) proposer_role(agreement_number int, proposal_value interface{})
       // Broadcast decides
       //fmt.Printf("Proposer [DecisionReached] (%s): agree_num: %d, prop: %d, val: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal.Value)
       px.broadcast_decided(agreement_number, proposal)
-      //px.local_decided(agreement_number, proposal)
       done_proposing = true
     } else {
       //fmt.Printf("Proposer [AcceptStage] (%s): agree_num: %d, Majority not reached on accept\n", short_name(px.peers[px.me], 7), agreement_number)    
       //runtime.Gosched()
-      time.Sleep(100*time.Millisecond)
+      time.Sleep(time.Duration(rand.Intn(100)))
       continue
     }
 
@@ -267,7 +266,7 @@ func (px *Paxos) Prepare_handler(args *PrepareArgs, reply *PrepareReply) error {
       // First hearing of agreement instance from some proposer
       px.state[agreement_number] = px.make_default_agreementstate()
     } else {
-      //fmt.Println("Trying to prepare agreement that should not exist Error!!!")
+      fmt.Println("Trying to prepare agreement that should not exist Error!!!")
       px.state[agreement_number] = px.make_default_agreementstate()
     }
   }
@@ -302,10 +301,17 @@ func (px *Paxos) Accept_handler(args *AcceptArgs, reply *AcceptReply) error {
   var proposal = args.Proposal
 
   _, present := px.state[agreement_number]
-  if !present {
-    //fmt.Println("AgreementState should exist in AcceptHandler!!!")
-    px.state[agreement_number] = px.make_default_agreementstate()
-  } 
+  if present {
+    // continue accepting prepare requests
+  } else {
+    if !present && agreement_number > px.minimum_done_number() {
+      // First hearing of agreement instance from some proposer
+      px.state[agreement_number] = px.make_default_agreementstate()
+    } else {
+      fmt.Println("Trying to accept agreement that should not exist Error!!!")
+      px.state[agreement_number] = px.make_default_agreementstate()
+    }
+  }
 
   if proposal.Number >= px.state[agreement_number].highest_promised {
     px.state[agreement_number].set_highest_promised(proposal.Number)
