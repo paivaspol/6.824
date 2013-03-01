@@ -339,6 +339,8 @@ func TestManyForget(t *testing.T) {
   }
   time.Sleep(2 * time.Second)
 
+  fmt.Println("Got here")
+
   for seq := 0; seq < maxseq; seq++ {
     for i := 0; i < npaxos; i++ {
       if seq >= pxa[i].Min() {

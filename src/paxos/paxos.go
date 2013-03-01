@@ -523,11 +523,10 @@ We technically only need to lock px.done, but locking the paxos instance is fine
 func (px *Paxos) update_done_entry(paxos_peer string, highest_done int) {
   px.mu.Lock()
   defer px.mu.Unlock()
-
-  fmt.Println(px.done[paxos_peer], highest_done)
   
   if highest_done > px.done[paxos_peer] {
     px.done[paxos_peer] = highest_done
+    fmt.Printf("Update done (%s): Updated %s's h_done to %d\n", short_name(px.peers[px.me],7), short_name(paxos_peer,7), highest_done)
     px.attempt_free_state()
   }
 }
@@ -540,20 +539,22 @@ agreements at or before the minimum agreement number in px.done.
 Callee is reponsible for attaining a lock on the px.state map and px.done map.
 */
 func (px *Paxos) attempt_free_state() {
-  var min_agreement_number = px.done[px.peers[px.me]]
+  var min_done_number = px.done[px.peers[px.me]]
   for _, peers_done_number := range px.done {
-    if peers_done_number < min_agreement_number {
-      min_agreement_number = peers_done_number
+    if peers_done_number < min_done_number {
+      min_done_number = peers_done_number
     }
   }
+  fmt.Printf("Free state (%s): min_done_val: %d\n", short_name(px.peers[px.me],7), min_done_number)
 
-  fmt.Printf("Paxos Free Space (%s): Clear state at and before: %d\n", short_name(px.peers[px.me], 7), min_agreement_number)
-  for agreement_number, _ := range px.state {
-    if agreement_number < min_agreement_number {
-      fmt.Println("DELETE", agreement_number, short_name(px.peers[px.me], 7))
-      delete(px.state, agreement_number)
-    }
-  }
+
+  // fmt.Printf("Paxos Free Space (%s): Clear state at and before: %d\n", short_name(px.peers[px.me], 7), min_agreement_number)
+  // for agreement_number, _ := range px.state {
+  //   if agreement_number < min_agreement_number {
+  //     fmt.Println("DELETE", agreement_number, short_name(px.peers[px.me], 7))
+  //     delete(px.state, agreement_number)
+  //   }
+  // }
 
 }
 
