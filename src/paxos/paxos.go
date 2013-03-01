@@ -266,7 +266,7 @@ func (px *Paxos) Prepare_handler(args *PrepareArgs, reply *PrepareReply) error {
       // First hearing of agreement instance from some proposer
       px.state[agreement_number] = px.make_default_agreementstate()
     } else {
-      fmt.Println("Trying to prepare agreement that should not exist Error!!!")
+      //fmt.Println("Trying to prepare agreement that should not exist Error!!!")
       px.state[agreement_number] = px.make_default_agreementstate()
     }
   }
@@ -308,7 +308,7 @@ func (px *Paxos) Accept_handler(args *AcceptArgs, reply *AcceptReply) error {
       // First hearing of agreement instance from some proposer
       px.state[agreement_number] = px.make_default_agreementstate()
     } else {
-      fmt.Println("Trying to accept agreement that should not exist Error!!!")
+      //fmt.Println("Trying to accept agreement that should not exist Error!!!")
       px.state[agreement_number] = px.make_default_agreementstate()
     }
   }
