@@ -234,8 +234,7 @@ func (px *Paxos) proposer_role(agreement_number int, proposal_value interface{})
       // Broadcast decides
       fmt.Printf("Proposer [DecisionReached] (%s): agree_num: %d, prop: %d, val: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal.Value)
       px.broadcast_decided(agreement_number, proposal)
-      px.local_decided(agreement_number, proposal)
-      fmt.Println("Done deciding")
+      //px.local_decided(agreement_number, proposal)
       done_proposing = true
     } else {
       fmt.Printf("Proposer [AcceptStage] (%s): agree_num: %d, Majority not reached on accept\n", short_name(px.peers[px.me], 7), agreement_number)    
@@ -444,6 +443,11 @@ func (px *Paxos) broadcast_prepare(agreement_number int, proposal *Proposal) []P
   
   var replies_array = make([]PrepareReply, px.peer_count)    // declare and init
   for index, peer := range px.peers {
+    if peer == px.peers[px.me] {
+      // local_prepare can be used instead of RPC
+      replies_array[index] = *(px.local_prepare(agreement_number, proposal.Number))
+      continue
+    }
     args := &PrepareArgs{}       // declare and init struct with zero-valued fields. 
     args.Agreement_number = agreement_number
     args.Proposal_number = proposal.Number
@@ -466,8 +470,8 @@ func (px *Paxos) broadcast_accept(agreement_number int, proposal *Proposal) []Ac
   var replies_array = make([]AcceptReply, px.peer_count)   // declare and init
   for index, peer := range px.peers {
     if peer == px.peers[px.me] {
-      // local_accept should be used instead of RPC
-      //replies_array[index] = local_accept(agreement_number, proposal)
+      // local_accept can be used instead of RPC
+      replies_array[index] = *(px.local_accept(agreement_number, proposal))
       continue                
     }
     args := &AcceptArgs{}       // declare and init struct with zero-valued fields. 
@@ -490,6 +494,8 @@ Does NOT mutate local px instance or take out any locks.
 func (px *Paxos) broadcast_decided(agreement_number int, proposal *Proposal) {
   for _, peer := range px.peers {
     if peer == px.peers[px.me] {
+      // local_decided can be used instead of RPC
+      px.local_decided(agreement_number, proposal)
       continue                   // local_decided should be used instead of RPC
     }
     args := &DecidedArgs{}       // declare and init struct with zero-valued fields. 
@@ -501,6 +507,88 @@ func (px *Paxos) broadcast_decided(agreement_number int, proposal *Proposal) {
   }
   return
 }
+
+
+/*
+Simulates the actions of receiving a prepare RPC request but this method is called
+locally as a function. Accepts agreement_number and proposal_number, the values that 
+would be packaged inside PrepareArgs. 
+Returns a pointer to an PrepareReply so all the replies (both local & RPC) can be 
+evaluated together.
+Since it simulates the Prepare_handler, it takes out a lock on the current Paxos
+instance.
+*/
+func (px *Paxos) local_prepare(agreement_number int, proposal_number int) *PrepareReply {
+  px.mu.Lock()
+  defer px.mu.Unlock()
+  var reply PrepareReply
+
+  _, present := px.state[agreement_number]
+  if present {
+    // continue accepting prepare requests
+  } else {
+    if !present && agreement_number > px.minimum_done_number() {
+      // First hearing of agreement instance from some proposer
+      px.state[agreement_number] = px.make_default_agreementstate()
+    } else {
+      fmt.Println("Trying to prepare agreement that should not exist Error!!!")
+      px.state[agreement_number] = px.make_default_agreementstate()
+    }
+  }
+
+  if proposal_number > px.state[agreement_number].highest_promised {
+    // Promise not to accept proposals numbered less than n
+    px.state[agreement_number].set_highest_promised(proposal_number)
+    reply.Prepare_ok = true
+    reply.Number_promised = proposal_number
+    reply.Accepted_proposal = px.state[agreement_number].accepted_proposal
+    fmt.Printf("Prepare_ok (%s): agreement_number: %d, proposal: %v\n", short_name(px.peers[px.me], 7), agreement_number, reply.Accepted_proposal)
+    return &reply
+  }
+  reply.Prepare_ok = false
+  reply.Number_promised = px.state[agreement_number].highest_promised
+  reply.Accepted_proposal = px.state[agreement_number].accepted_proposal
+  fmt.Printf("Prepare_no (%s): agreement_number: %d, proposal: %v\n", short_name(px.peers[px.me], 7), agreement_number, reply.Accepted_proposal)
+  
+  return &reply
+}
+
+
+
+/*
+Simulates the actions of receiving an accept RPC request but this method is called
+locally as a function. Accepts agreement_number and proposal, the values that would
+be packaged inside AcceptArgs. 
+Returns a pointer to an AcceptReply so all the replies (both local & RPC) can be 
+evaluated together.
+Since it simulates the Accept_handler, it takes out a lock on the current Paxos
+instance.
+*/
+func (px *Paxos) local_accept(agreement_number int, proposal *Proposal) *AcceptReply {
+  px.mu.Lock()
+  defer px.mu.Unlock()
+  var reply AcceptReply
+
+  _, present := px.state[agreement_number]
+  if !present {
+    fmt.Println("AgreementState should exist in local_accept!!!")
+    px.state[agreement_number] = px.make_default_agreementstate()
+  } 
+
+  if proposal.Number >= px.state[agreement_number].highest_promised {
+    px.state[agreement_number].set_highest_promised(proposal.Number)
+    px.state[agreement_number].set_accepted_proposal(proposal)
+    reply.Accept_ok = true
+    reply.Highest_done = px.done[px.peers[px.me]]
+    fmt.Printf("Accept_ok (%s): agree_num: %d, prop: %d, val: %v, h_done: %d\n", short_name(px.peers[px.me], 7), agreement_number, proposal.Number, proposal.Value, reply.Highest_done)
+    return &reply
+  }
+  reply.Accept_ok = false
+  reply.Highest_done = px.done[px.peers[px.me]]
+  fmt.Printf("Accept_no (%s): agree_num: %d, prop: %d, h_done: %d\n", short_name(px.peers[px.me], 7), agreement_number, proposal.Number, reply.Highest_done)
+  return &reply
+}
+
 
 /*
 Marks the agreement instance agreement_number as decided and sets the accepted 
