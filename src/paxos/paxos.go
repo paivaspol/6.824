@@ -77,10 +77,8 @@ func (px *Paxos) Start(agreement_number int, proposal_value interface{}) {
   _, present := px.state[agreement_number]
   if !present {
     px.state[agreement_number] = px.make_default_agreementstate()
-  } else {
-    fmt.Println("State already present!")
   }
-  fmt.Printf("Paxos Start (%s): agreement_number: %d, proposal_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_value)
+  //fmt.Printf("Paxos Start (%s): agreement_number: %d, proposal_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_value)
 
   // Spawn a thread to construct proposal and act as the proposer
   go px.proposer_role(agreement_number, proposal_value)
@@ -104,7 +102,7 @@ func (px *Paxos) Done(agreement_number int) {
   if agreement_number > px.done[px.peers[px.me]] {
     px.done[px.peers[px.me]] = agreement_number
   }
-  fmt.Printf("Paxos Done (%s): client_said: %d, my_h_done: %d\n", short_name(px.peers[px.me], 7), agreement_number, px.done[px.peers[px.me]])
+  //fmt.Printf("Paxos Done (%s): client_said: %d, my_h_done: %d\n", short_name(px.peers[px.me], 7), agreement_number, px.done[px.peers[px.me]])
 }
 
 
@@ -210,7 +208,7 @@ func (px *Paxos) proposer_role(agreement_number int, proposal_value interface{})
     proposal_number := px.next_proposal_number(agreement_number, highest_number)
 
     // Broadcast prepare request for agreement instance 'agreement_number' to Paxos acceptors.
-    fmt.Printf("Proposer [PrepareStage] (%s): agree_num: %d, prop: %d, val: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal_value)
+    //fmt.Printf("Proposer [PrepareStage] (%s): agree_num: %d, prop: %d, val: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal_value)
     var proposal = &Proposal{Number: proposal_number, Value: proposal_value}
     replies_from_prepare := px.broadcast_prepare(agreement_number, proposal)
 
@@ -228,18 +226,18 @@ func (px *Paxos) proposer_role(agreement_number int, proposal_value interface{})
       proposal.Value = high_val
     }
     // Otherwise, the value may be kept at what the application calling px.Start requested.
-    fmt.Printf("Proposer [AcceptStage] (%s): agree_num: %d, prop: %d, val: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal.Value)
+    //fmt.Printf("Proposer [AcceptStage] (%s): agree_num: %d, prop: %d, val: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal.Value)
     replies_from_accept := px.broadcast_accept(agreement_number, proposal)
     majority_accept := px.evaluate_accept_replies(replies_from_accept)
 
     if majority_accept {
       // Broadcast decides
-      fmt.Printf("Proposer [DecisionReached] (%s): agree_num: %d, prop: %d, val: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal.Value)
+      //fmt.Printf("Proposer [DecisionReached] (%s): agree_num: %d, prop: %d, val: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal.Value)
       px.broadcast_decided(agreement_number, proposal)
       //px.local_decided(agreement_number, proposal)
       done_proposing = true
     } else {
-      fmt.Printf("Proposer [AcceptStage] (%s): agree_num: %d, Majority not reached on accept\n", short_name(px.peers[px.me], 7), agreement_number)    
+      //fmt.Printf("Proposer [AcceptStage] (%s): agree_num: %d, Majority not reached on accept\n", short_name(px.peers[px.me], 7), agreement_number)    
       //runtime.Gosched()
       time.Sleep(100*time.Millisecond)
       continue
@@ -269,7 +267,7 @@ func (px *Paxos) Prepare_handler(args *PrepareArgs, reply *PrepareReply) error {
       // First hearing of agreement instance from some proposer
       px.state[agreement_number] = px.make_default_agreementstate()
     } else {
-      fmt.Println("Trying to prepare agreement that should not exist Error!!!")
+      //fmt.Println("Trying to prepare agreement that should not exist Error!!!")
       px.state[agreement_number] = px.make_default_agreementstate()
     }
   }
@@ -280,13 +278,13 @@ func (px *Paxos) Prepare_handler(args *PrepareArgs, reply *PrepareReply) error {
     reply.Prepare_ok = true
     reply.Number_promised = proposal_number
     reply.Accepted_proposal = px.state[agreement_number].accepted_proposal
-    fmt.Printf("Prepare_ok (%s): agreement_number: %d, proposal: %v\n", short_name(px.peers[px.me], 7), args.Agreement_number, reply.Accepted_proposal)
+    //fmt.Printf("Prepare_ok (%s): agreement_number: %d, proposal: %v\n", short_name(px.peers[px.me], 7), args.Agreement_number, reply.Accepted_proposal)
     return nil
   }
   reply.Prepare_ok = false
   reply.Number_promised = px.state[agreement_number].highest_promised
   reply.Accepted_proposal = px.state[agreement_number].accepted_proposal
-  fmt.Printf("Prepare_no (%s): agreement_number: %d, proposal: %v\n", short_name(px.peers[px.me], 7), args.Agreement_number, reply.Accepted_proposal)
+  //fmt.Printf("Prepare_no (%s): agreement_number: %d, proposal: %v\n", short_name(px.peers[px.me], 7), args.Agreement_number, reply.Accepted_proposal)
   return nil
 }
 
@@ -305,7 +303,7 @@ func (px *Paxos) Accept_handler(args *AcceptArgs, reply *AcceptReply) error {
 
   _, present := px.state[agreement_number]
   if !present {
-    fmt.Println("AgreementState should exist in AcceptHandler!!!")
+    //fmt.Println("AgreementState should exist in AcceptHandler!!!")
     px.state[agreement_number] = px.make_default_agreementstate()
   } 
 
@@ -314,12 +312,12 @@ func (px *Paxos) Accept_handler(args *AcceptArgs, reply *AcceptReply) error {
     px.state[agreement_number].set_accepted_proposal(proposal)
     reply.Accept_ok = true
     reply.Highest_done = px.done[px.peers[px.me]]
-    fmt.Printf("Accept_ok (%s): agree_num: %d, prop: %d, val: %v, h_done: %d\n", short_name(px.peers[px.me], 7), args.Agreement_number, args.Proposal.Number, proposal.Value, reply.Highest_done)
+    //fmt.Printf("Accept_ok (%s): agree_num: %d, prop: %d, val: %v, h_done: %d\n", short_name(px.peers[px.me], 7), args.Agreement_number, args.Proposal.Number, proposal.Value, reply.Highest_done)
     return nil
   }
   reply.Accept_ok = false
   reply.Highest_done = px.done[px.peers[px.me]]
-  fmt.Printf("Accept_no (%s): agree_num: %d, prop: %d, h_done: %d\n", short_name(px.peers[px.me], 7), args.Agreement_number, args.Proposal.Number, reply.Highest_done)
+  //fmt.Printf("Accept_no (%s): agree_num: %d, prop: %d, h_done: %d\n", short_name(px.peers[px.me], 7), args.Agreement_number, args.Proposal.Number, reply.Highest_done)
   return nil
 }
 
@@ -338,13 +336,13 @@ func (px *Paxos) Decided_handler(args *DecidedArgs, reply *DecidedReply) error {
 
   _, present := px.state[agreement_number]
   if !present {
-    fmt.Println("AgreementState should exist in DecidedHandler!!!")
+    //fmt.Println("AgreementState should exist in DecidedHandler!!!")
     px.state[agreement_number] = px.make_default_agreementstate()
   } 
   // A leaner never learns that a value has been chosen unless it actually has been.
   px.state[agreement_number].set_decided(true)
   px.state[agreement_number].set_accepted_proposal(proposal)
-  fmt.Printf("Decided (%s): agree_num: %d, prop: %d, val: %v\n", short_name(px.peers[px.me], 7), args.Agreement_number, args.Proposal.Number, args.Proposal.Value)
+  //fmt.Printf("Decided (%s): agree_num: %d, prop: %d, val: %v\n", short_name(px.peers[px.me], 7), args.Agreement_number, args.Proposal.Number, args.Proposal.Value)
   return nil
 }
 
@@ -534,7 +532,7 @@ func (px *Paxos) local_prepare(agreement_number int, proposal_number int) *Prepa
       // First hearing of agreement instance from some proposer
       px.state[agreement_number] = px.make_default_agreementstate()
     } else {
-      fmt.Println("Trying to prepare agreement that should not exist Error!!!")
+      //fmt.Println("Trying to prepare agreement that should not exist Error!!!")
       px.state[agreement_number] = px.make_default_agreementstate()
     }
   }
@@ -545,13 +543,13 @@ func (px *Paxos) local_prepare(agreement_number int, proposal_number int) *Prepa
     reply.Prepare_ok = true
     reply.Number_promised = proposal_number
     reply.Accepted_proposal = px.state[agreement_number].accepted_proposal
-    fmt.Printf("Prepare_ok (%s): agreement_number: %d, proposal: %v\n", short_name(px.peers[px.me], 7), agreement_number, reply.Accepted_proposal)
+    //fmt.Printf("Prepare_ok (%s): agreement_number: %d, proposal: %v\n", short_name(px.peers[px.me], 7), agreement_number, reply.Accepted_proposal)
     return &reply
   }
   reply.Prepare_ok = false
   reply.Number_promised = px.state[agreement_number].highest_promised
   reply.Accepted_proposal = px.state[agreement_number].accepted_proposal
-  fmt.Printf("Prepare_no (%s): agreement_number: %d, proposal: %v\n", short_name(px.peers[px.me], 7), agreement_number, reply.Accepted_proposal)
+  //fmt.Printf("Prepare_no (%s): agreement_number: %d, proposal: %v\n", short_name(px.peers[px.me], 7), agreement_number, reply.Accepted_proposal)
   
   return &reply
 }
@@ -574,7 +572,7 @@ func (px *Paxos) local_accept(agreement_number int, proposal *Proposal) *AcceptR
 
   _, present := px.state[agreement_number]
   if !present {
-    fmt.Println("AgreementState should exist in local_accept!!!")
+    //fmt.Println("AgreementState should exist in local_accept!!!")
     px.state[agreement_number] = px.make_default_agreementstate()
   } 
 
@@ -583,12 +581,12 @@ func (px *Paxos) local_accept(agreement_number int, proposal *Proposal) *AcceptR
     px.state[agreement_number].set_accepted_proposal(proposal)
     reply.Accept_ok = true
     reply.Highest_done = px.done[px.peers[px.me]]
-    fmt.Printf("Accept_ok (%s): agree_num: %d, prop: %d, val: %v, h_done: %d\n", short_name(px.peers[px.me], 7), agreement_number, proposal.Number, proposal.Value, reply.Highest_done)
+    //fmt.Printf("Accept_ok (%s): agree_num: %d, prop: %d, val: %v, h_done: %d\n", short_name(px.peers[px.me], 7), agreement_number, proposal.Number, proposal.Value, reply.Highest_done)
     return &reply
   }
   reply.Accept_ok = false
   reply.Highest_done = px.done[px.peers[px.me]]
-  fmt.Printf("Accept_no (%s): agree_num: %d, prop: %d, h_done: %d\n", short_name(px.peers[px.me], 7), agreement_number, proposal.Number, reply.Highest_done)
+  //fmt.Printf("Accept_no (%s): agree_num: %d, prop: %d, h_done: %d\n", short_name(px.peers[px.me], 7), agreement_number, proposal.Number, reply.Highest_done)
   return &reply
 }
 
@@ -605,7 +603,7 @@ func (px *Paxos) local_decided(agreement_number int, proposal *Proposal) {
 
   _, present := px.state[agreement_number]
   if !present {
-    fmt.Println("AgreementState should exist in local_decided!!!")
+    //fmt.Println("AgreementState should exist in local_decided!!!")
     px.state[agreement_number] = px.make_default_agreementstate()
   } 
   // A leaner never learns that a value has been chosen unless it actually has been.
@@ -627,7 +625,7 @@ func (px *Paxos) update_done_entry(paxos_peer string, highest_done int) {
   
   if highest_done > px.done[paxos_peer] {
     px.done[paxos_peer] = highest_done
-    fmt.Printf("Update done (%s): Updated %s's h_done to %d\n", short_name(px.peers[px.me],7), short_name(paxos_peer,7), highest_done)
+    //fmt.Printf("Update done (%s): Updated %s's h_done to %d\n", short_name(px.peers[px.me],7), short_name(paxos_peer,7), highest_done)
     px.attempt_free_state()
   }
 }
@@ -658,10 +656,10 @@ func (px *Paxos) attempt_free_state() {
   
   var min_done_number = px.minimum_done_number()
 
-  fmt.Printf("Free state (%s): min_done_val: %d\n", short_name(px.peers[px.me],7), min_done_number)
+  //fmt.Printf("Free state (%s): min_done_val: %d\n", short_name(px.peers[px.me],7), min_done_number)
   for agreement_number, _ := range px.state {
     if agreement_number < min_done_number {
-      fmt.Println("DELETE", agreement_number, short_name(px.peers[px.me], 7))
+      //fmt.Println("DELETE", agreement_number, short_name(px.peers[px.me], 7))
       delete(px.state, agreement_number)
     }
   }
