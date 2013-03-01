@@ -1,1034 +1,166 @@
-2013/02/28 23:03:54 method Done has wrong number of ins: 2
-2013/02/28 23:03:54 method Kill has wrong number of ins: 1
-2013/02/28 23:03:54 method Max has wrong number of ins: 1
-2013/02/28 23:03:54 method Min has wrong number of ins: 1
-2013/02/28 23:03:54 method Start reply type not a pointer: interface {}
-2013/02/28 23:03:54 method Status has wrong number of ins: 2
-2013/02/28 23:03:54 method Done has wrong number of ins: 2
-2013/02/28 23:03:54 method Kill has wrong number of ins: 1
-2013/02/28 23:03:54 method Max has wrong number of ins: 1
-2013/02/28 23:03:54 method Min has wrong number of ins: 1
-2013/02/28 23:03:54 method Start reply type not a pointer: interface {}
-2013/02/28 23:03:54 method Status has wrong number of ins: 2
-2013/02/28 23:03:54 method Done has wrong number of ins: 2
-2013/02/28 23:03:54 method Kill has wrong number of ins: 1
-2013/02/28 23:03:54 method Max has wrong number of ins: 1
-2013/02/28 23:03:54 method Min has wrong number of ins: 1
-2013/02/28 23:03:54 method Start reply type not a pointer: interface {}
-2013/02/28 23:03:54 method Status has wrong number of ins: 2
-2013/02/28 23:03:54 method Done has wrong number of ins: 2
-2013/02/28 23:03:54 method Kill has wrong number of ins: 1
-2013/02/28 23:03:54 method Max has wrong number of ins: 1
-2013/02/28 23:03:54 method Min has wrong number of ins: 1
-2013/02/28 23:03:54 method Start reply type not a pointer: interface {}
-2013/02/28 23:03:54 method Status has wrong number of ins: 2
-2013/02/28 23:03:54 method Done has wrong number of ins: 2
-2013/02/28 23:03:54 method Kill has wrong number of ins: 1
-2013/02/28 23:03:54 method Max has wrong number of ins: 1
-2013/02/28 23:03:54 method Min has wrong number of ins: 1
-2013/02/28 23:03:54 method Start reply type not a pointer: interface {}
-2013/02/28 23:03:54 method Status has wrong number of ins: 2
-2013/02/28 23:03:54 method Done has wrong number of ins: 2
-2013/02/28 23:03:54 method Kill has wrong number of ins: 1
-2013/02/28 23:03:54 method Max has wrong number of ins: 1
-2013/02/28 23:03:54 method Min has wrong number of ins: 1
-2013/02/28 23:03:54 method Start reply type not a pointer: interface {}
-2013/02/28 23:03:54 method Status has wrong number of ins: 2
-2013/02/28 23:03:54 method Done has wrong number of ins: 2
-2013/02/28 23:03:54 method Kill has wrong number of ins: 1
-2013/02/28 23:03:54 method Max has wrong number of ins: 1
-2013/02/28 23:03:54 method Min has wrong number of ins: 1
-2013/02/28 23:03:54 method Start reply type not a pointer: interface {}
-2013/02/28 23:03:54 method Status has wrong number of ins: 2
-2013/02/28 23:03:54 method Done has wrong number of ins: 2
-2013/02/28 23:03:54 method Kill has wrong number of ins: 1
-2013/02/28 23:03:54 method Max has wrong number of ins: 1
-2013/02/28 23:03:54 method Min has wrong number of ins: 1
-2013/02/28 23:03:54 method Start reply type not a pointer: interface {}
-2013/02/28 23:03:54 method Status has wrong number of ins: 2
-2013/02/28 23:03:57 method Done has wrong number of ins: 2
-2013/02/28 23:03:57 method Kill has wrong number of ins: 1
-2013/02/28 23:03:57 method Max has wrong number of ins: 1
-2013/02/28 23:03:57 method Min has wrong number of ins: 1
-2013/02/28 23:03:57 method Start reply type not a pointer: interface {}
-2013/02/28 23:03:57 method Status has wrong number of ins: 2
-2013/02/28 23:03:57 method Done has wrong number of ins: 2
-2013/02/28 23:03:57 method Kill has wrong number of ins: 1
-2013/02/28 23:03:57 method Max has wrong number of ins: 1
-2013/02/28 23:03:57 method Min has wrong number of ins: 1
-2013/02/28 23:03:57 method Start reply type not a pointer: interface {}
-2013/02/28 23:03:57 method Status has wrong number of ins: 2
-2013/02/28 23:03:57 method Done has wrong number of ins: 2
-2013/02/28 23:03:57 method Kill has wrong number of ins: 1
-2013/02/28 23:03:57 method Max has wrong number of ins: 1
-2013/02/28 23:03:57 method Min has wrong number of ins: 1
-2013/02/28 23:03:57 method Start reply type not a pointer: interface {}
-2013/02/28 23:03:57 method Status has wrong number of ins: 2
-2013/02/28 23:03:57 method Done has wrong number of ins: 2
-2013/02/28 23:03:57 method Kill has wrong number of ins: 1
-2013/02/28 23:03:57 method Max has wrong number of ins: 1
-2013/02/28 23:03:57 method Min has wrong number of ins: 1
-2013/02/28 23:03:57 method Start reply type not a pointer: interface {}
-2013/02/28 23:03:57 method Status has wrong number of ins: 2
-2013/02/28 23:03:57 method Done has wrong number of ins: 2
-2013/02/28 23:03:57 method Kill has wrong number of ins: 1
-2013/02/28 23:03:57 method Max has wrong number of ins: 1
-2013/02/28 23:03:57 method Min has wrong number of ins: 1
-2013/02/28 23:03:57 method Start reply type not a pointer: interface {}
-2013/02/28 23:03:57 method Status has wrong number of ins: 2
-2013/02/28 23:03:57 method Done has wrong number of ins: 2
-2013/02/28 23:03:57 method Kill has wrong number of ins: 1
-2013/02/28 23:03:57 method Max has wrong number of ins: 1
-2013/02/28 23:03:57 method Min has wrong number of ins: 1
-2013/02/28 23:03:57 method Start reply type not a pointer: interface {}
-2013/02/28 23:03:57 method Status has wrong number of ins: 2
-2013/02/28 23:03:58 method Done has wrong number of ins: 2
-2013/02/28 23:03:58 method Kill has wrong number of ins: 1
-2013/02/28 23:03:58 method Max has wrong number of ins: 1
-2013/02/28 23:03:58 method Min has wrong number of ins: 1
-2013/02/28 23:03:58 method Start reply type not a pointer: interface {}
-2013/02/28 23:03:58 method Status has wrong number of ins: 2
-2013/02/28 23:03:58 method Done has wrong number of ins: 2
-2013/02/28 23:03:58 method Kill has wrong number of ins: 1
-2013/02/28 23:03:58 method Max has wrong number of ins: 1
-2013/02/28 23:03:58 method Min has wrong number of ins: 1
-2013/02/28 23:03:58 method Start reply type not a pointer: interface {}
-2013/02/28 23:03:58 method Status has wrong number of ins: 2
-2013/02/28 23:03:58 method Done has wrong number of ins: 2
-2013/02/28 23:03:58 method Kill has wrong number of ins: 1
-2013/02/28 23:03:58 method Max has wrong number of ins: 1
-2013/02/28 23:03:58 method Min has wrong number of ins: 1
-2013/02/28 23:03:58 method Start reply type not a pointer: interface {}
-2013/02/28 23:03:58 method Status has wrong number of ins: 2
-2013/02/28 23:03:58 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:03:58 rpc: client protocol error: unexpected EOF
-2013/02/28 23:03:58 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:03:58 rpc: client protocol error: unexpected EOF
-2013/02/28 23:03:58 rpc: client protocol error: unexpected EOF
-2013/02/28 23:03:58 rpc: client protocol error: unexpected EOF
-2013/02/28 23:03:58 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:03:58 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:03:58 rpc: client protocol error: read unix /var/tmp/824-1000/px-12883-manygc-0: connection reset by peer
-2013/02/28 23:03:58 rpc: client protocol error: unexpected EOF
-2013/02/28 23:03:58 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:03:58 rpc: client protocol error: unexpected EOF
-2013/02/28 23:03:58 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:03:58 rpc: client protocol error: read unix /var/tmp/824-1000/px-12883-manygc-0: connection reset by peer
-2013/02/28 23:03:58 rpc: client protocol error: read unix /var/tmp/824-1000/px-12883-manygc-2: connection reset by peer
-2013/02/28 23:03:58 rpc: client protocol error: unexpected EOF
-2013/02/28 23:03:58 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:03:58 rpc: client protocol error: read unix /var/tmp/824-1000/px-12883-manygc-1: connection reset by peer
-2013/02/28 23:03:58 rpc: client protocol error: read unix /var/tmp/824-1000/px-12883-manygc-1: connection reset by peer
-2013/02/28 23:03:58 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:03:58 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:03:58 rpc: client protocol error: read unix /var/tmp/824-1000/px-12883-manygc-0: connection reset by peer
-2013/02/28 23:03:58 rpc: client protocol error: unexpected EOF
-2013/02/28 23:03:58 rpc: client protocol error: unexpected EOF
-2013/02/28 23:03:58 rpc: client protocol error: read unix /var/tmp/824-1000/px-12883-manygc-1: connection reset by peer
-2013/02/28 23:03:58 rpc: client protocol error: read unix /var/tmp/824-1000/px-12883-manygc-1: connection reset by peer
-2013/02/28 23:03:58 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:03:58 rpc: client protocol error: read unix /var/tmp/824-1000/px-12883-manygc-1: connection reset by peer
-2013/02/28 23:03:58 rpc: client protocol error: unexpected EOF
-2013/02/28 23:03:58 rpc: client protocol error: read unix /var/tmp/824-1000/px-12883-manygc-0: connection reset by peer
-2013/02/28 23:03:58 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:03:58 rpc: client protocol error: read unix /var/tmp/824-1000/px-12883-manygc-2: connection reset by peer
-2013/02/28 23:03:58 rpc: client protocol error: read unix /var/tmp/824-1000/px-12883-manygc-2: connection reset by peer
-2013/02/28 23:03:58 rpc: client protocol error: unexpected EOF
-2013/02/28 23:03:58 rpc: client protocol error: read unix /var/tmp/824-1000/px-12883-manygc-2: connection reset by peer
-2013/02/28 23:03:58 rpc: client protocol error: read unix /var/tmp/824-1000/px-12883-manygc-2: connection reset by peer
-2013/02/28 23:03:58 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:03:58 rpc: client protocol error: unexpected EOF
-2013/02/28 23:03:58 rpc: client protocol error: read unix /var/tmp/824-1000/px-12883-manygc-1: connection reset by peer
-2013/02/28 23:03:58 rpc: client protocol error: read unix /var/tmp/824-1000/px-12883-manygc-0: connection reset by peer
-2013/02/28 23:03:58 rpc: client protocol error: read unix /var/tmp/824-1000/px-12883-manygc-0: connection reset by peer
-2013/02/28 23:03:58 rpc: client protocol error: read unix /var/tmp/824-1000/px-12883-manygc-1: connection reset by peer
-2013/02/28 23:03:58 rpc: client protocol error: read unix /var/tmp/824-1000/px-12883-manygc-2: connection reset by peer
-panic: runtime error: invalid memory address or nil pointer dereference
-[signal 0xb code=0x1 addr=0x0 pc=0x426381]
-
-goroutine 902 [running]:
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).next_proposal_number(0xf840156640, 0x20000000c, 0x7478654e00000000, 0x0, 0x0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:416 +0x1d8
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).proposer_role(0xf840156640, 0xf80000000c, 0x5760d0, 0x5e4561ad, 0x0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:269 +0xf1
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).Start
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:142 +0x301
-
-goroutine 1 [chan receive]:
-testing.RunTests(0x400c00, 0x7b6740, 0xb0000000b, 0x1, 0x7a4870, ...)
-	/usr/local/go/src/pkg/testing/testing.go:369 +0x7b8
-testing.Main(0x400c00, 0x7b6740, 0xb0000000b, 0x7b9c68, 0x0, ...)
-	/usr/local/go/src/pkg/testing/testing.go:304 +0x7a
-main.main()
-	_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/_test/_testmain.go:63 +0x91
-
-goroutine 2 [syscall]:
-created by runtime.main
-	/usr/local/go/src/pkg/runtime/proc.c:221
-
-goroutine 1146 [semacquire]:
-sync.runtime_Semacquire(0xf8400d112c, 0x2500000023)
-	/usr/local/go/src/pkg/runtime/zsema_amd64.c:146 +0x25
-sync.(*Mutex).Lock(0xf8400d1128, 0x7f6ca8b94e40)
-	/usr/local/go/src/pkg/sync/mutex.go:60 +0xbe
-net.(*netFD).Close(0xf8401cbd80, 0x0, 0x0, 0xf840079170)
-	/usr/local/go/src/pkg/net/fd.go:381 +0x3f
-net.(*UnixConn).Close(0xf84046bae0, 0xf840079170, 2013/02/28 2, 0xf8400d1800)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:144 +0x8f
-net/rpc.(*gobServerCodec).Close(0xf8404bb120, 0xf840079170, 0xf840077210, 0xf840079170)
-	/usr/local/go/src/pkg/net/rpc/server.go:389 +0x44
-net/rpc.(*Server).ServeCodec(0xf84011aec0, 0xf840108080, 0xf8404bb120, 0xf840108080)
-	/usr/local/go/src/pkg/net/rpc/server.go:425 +0x15b
-net/rpc.(*Server).ServeConn(0xf84011aec0, 0xf8400d1800, 0xf84046bae0, 0x0)
-	/usr/local/go/src/pkg/net/rpc/server.go:400 +0x146
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos._func_001
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:767 +0x45d
-
-goroutine 4 [semacquire]:
-sync.runtime_Semacquire(0xf8400d112c, 0x1d00000019)
-	/usr/local/go/src/pkg/runtime/zsema_amd64.c:146 +0x25
-sync.(*Mutex).Lock(0xf8400d1128, 0xf840097220)
-	/usr/local/go/src/pkg/sync/mutex.go:60 +0xbe
-net.(*pollster).WaitFD(0xf840097210, 0xf8400d1100, 0x0, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/net/fd_linux.go:147 +0x144
-net.(*pollServer).Run(0xf8400d1100, 0x0)
-	/usr/local/go/src/pkg/net/fd.go:236 +0xe4
-created by net.newPollServer
-	/usr/local/go/src/pkg/net/newpollserver.go:35 +0x382
-
-goroutine 871 [sleep]:
-time.Sleep(0x12a05f200, 0xf84024d2c0)
-	/usr/local/go/src/pkg/runtime/ztime_amd64.c:21 +0x49
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.TestManyForget()
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/test_test.go:335 +0x227
-testing.tRunner(0xf840276100, 0x7b6788, 0x0, 0x0)
-	/usr/local/go/src/pkg/testing/testing.go:292 +0x6f
-created by testing.RunTests
-	/usr/local/go/src/pkg/testing/testing.go:368 +0x795
-
-goroutine 1183 [chan receive]:
-net.(*pollServer).WaitRead(0xf8400d1100, 0xf84026e7e0, 0xf840078f30, 0xb, 0x1, ...)
-	/usr/local/go/src/pkg/net/fd.go:268 +0x73
-net.(*netFD).Read(0xf84026e7e0, 0xf8405a9000, 0x100000001000, 0xf8ffffffff, 0xf840075540, ...)
-	/usr/local/go/src/pkg/net/fd.go:428 +0x1ec
-net.(*UnixConn).Read(0xf840576598, 0xf8405a9000, 0x100000001000, 0xf6a00000000, 201, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:128 +0xce
-bufio.(*Reader).fill(0xf840572200, 0x56b2b0)
-	/usr/local/go/src/pkg/bufio/bufio.go:77 +0xf0
-bufio.(*Reader).Read(0xf840572200, 0xf840553d30, 0x900000001, 0xf800000001, 0x0, ...)
-	/usr/local/go/src/pkg/bufio/bufio.go:142 +0x188
-encoding/gob.decodeUintReader(0xf8400e7210, 0xf840572200, 0xf840553d30, 0x900000009, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decode.go:65 +0x87
-encoding/gob.(*Decoder).recvMessage(0xf8401df8f0, 0x410425, 0xf8404cbf58, 0x7f6ca8b97b20)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:73 +0x43
-encoding/gob.(*Decoder).decodeTypeSequence(0xf8401df8f0, 0xf8403aa800, 0x160, 0x0, 0x64be68, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:142 +0x57
-encoding/gob.(*Decoder).DecodeValue(0xf8401df8f0, 0x56de00, 0xf8403aa820, 0x160, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:206 +0x124
-encoding/gob.(*Decoder).Decode(0xf8401df8f0, 0x56ddf0, 0xf8403aa820, 0xf8403aa820, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:185 +0x20a
-net/rpc.(*gobServerCodec).ReadRequestHeader(0xf8404cbe40, 0xf8403aa820, 0x56b2f8, 0x56b2f8, 0x100000000, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:371 +0x4e
-net/rpc.(*Server).readRequestHeader(0xf84011aec0, 0xf840108080, 0xf8404cbe40, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:522 +0x94
-net/rpc.(*Server).readRequest(0xf84011aec0, 0xf840108080, 0xf8404cbe40, 0xf840155480, 0xf84056e700, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:489 +0x90
-net/rpc.(*Server).ServeCodec(0xf84011aec0, 0xf840108080, 0xf8404cbe40, 0xf840108080)
-	/usr/local/go/src/pkg/net/rpc/server.go:408 +0x69
-net/rpc.(*Server).ServeConn(0xf84011aec0, 0xf8400d1800, 0xf840576598, 0x0)
-	/usr/local/go/src/pkg/net/rpc/server.go:400 +0x146
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos._func_001
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:770 +0x4d4
-
-goroutine 873 [runnable]:
-syscall.Syscall()
-	/usr/local/go/src/pkg/syscall/asm_linux_amd64.s:36 +0x64
-syscall.accept(0x7, 0xf8402439a0, 0xf84021a150, 0x44f5d0, 0x0, ...)
-	/usr/local/go/src/pkg/syscall/zerrors_linux_amd64.go:3103 +0x58
-syscall.Accept(0x7, 0xf8401f8c60, 0x0, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/syscall/syscall_linux.go:387 +0x87
-net.(*netFD).accept(0xf8401f8c60, 0x49a1f4, 0x0, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/net/fd.go:616 +0xdf
-net.(*UnixListener).AcceptUnix(0xf840185040, 0xf800000000, 0x7f6ca8b98eb8, 0x42dd3d)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:350 +0x4d
-net.(*UnixListener).Accept(0xf840185040, 0x0, 0x0, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:361 +0x49
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos._func_001(0xf84030dc28, 0xf84030dc20, 0xf84030dc18, 0x0, 0x0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:753 +0x79
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.Make
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:779 +0x4c2
-
-goroutine 929 [syscall]:
-syscall.Syscall()
-	/usr/local/go/src/pkg/syscall/asm_linux_amd64.s:15 +0x5
-syscall.Write(0xf800000013, 0xf8401e0000, 0x1000000000c9, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/syscall/zerrors_linux_amd64.go:2606 +0x78
-net.(*netFD).Write(0xf8401a3d80, 0xf8401e0000, 0x1000000000c9, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/net/fd.go:518 +0x1a7
-net.(*UnixConn).Write(0xf840298a68, 0xf8401e0000, 0x1000000000c9, 0x56b220, 0x0, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:136 +0xce
-bufio.(*Writer).Flush(0xf840564700, 0x56b210, 0xf8401208e0, 0x0)
-	/usr/local/go/src/pkg/bufio/bufio.go:421 +0xb7
-net/rpc.(*gobClientCodec).WriteRequest(0xf8404da4b0, 0xf84055e010, 0x56b210, 0xf8401208e0, 0x0, ...)
-	/usr/local/go/src/pkg/net/rpc/client.go:195 +0xe7
-net/rpc.(*Client).send(0xf84055e000, 0xf8401394b0, 0xf8404da4b0, 0x609d18)
-	/usr/local/go/src/pkg/net/rpc/client.go:88 +0x150
-net/rpc.(*Client).Go(0xf84055e000, 0x6777cc, 0xf800000014, 0x56b210, 0xf8401208e0, ...)
-	/usr/local/go/src/pkg/net/rpc/client.go:285 +0xbf
-net/rpc.(*Client).Call(0xf84055e000, 0x6777cc, 0xf800000014, 0x56b210, 0xf8401208e0, ...)
-	/usr/local/go/src/pkg/net/rpc/client.go:291 +0x92
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.call(0xf84023bf30, 0xf800000023, 0x6777cc, 0x6f78615000000014, 0x56b210, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:692 +0x2da
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).broadcast_accept(0xf8401565f0, 0xf80000000e, 0xf84037af20, 0x1402df901, 0x300000000, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:515 +0x1c7
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).proposer_role(0xf8401565f0, 0xf80000000e, 0x5760d0, 0x2694763d, 0x0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:291 +0x1ff
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).Start
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:142 +0x301
-
-goroutine 9 [syscall]:
-2013/02/28 addtimer
-	/usr/local/go/src/pkg/runtime/ztime_amd64.c:72
-
-goroutine 874 [semacquire]:
-sync.runtime_Semacquire(0xf8400d112c, 0x5500000051)
-	/usr/local/go/src/pkg/runtime/zsema_amd64.c:146 +0x25
-sync.(*Mutex).Lock(0xf8400d1128, 0x407888)
-	/usr/local/go/src/pkg/sync/mutex.go:60 +0xbe
-net.(*pollServer).AddFD(0xf8400d1100, 0xf8401f8cf0, 0xf800000072, 0xb, 0xf840078f30, ...)
-	/usr/local/go/src/pkg/net/fd.go:94 +0x2a
-net.(*pollServer).WaitRead(0xf8400d1100, 0xf8401f8cf0, 0xf840078f30, 0xb, 0x1, ...)
-	/usr/local/go/src/pkg/net/fd.go:266 +0x37
-net.(*netFD).accept(0xf8401f8cf0, 0x49a1f4, 0x0, 0xf840075540, 0xf8400910a8, ...)
-	/usr/local/go/src/pkg/net/fd.go:622 +0x20d
-net.(*UnixListener).AcceptUnix(0xf8401852c0, 0xf800000000, 0x7f6ca8b9beb8, 0x42dd3d)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:350 +0x4d
-net.(*UnixListener).Accept(0xf8401852c0, 0x0, 0x0, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:361 +0x49
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos._func_001(0xf84030dc70, 0xf84030dc68, 0xf84030dc60, 0x0, 0x0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:753 +0x79
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.Make
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:779 +0x4c2
-
-goroutine 1218 [semacquire]:
-sync.runtime_Semacquire(0xf8400d112c, 0x510000004d)
-	/usr/local/go/src/pkg/runtime/zsema_amd64.c:146 +0x25
-sync.(*Mutex).Lock(0xf8400d1128, 0x407888)
-	/usr/local/go/src/pkg/sync/mutex.go:60 +0xbe
-net.(*pollServer).AddFD(0xf8400d1100, 0xf84037d1b0, 0xf800000072, 0xb, 0xf840078f30, ...)
-	/usr/local/go/src/pkg/net/fd.go:94 +0x2a
-net.(*pollServer).WaitRead(0xf8400d1100, 0xf84037d1b0, 0xf840078f30, 0xb, 0x1, ...)
-	/usr/local/go/src/pkg/net/fd.go:266 +0x37
-net.(*netFD).Read(0xf84037d1b0, 0xf84023d000, 0x100000001000, 0xf8ffffffff, 0xf840075540, ...)
-	/usr/local/go/src/pkg/net/fd.go:428 +0x1ec
-net.(*UnixConn).Read(0xf84021a120, 0xf84023d000, 0x100000001000, 0xf3900000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:128 +0xce
-bufio.(*Reader).fill(0xf84059d180, 0xf8401dfeb8)
-	/usr/local/go/src/pkg/bufio/bufio.go:77 +0xf0
-bufio.(*Reader).Read(0xf84059d180, 0xf840213510, 0x900000001, 0xf800000001, 0x0, ...)
-	/usr/local/go/src/pkg/bufio/bufio.go:142 +0x188
-encoding/gob.decodeUintReader(0xf8400e7210, 0xf84059d180, 0xf840213510, 0x900000009, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decode.go:65 +0x87
-encoding/gob.(*Decoder).recvMessage(0xf8401dfea0, 0x410425, 0xf8402d2178, 0x7f6ca6a8eb20)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:73 +0x43
-encoding/gob.(*Decoder).decodeTypeSequence(0xf8401dfea0, 0xf840188400, 0x160, 0x0, 0x64be68, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:142 +0x57
-encoding/gob.(*Decoder).DecodeValue(0xf8401dfea0, 0x56de00, 0xf840188480, 0x160, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:206 +0x124
-encoding/gob.(*Decoder).Decode(0xf8401dfea0, 0x56ddf0, 0xf840188480, 0xf840188480, 0x1, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:185 +0x20a
-net/rpc.(*gobServerCodec).ReadRequestHeader(0xf84057abd0, 0xf840188480, 0x56b268, 0x56b268, 0x7f6ca6a8ece8, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:371 +0x4e
-net/rpc.(*Server).readRequestHeader(0xf8401317c0, 0xf840108080, 0xf84057abd0, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:522 +0x94
-net/rpc.(*Server).readRequest(0xf8401317c0, 0xf840108080, 0xf84057abd0, 0xf840155800, 0xf840166300, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:489 +0x90
-net/rpc.(*Server).ServeCodec(0xf8401317c0, 0xf840108080, 0xf84057abd0, 0xf840108080)
-	/usr/local/go/src/pkg/net/rpc/server.go:408 +0x69
-net/rpc.(*Server).ServeConn(0xf8401317c0, 0xf8400d1800, 0xf84021a120, 0x0)
-	/usr/local/go/src/pkg/net/rpc/server.go:400 +0x146
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos._func_001
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:770 +0x4d4
-
-goroutine 1166 [semacquire]:
-sync.runtime_Semacquire(0xf8400d112c, 0x4d00000049)
-	/usr/local/go/src/pkg/runtime/zsema_amd64.c:146 +0x25
-sync.(*Mutex).Lock(0xf8400d1128, 0x7f6ca6a8fe40)
-	/usr/local/go/src/pkg/sync/mutex.go:60 +0xbe
-net.(*netFD).Close(0xf84010e6c0, 0x0, 0x0, 0xf840079170)
-	/usr/local/go/src/pkg/net/fd.go:381 +0x3f
-net.(*UnixConn).Close(0xf840507320, 0xf840079170, 0xf840077210, 0xf8400d1800)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:144 +0x8f
-net/rpc.(*gobServerCodec).Close(0xf8405115d0, 0xf840079170, 0xf840077210, 0xf840079170)
-	/usr/local/go/src/pkg/net/rpc/server.go:389 +0x44
-net/rpc.(*Server).ServeCodec(0xf84011aec0, 0xf840108080, 0xf8405115d0, 0xf840108080)
-	/usr/local/go/src/pkg/net/rpc/server.go:425 +0x15b
-net/rpc.(*Server).ServeConn(0xf84011aec0, 0xf8400d1800, 0xf840507320, 0x0)
-	/usr/local/go/src/pkg/net/rpc/server.go:400 +0x146
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos._func_001
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:770 +0x4d4
-
-goroutine 879 [chan receive]:
-net/rpc.(*Client).Call(0xf840249120, 0x6777f4, 0xf800000015, 0x56b2a0, 0xf84032bd70, ...)
-	/usr/local/go/src/pkg/net/rpc/client.go:291 +0xad
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.call(0xf84023bf30, 0xf800000023, 0x6777f4, 0x6f78615000000015, 0x56b2a0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:692 +0x2da
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).broadcast_prepare(0xf8401565a0, 0xf800000005, 0xf840504d00, 0x0, 0x0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:494 +0x1c8
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).proposer_role(0xf8401565a0, 0xf800000005, 0x5760d0, 0x215d523b, 0x0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:274 +0x158
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).Start
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:142 +0x301
-
-goroutine 1227 [syscall]:
-syscall.Syscall()
-	/usr/local/go/src/pkg/syscall/asm_linux_amd64.s215 +0x5
-syscall.Read(0xf800000029, 0xf84046d000, 0x100000001000, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/syscall/zerrors_linux_amd64.go:2262 +0x78
-net.(*netFD).Read(0xf8403821b0, 0xf84046d000, 0x100000001000, 0xf800000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/fd.go:424 +0x107
-net.(*UnixConn).Read(0xf8402ac080, 0xf84046d000, 0x100000001000, 0xf3700000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:128 +0xce
-bufio.(*Reader).fill(0xf840314180, 0xf8402fd698)
-	/usr/local/go/src/pkg/bufio/bufio.go:77 +0xf0
-bufio.(*Reader).Read(0xf840314180, 0xf84024dda0, 0x900000001, 0xf800000001, 0x0, ...)
-	/usr/local/go/src/pkg/bufio/bufio.go:142 +0x188
-encoding/gob.decodeUintReader(0xf8400e7210, 0xf840314180, 0xf84024dda0, 0x900000009, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decode.go:65 +0x87
-encoding/gob.(*Decoder).recvMessage(0xf8402fd680, 0x410425, 0xf840132778, 0x7f6ca4a0ab20)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:73 +0x43
-encoding/gob.(*Decoder).decodeTypeSequence(0xf8402fd680, 0xf84024b300, 0x160, 0x0, 0x64be68, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:142 +0x57
-encoding/gob.(*Decoder).DecodeValue(0xf8402fd680, 0x56de00, 0xf84024b360, 0x160, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:206 +0x124
-encoding/gob.(*Decoder).Decode(0xf8402fd680, 0x56ddf0, 0xf84024b360, 0xf84024b360, 0x1, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:185 +0x20a
-net/rpc.(*gobServerCodec).ReadRequestHeader(0xf840132720, 0xf84024b360, 0x56b268, 0x56b268, 0x7f6ca4a0ace8, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:371 +0x4e
-net/rpc.(*Server).readRequestHeader(0xf84011aec0, 0xf840108080, 0xf840132720, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:522 +0x94
-net/rpc.(*Server).readRequest(0xf84011aec0, 0xf840108080, 0xf840132720, 0xf840155400, 0xf840241200, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:489 +0x90
-net/rpc.(*Server).ServeCodec(0xf84011aec0, 0xf840108080, 0xf840132720, 0xf840108080)
-	/usr/local/go/src/pkg/net/rpc/server.go:408 +0x69
-net/rpc.(*Server).ServeConn(0xf84011aec0, 0xf8400d1800, 0xf8402ac080, 0x0)
-	/usr/local/go/src/pkg/net/rpc/server.go:400 +0x146
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos._func_001
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:767 +0x45d
-
-goroutine 880 [semacquire]:
-sync.runtime_Semacquire(0xf8401565f4, 0xd00000009)
-	/usr/local/go/src/pkg/runtime/zsema_amd64.c:146 +0x25
-sync.(*Mutex).Lock(0xf8401565f0, 0x4274b0)
-	/usr/local/go/src/pkg/sync/mutex.go:60 +0xbe
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).update_done_entry(0xf8401565f0, 0xf84023bfc0, 0x23, 0x6f78615000000013, 0x56b210, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:529 +0x30
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).broadcast_accept(0xf8401565f0, 0xf800000001, 0xf84023ce20, 0x1402bf101, 0x300000000, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:517 +0x21d
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).proposer_role(0xf8401565f0, 0xf800000001, 0x5760d0, 0x1da1d7eb, 0x0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:291 +0x1ff
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).Start
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:142 +0x301
-
-goroutine 1221 [chan receive]:
-net.(*pollServer).WaitRead(0xf8400d1100, 0xf840382000, 0xf840078f30, 0xb, 0x1, ...)
-	/usr/local/go/src/pkg/net/fd.go:268 +0x73
-net.(*netFD).Read(0xf840382000, 0xf840599000, 0x100000001000, 0xffffffff, 0xf840075540, ...)
-	/usr/local/go/src/pkg/net/fd.go:428 +0x1ec
-net.(*UnixConn).Read(0xf8402accb8, 0xf840599000, 0x100000001000, 0xf6a00000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:128 +0xce
-bufio.(*Reader).fill(0xf840572900, 0xf84010fbd0)
-	/usr/local/go/src/pkg/bufio/bufio.go:77200xf0
-bufio.(*Reader).Read(0xf840572900, 0xf84024dd60, 0x900000001, 0x7f6c00000001, 0x0, ...)
-	/usr/local/go/src/pkg/bufio/bufio.go:142 +0x188
-encoding/gob.decodeUintReader(0xf8400e7210, 0xf840572900, 0xf84024dd60, 0x900000009, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decode.go:65 +0x87
-encoding/gob.(*Decoder).recvMessage(0xf8402fd340, 0x410425, 0xf840132ec8, 0x7f6ca6a91c70)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:73 +0x43
-encoding/gob.(*Decoder).decodeTypeSequence(0xf8402fd340, 0xf840132e00, 0x160, 0x0, 0x64be68, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:142 +0x57
-encoding/gob.(*Decoder).DecodeValue(0xf8402fd340, 0x56de48, 0xf840132e40, 0x160, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:206 +0x124
-encoding/gob.(*Decoder).Decode(0xf8402fd340, 0x56de38, 0xf840132e40, 0xf840132e40, 0x40549f80, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:185 +0x20a
-net/rpc.(*gobClientCodec).ReadResponseHeader(0xf8403b5f90, 0xf840132e40, 0x7f6ca6a91e78, 0xf840549f80, 0x0, ...)
-	/usr/local/go/src/pkg/net/rpc/client.go:199 +0x4e
-net/rpc.(*Client).input(0xf8403b4c00, 0x0)
-	/usr/local/go/src/pkg/net/rpc/client.go:103 +0xd7
-created by net/rpc.NewClientWithCodec
-	/usr/local/go/src/pkg/net/rpc/client.go:177 +0x95
-
-goroutine 897 [semacquire]:
-sync.runtime_Semacquire(0xf8401565f4, 0x1500000013)
-	/usr/local/go/src/pkg/runtime/zsema_amd64.c:146 +0x25
-sync.(*Mutex).Lock(0xf8401565f0, 0x4274b0)
-	/usr/local/go/src/pkg/sync/mutex.go:60 +0xbe
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).update_done_entry(0xf8401565f0, 0xf84023bfc0, 0x23, 0x6f78615000000000, 0x56b210, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:529 +0x30
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).broadcast_accept(0xf8401565f0, 0xf800000006, 0xf840319480, 0x14019e301, 0x300000000, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:517 +0x21d
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).proposer_role(0xf8401565f0, 0xf800000006, 0x5760d0, 0x6f269a28, 0x0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:291 +0x1ff
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).Start
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:142 +0x301
-
-goroutine 1222 [chan receive]:
-net.(*pollServer).WaitRead(0xf8400d1100, 0xf840382090, 0xf840078f30, 0xb, 0x1, ...)
-	/usr/local/go/src/pkg/net/fd.go:268 +0x73
-net.(*netFD).Read(0xf840382090, 0xf84036d000, 0x100000001000, 0xf8ffffffff, 0xf840075540, ...)
-	/usr/local/go/src/pkg/net/fd.go:428 +0x1ec
-2013/02/28 23:03:58 (0xf84034b900, 0xf84036d000, 0x100000001000, 0xf6a00000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:128 +0xce
-bufio.(*Reader).fill(0xf840314100, 0x56b2b0)
-	/usr/local/go/src/pkg/bufio/bufio.go:77 +0xf0
-bufio.(*Reader).Read(0xf840314100, 0xf84024dd80, 0x900000001, 0xf800000001, 0x0, ...)
-	/usr/local/go/src/pkg/bufio/bufio.go:142 +0x188
-encoding/gob.decodeUintReader(0xf8400e7210, 0xf840314100, 0xf84024dd80, 0x900000009, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decode.go:65 +0x87
-encoding/gob.(*Decoder).recvMessage(0xf8402fd410, 0x410425, 0xf840132fb8, 0x7f6ca522cb20)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:73 +0x43
-encoding/gob.(*Decoder).decodeTypeSequence(0xf8402fd410, 0xf8402c5700, 0x160, 0x0, 0x64be68, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:142 +0x57
-encoding/gob.(*Decoder).DecodeValue(0xf8402fd410, 0x56de00, 0xf8402c5720, 0x160, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:206 +0x124
-encoding/gob.(*Decoder).Decode(0xf8402fd410, 0x56ddf0, 0xf8402c5720, 0xf8402c5720, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:185 +0x20a
-net/rpc.(*gobServerCodec).ReadRequestHeader(0xf840132f60, 0xf8402c5720, 0x56b2f8, 0x56b2f8, 0x100000000, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:371 +0x4e
-net/rpc.(*Server).readRequestHeader(0xf84011aec0, 0xf840108080, 0xf840132f60, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:522 +0x94
-net/rpc.(*Server).readRequest(0xf84011aec0, 0xf840108080, 0xf840132f60, 0xf840155480, 0xf84056e700, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:489 +0x90
-net/rpc.(*Server).ServeCodec(0xf84011aec0, 0xf840108080, 0xf840132f60, 0xf840108080)
-	/usr/local/go/src/pkg/net/rpc/server.go:408 +0x69
-net/rpc.(*Server).ServeConn(0xf84011aec0, 0xf8400d1800, 0xf84034b900, 0x0)
-	/usr/local/go/src/pkg/net/rpc/server.go:400 +0x146
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos._func_001
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:770 +0x4d4
-
-goroutine 876 [semacquire]:
-sync.runtime_Semacquire(0xf8401565f4, 0xd00000009)
-	/usr/local/go/src/pkg/runtime/zsema_amd64.c:146 +0x25
-sync.(*Mutex).Lock(0xf8401565f0, 0x766c9db6)
-	/usr/local/go/src/pkg/sync/mutex.go:60 +0xbe
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).Min(0xf8401565f0, 0xf800000000, 0x40fa01, 0x5760d0)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:218 +0x2d
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos._func_003(0xf84030dcc0, 0xf84024d2c0, 0x0, 0x0)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/test_test.go:325 +0x9c
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.TestManyForget
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/test_test.go:333 +0x212
-
-goroutine 872 [chan receive]:
-net.(*pollServer).WaitRead(0xf8400d1100, 0xf8401f8630, 0xf840078f30, 0xb, 0x1, ...)
-	/usr/local/go/src/pkg/net/fd.go:268 +0x73
-net.(*netFD).accept(0xf8401f8630, 0x49a1f4, 0x0, 0xf840075540, 0xf8400910a8, ...)
-	/usr/local/go/src/pkg/net/fd.go:622 +0x20d
-net.(*UnixListener).AcceptUnix(0xf840287a60, 0xf800000000, 0x7f6ca8a32eb8, 0x42dd3d)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:350 +0x4d
-net.(*UnixListener).Accept(0xf840287a60, 0x0, 0x0, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:361 +0x49
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos._func_001(0xf84030dbc8, 0xf84030dbc0, 0xf84030de18, 0x0, 0x0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:753 +0x79
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.Make
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:779 +0x4c2
-
-goroutine 1224 [chan receive]:
-net.(*pollServer).WaitRead(0xf8400d1100, 0xf84037d480, 0xf840078f30, 0xb, 0x1, ...)
-	/usr/local/go/src/pkg/net/fd.go:268 +0x73
-net.(*netFD).Read(0xf84037d480, 0xf840565000, 0x100000001000, 0xffffffff, 0xf840075540, ...)
-	/usr/local/go/src/pkg/net/fd.go:428 +0x1ec
-net.(*UnixConn).Read(0xf8402ac800, 0xf840565000, 0x100000001000, 0xf6a00000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:128 +0xce
-bufio.(*Reader).fill(0xf840385e40, 0xf84010fbd0)
-	2013/02/28 23:03:58 rpc: client prot:77 +0xf0
-bufio.(*Reader).Read(0xf840385e40, 0xf84024d600, 0x900000001, 0x7f6c00000001, 0x0, ...)
-	/usr/local/go/src/pkg/bufio/bufio.go:142 +0x188
-encoding/gob.decodeUintReader(0xf8400e7210, 0xf840385e40, 0xf84024d600, 0x900000009, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decode.go:65 +0x87
-encoding/gob.(*Decoder).recvMessage(0xf8403addd0, 0x410425, 0xf8401321d8, 0x7f6ca524cc70)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:73 +0x43
-encoding/gob.(*Decoder).decodeTypeSequence(0xf8403addd0, 0xf840132100, 0x160, 0x0, 0x64be68, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:142 +0x57
-encoding/gob.(*Decoder).DecodeValue(0xf8403addd0, 0x56de48, 0xf840132180, 0x160, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:206 +0x124
-encoding/gob.(*Decoder).Decode(0xf8403addd0, 0x56de38, 0xf840132180, 0xf840132180, 0x40314040, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:185 +0x20a
-net/rpc.(*gobClientCodec).ReadResponseHeader(0xf840132d20, 0xf840132180, 0x7f6ca524ce78, 0xf840314040, 0x0, ...)
-	/usr/local/go/src/pkg/net/rpc/client.go:199 +0x4e
-net/rpc.(*Client).input(0xf84012f420, 0x0)
-	/usr/local/go/src/pkg/net/rpc/client.go:103 +0xd7
-created by net/rpc.NewClientWithCodec
-	/usr/local/go/src/pkg/net/rpc/client.go:177 +0x95
-
-goroutine 891 [syscall]:
-syscall.Syscall()
-	/usr/local/go/src/pkg/syscall/asm_linux_amd64.s:15 +0x5
-syscall.Read(0xf80000000e, 0xf840142000, 0x100000001000, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/syscall/zerrors_linux_amd64.go:2262 +0x78
-net.(*netFD).Read(0xf8400c1090, 0xf840142000, 0x100000001000, 0xf800000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/fd.go:424 +0x107
-net.(*UnixConn).Read(0xf840167870, 0xf840142000, 0x100000001000, 0xf6c00000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:128 +0xce
-bufio.(*Reader).fill(0xf84034c7c0, 0x56b2b0)
-	/usr/local/go/src/pkg/bufio/bufio.go:77 +0xf0
-bufio.(*Reader).Read(0xf84034c7c0, 0xf8400e9690, 0x900000001, 0xf800000001, 0x0, ...)
-	/usr/local/go/src/pkg/bufio/bufio.go:142 +0x188
-encoding/gob.decodeUintReader(0xf8400e7210, 0xf84034c7c0, 0xf8400e9690, 0x900000009, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decode.go:65 +0x87
-encoding/gob.(*Decoder).recvMessage(0xf840346000, 0x410425, 0xf8403ae748, 0x7f6ca8a72b20)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:73 +0x43
-encoding/gob.(*Decoder).decodeTypeSequence(0xf840346000, 0xf8402f7600, 0x160, 0x0, 0x64be68, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:142 +0x57
-encoding/gob.(*Decoder).DecodeValue(0xf840346000, 0x56de00, 0xf8402f76c0, 0x160, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:206 +0x124
-encoding/gob.(*Decoder).Decode(0xf840346000, 0x56ddf0, 0xf8402f76c0, 0xf8402f76c0, 0x40346000, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:185 +0x20a
-net/rpc.(*gobServerCodec).ReadRequestHeader(0xf8403ae6f0, 0xf8402f76c0, 0x56b2f8, 0x56b2f8, 0x100000000, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:371 +0x4e
-net/rpc.(*Server).readRequestHeader(0xf84011aec0, 0xf840108080, 0xf8403ae6f0, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:522 +0x94
-net/rpc.(*Server).readRequest(0xf84011aec0, 0xf840108080, 0xf8403ae6f0, 0xf840155480, 0xf840319240, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:489 +0x90
-net/rpc.(*Server).ServeCodec(0xf84011aec0, 0xf840108080, 0xf8403ae6f0, 0xf840108080)
-	/usr/local/go/src/pkg/net/rpc/server.go:408 +0x69
-net/rpc.(*Server).ServeConn(0xf84011aec0, 0xf8400d1800, 0xf840167870, 0x0)
-	/usr/local/go/src/pkg/net/rpc/server.go:400 +0x146
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos._func_001
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:767 +0x45d
-
-goroutine 878 [chan receive]:
-net/rpc.(*Client).Call(0xf8403fcc00, 0x6777f4, 0xf800000015, 0x56b2a0, 0xf8402f1668, ...)
-	/usr/local/go/src/pkg/net/rpc/client.go:291 +0xad
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.call(0xf84023bfc0, 0xf800000023, 0x6777f4, 0x6f78615000000015, 0x56b2a0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:692 +0x2da
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).broadcast_prepare(0xf8401565a0, 0xf800000009, 0xf8404d5b80, 0x0, 0x0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:494 +0x1c8
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).proposer_role(0xf8401565a0, 0xf800000009, 0x5760d0, 0x6b83d0e2, 0x0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:274 +0x158
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).Start
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:142 +0x301
-
-goroutine 901 [chan receive]:
-net/rpc.(*Client).Call(0xf8403fce40, 0x6777cc, 0xf800000014, 0x56b210, 0xf840213d30, ...)
-	/usr/local/go/src/pkg/net/rpc/client.go:291 +0xad
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.call(0xf84023bf30, 0xf800000023, 0x6777cc, 0x6f78615000000014, 0x56b210, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:692 +0x2da
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).broadcast_accept(0xf8401565a0, 0xf800000003, 0xf8404d5c80, 0x64023b001, 0x300000000, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:515 +0x1c7
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).proposer_role(0xf8401565a0, 0xf800000003, 0x5760d0, 0x5ed7e411, 0x0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:291 +0x1ff
-created by 2013/02/28 23:03:58 rpc: writing response: write unix @: broken pipe
-s).Start
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:142 +0x301
-
-goroutine 1244 [chan receive]:
-net.(*pollServer).WaitRead(0xf8400d1100, 0xf8401091b0, 0xf840078f30, 0xb, 0x1, ...)
-	/usr/local/go/src/pkg/net/fd.go:268 +0x73
-net.(*netFD).Read(0xf8401091b0, 0xf840304000, 0x100000001000, 0xffffffff, 0xf840075540, ...)
-	/usr/local/go/src/pkg/net/fd.go:428 +0x1ec
-net.(*UnixConn).Read(0xf840176400, 0xf840304000, 0x100000001000, 0xf8403adea0, 0x0, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:128 +0xce
-bufio.(*Reader).fill(0xf84011ab80, 0xffffffff)
-	/usr/local/go/src/pkg/bufio/bufio.go:77 +0xf0
-bufio.(*Reader).Read(0xf84011ab80, 0xf8402e86e0, 0x900000001, 0x1, 0x0, ...)
-	/usr/local/go/src/pkg/bufio/bufio.go:142 +0x188
-encoding/gob.decodeUintReader(0xf8400e7210, 0xf84011ab80, 0xf8402e86e0, 0x900000009, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decode.go:65 +0x87
-encoding/gob.(*Decoder).recvMessage(0xf84026fa90, 0x410425, 0xf8401e5778, 0x7f6ca6a93c70)
-	2013/02/28 23:03:58 rpc: client protocol erro:73 +0x43
-encoding/gob.(*Decoder).decodeTypeSequence(0xf84026fa90, 0xf8401e5700, 0x160, 0x0, 0x64be68, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:142 +0x57
-encoding/gob.(*Decoder).DecodeValue(0xf84026fa90, 0x56de48, 0xf8401e5720, 0x160, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:206 +0x124
-encoding/gob.(*Decoder).Decode(0xf84026fa90, 0x56de38, 0xf8401e5720, 0xf8401e5720, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:185 +0x20a
-net/rpc.(*gobClientCodec).ReadResponseHeader(0xf8401e5f00, 0xf8401e5720, 0x0, 0xf840079170, 0x609138, ...)
-	/usr/local/go/src/pkg/net/rpc/client.go:199 +0x4e
-net/rpc.(*Client).input(0xf8403fce40, 0x0)
-	/usr/local/go/src/pkg/net/rpc/client.go:103 +0xd7
-created by net/rpc.NewClientWithCodec
-	/usr/local/go/src/pkg/net/rpc/client.go:177 +0x95
-
-goroutine 907 [running]:
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).Start
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:142 +0x301
-
-goroutine 1243 [chan receive]:
-net.(*pollServer).WaitRead(0xf8400d1100, 0xf84010e480, 0xf840078f30, 0xb, 0x1, ...)
-	/usr/local/go/src/pkg/net/fd.go:268 +0x73
-net.(*netFD).Read(0xf84010e480, 0xf840315000, 0x100000001000, 0xffffffff, 0xf840075540, ...)
-	/usr/local/go/src/pkg/net/fd.go:428 +0x1ec
-net.(*UnixConn).Read(0xf840176420, 0xf840315000, 0x100000001000, 0xf6a00000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:128 +0xce
-bufio.(*Reader).fill(0xf840549d00, 0xf84010fbd0)
-	/usr/local/go/src/pkg/bufio/bufio.go:77 +0xf0
-bufio.(*Reader).Read(0xf840549d00, 0xf840213e20, 0x900000001, 0x7f6c00000001, 0x0, ...)
-	/usr/local/go/src/pkg/bufio/bufio.go:142 +0x188
-encoding/gob.decodeUintReader(0xf8400e7210, 0xf840549d00, 0xf840213e20, 0x900000009, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decode.go:65 +0x87
-encoding/gob.(*Decoder).recvMessage(0xf8404f4dd0, 0x410425, 0xf8401e5cb8, 0x7f6ca8a55c70)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:73 +0x43
-encoding/gob.(*Decoder).decodeTypeSequence(0xf8404f4dd0, 0xf8401e5c00, 0x160, 0x0, 0x64be68, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:142 +0x57
-encoding/gob.(*Decoder).DecodeValue(0xf8404f4dd0, 0x56de48, 0xf8401e5c60, 0x160, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:206 +0x124
-encoding/gob.(*Decoder).Decode(0xf8404f4dd0, 0x56de38, 0xf8401e5c60, 0xf8401e5c60, 0x402e2b00, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:185 +0x20a
-net/rpc.(*gobClientCodec).ReadResponseHeader(0xf8401e5570, 0xf8401e5c60, 0x7f6ca8a55e78, 0xf8402e2b00, 0x0, ...)
-	/usr/local/go/src/pkg/net/rpc/client.go:199 +0x4e
-net/rpc.(*Client).input(0xf8402b5d80, 0x0)
-	/usr/local/go/src/pkg/net/rpc/client.go:103 +0xd7
-created by net/rpc.NewClientWithCodec
-	/usr/local/go/src/pkg/net/rpc/client.go:177 +0x95
-
-goroutine 1241 [runnable]:
-net.(*pollServer).WaitRead(0xf8400d1100, 0xf84010e3f0, 0xf840078f30, 0xb, 0x1, ...)
-	/usr/local/go/src/pkg/net/fd.go:268 +0x73
-net.(*netFD).Read(0xf84010e3f0, 0xf840203000, 0x100000001000, 0xffffffff, 0xf840075540, ...)
-	/usr/local/go/src/pkg/net/fd.go:428 +0x1ec
-net.(*UnixConn).Read(0xf8401767f0, 0xf840203000, 0x100000001000, 0xf8402ea03b, 0x0, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:128 +0xce
-bufio.(*Reader).fill(0xf84011aa00, 0x576c88)
-	/usr/local/go/src/pkg/bufio/bufio.go:77 +0xf0
-bufio.(*Reader).Read(0xf84011aa00, 0xf8402e8660, 0x900000001, 0x7f6c00000001, 0x0, ...)
-	/usr/local/go/src/pkg/bufio/bufio.go:142 +0x188
-encoding/gob.decodeUintReader(0xf8400e7210, 0xf84011aa00, 0xf8402e8660, 0x900000009, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decode.go:65 +0x87
-encoding/gob.(*Decoder).recvMessage(0xf84026f8f0, 0x410425, 0xf84047b208, 0x7f6ca6a94c70)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:73 +0x43
-encoding/gob.(*Decoder).decodeTypeSequence(0xf84026f8f0, 0xf84047b100, 0x160, 0x0, 0x64be68, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:142 +0x57
-encoding/gob.(*Decoder).DecodeValue(0xf84026f8f0, 0x56de48, 0xf84047b1b0, 0x160, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:206 +0x124
-encoding/gob.(*Decoder).Decode(0xf84026f8f0, 0x56de38, 0xf84047b1b0, 0xf84047b1b0, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:185 +0x20a
-net/rpc.(*gobClientCodec).ReadResponseHeader(0xf8401e5900, 0xf84047b1b0, 0xf8400972c0, 0xf8402ea000, 0x28000000043, ...)
-	/usr/local/go/src/pkg/net/rpc/client.go:199 +0x4e
-net/rpc.(*Client).input(0xf8403fc840, 0x0)
-	/usr/local/go/src/pkg/net/rpc/client.go:103 +0xd7
-created by net/rpc.NewClientWithCodec
-	/usr/local/go/src/pkg/net/rpc/client.go:177 +0x95
-
-goroutine 915 [running]:
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).Start
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:142 +0x301
-
-goroutine 917 [chan receive]:
-net/rpc.(*Client).Call(0xf8403fc840, 0x6777cc, 0xf800000014, 0x56b210, 0xf84024d2f0, ...)
-	/usr/local/go/src/pkg/net/rpc/client.go:291 +0xad
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.call(0xf84023bf30, 0xf800000023, 0x6777cc, 0x6f78615000000014, 0x56b210, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:692 +0x2da
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).broadcast_accept(0xf8401565a0, 0xf800000000, 0xf840188540, 0x3401e5d01, 0x300000000, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:515 +0x1c7
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).proposer_role(0xf8401565a0, 0xf800000000, 0x5760d0, 0x6a3d4ca5, 0x0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:291 +0x1ff
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).Start
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:142 +0x301
-
-goroutine 1237 [runnable]:
-syscall.Syscall()
-	/usr/local/go/src/pkg/syscall/asm_linux_amd64.s:36 +0x64
-syscall.Read(0xf800000019, 0xf84056c000, 0x100000001000, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/syscall/zerrors_linux_amd64.go:2262 +0x78
-net.(*netFD).Read(0xf840382360, 0xf84056c000, 0x100000001000, 0xf8ffffffff, 0x0, ...)
-	/usr/local/go/src/pkg/net/fd.go:424 +0x107
-net.(*UnixConn).Read(0xf8402f1490, 0xf84056c000, 0x100000001000, 0xf6a00000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:128 +0xce
-bufio.(*Reader).fill(0xf8402e2a80, 0x56b2b0)
-	/usr/local/go/src/pkg/bufio/bufio.go:77 +0xf0
-bufio.(*Reader).Read(0xf8402e2a80, 0xf840145900, 0x900000001, 0xf800000001, 0x0, ...)
-	/usr/local/go/src/pkg/bufio/bufio.go:142 +0x188
-encoding/gob.decodeUintReader(0xf8400e7210, 0xf8402e2a80, 0xf840145900, 0x900000009, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decode.go:65 +0x87
-encoding/gob.(*Decoder).recvMessage(0xf84026f4e0, 0x410425, 0xf840224f88, 0x7f6ca8a18b20)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:73 +0x43
-encoding/gob.(*Decoder).decodeTypeSequence(0xf84026f4e0, 0xf840278300, 0x160, 0x0, 0x64be68, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:142 +0x57
-encoding/gob.(*Decoder).DecodeValue(0xf84026f4e0, 0x56de00, 0xf840278360, 0x160, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:206 +0x124
-encoding/gob.(*Decoder).Decode(0xf84026f4e0, 0x56ddf0, 0xf840278360, 0xf840278360, 0x4026f4e0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:185 +0x20a
-net/rpc.(*gobServerCodec).ReadRequestHeader(0xf840224f30, 0xf840278360, 0x56b2f8, 0x56b2f8, 0x100000000, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:371 +0x4e
-net/rpc.(*Server).readRequestHeader(0xf8401317c0, 0xf840108080, 0xf840224f30, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:522 +0x94
-net/rpc.(*Server).readRequest(0xf8401317c0, 0xf840108080, 0xf840224f30, 0xf840155980, 0xf8402930a0, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:489 +0x90
-net/rpc.(*Server).ServeCodec(0xf8401317c0, 0xf840108080, 0xf840224f30, 0xf840108080)
-	/usr/local/go/src/pkg/net/rpc/server.go:408 +0x69
-net/rpc.(*Server).ServeConn(0xf8401317c0, 0xf8400d1800, 0xf8402f1490, 0x0)
-	/usr/local/go/src/pkg/net/rpc/server.go:400 +0x146
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos._func_001
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:770 +0x4d4
-
-goroutine 921 [chan receive]:
-net/rpc.(*Client).Call(0xf8402b5a20, 0x6777cc, 0xf800000014, 0x56b210, 0xf8402133e0, ...)
-	/usr/local/go/src/pkg/net/rpc/client.go:291 +0xad
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.call(0xf84023bfc0, 0xf800000023, 0x6777cc, 0x6f78615000000014, 0x56b210, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:692 +0x2da
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).broadcast_accept(0xf8401565f0, 0xf800000010, 0xf84037ae40, 0x1403ae801, 0x300000000, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:515 +0x1c7
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).proposer_role(0xf8401565f0, 0xf800000010, 0x5760d0, 0x3539b1ea, 0x0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:291 +0x1ff
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).Start
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:142 +0x301
-
-goroutine 926 [chan receive]:
-net/rpc.(*Client).Call(0xf840272840, 0x6777cc, 0xf800000014, 0x56b210, 0xf84035b750, ...)
-	/usr/local/go/src/pkg/net/rpc/client.go:291 +0xad
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.call(0xf8402dfde0, 0xf800000023, 0x6777cc, 0x6f78615000000014, 0x56b210, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:692 +0x2da
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).broadcast_accept(0xf840156640, 0xf80000000d, 0xf84037ac80, 0x5403b5a01, 0x300000000, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:515 +0x1c7
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).proposer_role(0xf840156640, 0xf80000000d, 0x5760d0, 0x38b352f7, 0x0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:291 +0x1ff
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).Start
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:142 +0x301
-
-goroutine 1245 [syscall]:
-syscall.Syscall()
-	/usr/local/go/src/pkg/syscall/asm_linux_amd64.s:15 +0x5
-syscall.Read(0xf800000022, 0xf8401ce000, 0x100000001000, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/syscall/zerrors_linux_amd64.go:2262 +0x78
-net.(*netFD).Read(0xf84010e900, 0xf8401ce000, 0x100000001000, 0xf800000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/fd.go:424 +0x107
-net.(*UnixConn).Read(0xf840176578, 0xf8401ce000, 0x100000001000, 0xf3700000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:128 +0xce
-bufio.(*Reader).fill(0xf84011ac40, 0xf84026fc48)
-	/usr/local/go/src/pkg/bufio/bufio.go:77 +0xf0
-bufio.(*Reader).Read(0xf84011ac40, 0xf8402e8720, 0x900000001, 0xf800000001, 0x0, ...)
-	/usr/local/go/src/pkg/bufio/bufio.go:142 +0x188
-encoding/gob.decodeUintReader(0xf8400e7210, 0xf84011ac40, 0xf8402e8720, 0x900000009, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decode.go:65 +0x87
-encoding/gob.(*Decoder).recvMessage(0xf84026fc30, 0x410425, 0xf8401e5388, 0x7f6ca6a96b20)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:73 +0x43
-encoding/gob.(*Decoder).decodeTypeSequence(0xf84026fc30, 0xf84018c700, 0x160, 0x0, 0x64be68, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:142 +0x57
-encoding/gob.(*Decoder).DecodeValue(0xf84026fc30, 0x56de00, 0xf84018c7c0, 0x160, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:206 +0x124
-encoding/gob.(*Decoder).Decode(0xf84026fc30, 0x56ddf0, 0xf84018c7c0, 0xf84018c7c0, 0x1, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:185 +0x20a
-net/rpc.(*gobServerCodec).ReadRequestHeader(0xf8401e5270, 0xf84018c7c0, 0x56b268, 0x56b268, 0x7f6ca6a96ce8, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:371 +0x4e
-net/rpc.(*Server).readRequestHeader(0xf8401317c0, 0xf840108080, 0xf8401e5270, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:522 +0x94
-net/rpc.(*Server).readRequest(0xf8401317c0, 0xf840108080, 0xf8401e5270, 0xf840155800, 0xf8402930a0, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:489 +0x90
-net/rpc.(*Server).ServeCodec(0xf8401317c0, 0xf840108080, 0xf8401e5270, 0xf840108080)
-	/usr/local/go/src/pkg/net/rpc/server.go:408 +0x69
-net/rpc.(*Server).ServeConn(0xf8401317c0, 0xf8400d1800, 0xf840176578, 0x0)
-	/usr/local/go/src/pkg/net/rpc/server.go:400 +0x146
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos._func_001
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:767 +0x45d
-
-goroutine 936 [finalizer wait]:
-created by runtime.gc
-	/usr/local/go/src/pkg/runtime/mgc0.c:882
-
-goroutine 1212 [syscall]:
-syscall.Syscall()
-	/usr/local/go/src/pkg/syscall/asm_linux_amd64.s:15 +0x5
-syscall.Read(0xf80000000f, 0xf840153000, 0x100000001000, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/syscall/zerrors_linux_amd64.go:2262 +0x78
-net.(*netFD).Read(0xf8401c3d80, 0xf840153000, 0x100000001000, 0xf800000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/fd.go:424 +0x107
-net.(*UnixConn).Read(0xf840298910, 0xf840153000, 0x100000001000, 0xf3700000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:128 +0xce
-bufio.(*Reader).fill(0xf840572dc0, 0xf840244428)
-	/usr/local/go/src/pkg/bufio/bufio.go:77 +0xf0
-bufio.(*Reader).Read(0xf840572dc0, 0xf840213a20, 0x900000001, 0xf800000001, 0x0, ...)
-	/usr/local/go/src/pkg/bufio/bufio.go:142 +0x188
-encoding/gob.decodeUintReader(0xf8400e7210, 0xf840572dc0, 0xf840213a20, 0x900000009, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decode.go:65 +0x87
-encoding/gob.(*Decoder).recvMessage(0xf840244410, 0x410425, 0xf84047b8f8, 0x7f6ca8b9fb20)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:73 +0x43
-encoding/gob.(*Decoder).decodeTypeSequence(0xf840244410, 0xf8402ca800, 0x160, 0x0, 0x64be68, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:142 +0x57
-encoding/gob.(*Decoder).DecodeValue(0xf840244410, 0x56de00, 0xf8402ca800, 0x160, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:206 +0x124
-encoding/gob.(*Decoder).Decode(0xf840244410, 0x56ddf0, 0xf8402ca800, 0xf8402ca800, 0x1, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:185 +0x20a
-net/rpc.(*gobServerCodec).ReadRequestHeader(0xf84047b840, 0xf8402ca800, 0x56b268, 0x56b268, 0x7f6ca8b9fce8, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:371 +0x4e
-net/rpc.(*Server).readRequestHeader(0xf8401317c0, 0xf840108080, 0xf84047b840, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:522 +0x94
-net/rpc.(*Server).readRequest(0xf8401317c0, 0xf840108080, 0xf84047b840, 0xf840155800, 0xf840166300, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:489 +0x90
-net/rpc.(*Server).ServeCodec(0xf8401317c0, 0xf840108080, 0xf84047b840, 0xf840108080)
-	/usr/local/go/src/pkg/net/rpc/server.go:408 +0x69
-net/rpc.(*Server).ServeConn(0xf8401317c0, 0xf8400d1800, 0xf840298910, 0x0)
-	/usr/local/go/src/pkg/net/rpc/server.go:400 +0x146
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos._func_001
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:767 +0x45d
-
-goroutine 1248 [runnable]:
-net/rpc.(*Server).ServeConn(0xf84011aec0, 0xf8400d1800, 0xf840301618, 0x0)
-	/usr/local/go/src/pkg/net/rpc/server.go:397
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos._func_001
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:767 +0x45d
-
-goroutine 1239 [chan receive]:
-net.(*pollServer).WaitRead(0xf8400d1100, 0xf84010e120, 0xf840078f30, 0xb, 0x1, ...)
-	/usr/local/go/src/pkg/net/fd.go:268 +0x73
-net.(*netFD).Read(0xf84010e120, 0xf840542000, 0x100000001000, 0xffffffff, 0xf840075540, ...)
-	/usr/local/go/src/pkg/net/fd.go:428 +0x1ec
-net.(*UnixConn).Read(0xf840176750, 0xf840542000, 0x100000001000, 0xf2100000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:128 +0xce
-bufio.(*Reader).fill(0xf84011a940, 0xf84010fbd0)
-	/usr/local/go/src/pkg/bufio/bufio.go:77 +0xf0
-bufio.(*Reader).Read(0xf84011a940, 0xf8402e8630, 0x900000001, 0x7f6c00000001, 0x0, ...)
-	/usr/local/go/src/pkg/bufio/bufio.go:142 +0x188
-encoding/gob.decodeUintReader(0xf8400e7210, 0xf84011a940, 0xf8402e8630, 0x900000009, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decode.go:65 +0x87
-encoding/gob.(*Decoder).recvMessage(0xf84026f750, 0x410425, 0xf8401e5b68, 0x7f6ca8a75c70)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:73 +0x43
-encoding/gob.(*Decoder).decodeTypeSequence(0xf84026f750, 0xf8401e5b00, 0x160, 0x0, 0x64be68, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:142 +0x57
-encoding/gob.(*Decoder).DecodeValue(0xf84026f750, 0x56de48, 0xf8401e5b10, 0x160, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:206 +0x124
-encoding/gob.(*Decoder).Decode(0xf84026f750, 0x56de38, 0xf8401e5b10, 0xf8401e5b10, 0x4016ff40, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:185 +0x20a
-net/rpc.(*gobClientCodec).ReadResponseHeader(0xf840367210, 0xf8401e5b10, 0x7f6ca8a75e78, 0xf84016ff40, 0x0, ...)
-	/usr/local/go/src/pkg/net/rpc/client.go:199 +0x4e
-net/rpc.(*Client).input(0xf8403fc600, 0x0)
-	/usr/local/go/src/pkg/net/rpc/client.go:103 +0xd7
-created by net/rpc.NewClientWithCodec
-	/usr/local/go/src/pkg/net/rpc/client.go:177 +0x95
-
-goroutine 1023 [syscall]:
-syscall.Syscall()
-	/usr/local/go/src/pkg/syscall/asm_linux_amd64.s:15 +0x5
-syscall.Read(0xf80000003a, 0xf840462000, 0x100000001000, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/syscall/zerrors_linux_amd64.go:2262 +0x78
-net.(*netFD).Read(0xf8401c3a20, 0xf840462000, 0x100000001000, 0xf800000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/fd.go:424 +0x107
-net.(*UnixConn).Read(0xf840297990, 0xf840462000, 0x100000001000, 0xf6a00000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:128 +0xce
-bufio.(*Reader).fill(0xf840451400, 0x56b2b0)
-	/usr/local/go/src/pkg/bufio/bufio.go:77 +0xf0
-bufio.(*Reader).Read(0xf840451400, 0xf8403a48d0, 0x900000001, 0xf800000001, 0x0, ...)
-	/usr/local/go/src/pkg/bufio/bufio.go:142 +0x188
-encoding/gob.decodeUintReader(0xf8400e7210, 0xf840451400, 0xf8403a48d0, 0x900000009, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decode.go:65 +0x87
-encoding/gob.(*Decoder).recvMessage(0xf8401df410, 0x410425, 0xf8403ff748, 0x7f6ca8ba2b20)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:73 +0x43
-encoding/gob.(*Decoder).decodeTypeSequence(0xf8401df410, 0xf84046af00, 0x160, 0x0, 0x64be68, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:142 +0x57
-encoding/gob.(*Decoder).DecodeValue(0xf8401df410, 0x56de00, 0xf84046af80, 0x160, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:206 +0x124
-encoding/gob.(*Decoder).Decode(0xf8401df410, 0x56ddf0, 0xf84046af80, 0xf84046af80, 0x401df410, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:185 +0x20a
-net/rpc.(*gobServerCodec).ReadRequestHeader(0xf8403ff6f0, 0xf84046af80, 0x56b2f8, 0x56b2f8, 0x100000000, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:371 +0x4e
-net/rpc.(*Server).readRequestHeader(0xf84011ae00, 0xf840108080, 0xf8403ff6f0, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:522 +0x94
-net/rpc.(*Server).readRequest(0xf84011ae00, 0xf840108080, 0xf8403ff6f0, 0xf8402d7380, 0xf840278b00, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:489 +0x90
-net/rpc.(*Server).ServeCodec(0xf84011ae00, 0xf840108080, 0xf8403ff6f0, 0xf840108080)
-	/usr/local/go/src/pkg/net/rpc/server.go:408 +0x69
-net/rpc.(*Server).ServeConn(0xf84011ae00, 0xf8400d1800, 0xf840297990, 0x0)
-	/usr/local/go/src/pkg/net/rpc/server.go:400 +0x146
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos._func_001
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:767 +0x45d
-
-goroutine 1216 [syscall]:
-syscall.Syscall()
-	/usr/local/go/src/pkg/syscall/asm_linux_amd64.s:15 +0x5
-syscall.Read(0xf80000001d, 0xf840168000, 0x100000001000, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/syscall/zerrors_linux_amd64.go:2262 +0x78
-net.(*netFD).Read(0xf8401c3f30, 0xf840168000, 0x100000001000, 0xf800000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/fd.go:424 +0x107
-net.(*UnixConn).Read(0xf84021a0f0, 0xf840168000, 0x100000001000, 0xf3700000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:128 +0xce
-bufio.(*Reader).fill(0xf840108400, 0xf840211288)
-	/usr/local/go/src/pkg/bufio/bufio.go:77 +0xf0
-bufio.(*Reader).Read(0xf840108400, 0xf840320bc0, 0x900000001, 0xf800000001, 0x0, ...)
-	/usr/local/go/src/pkg/bufio/bufio.go:142 +0x188
-encoding/gob.decodeUintReader(0xf8400e7210, 0xf840108400, 0xf840320bc0, 0x900000009, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decode.go:65 +0x87
-encoding/gob.(*Decoder).recvMessage(0xf840211270, 0x410425, 0xf8400e70b8, 0x7f6ca6a9ab20)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:73 +0x43
-encoding/gob.(*Decoder).decodeTypeSequence(0xf840211270, 0xf840363800, 0x160, 0x0, 0x64be68, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:142 +0x57
-encoding/gob.(*Decoder).DecodeValue(0xf840211270, 0x56de00, 0xf840363800, 0x160, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:206 +0x124
-encoding/gob.(*Decoder).Decode(0xf840211270, 0x56ddf0, 0xf840363800, 0xf840363800, 0x1, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:185 +0x20a
-net/rpc.(*gobServerCodec).ReadRequestHeader(0xf8400e7060, 0xf840363800, 0x56b268, 0x56b268, 0x7f6ca6a9ace8, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:371 +0x4e
-net/rpc.(*Server).readRequestHeader(0xf8401317c0, 0xf840108080, 0xf8400e7060, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:522 +0x94
-net/rpc.(*Server).readRequest(0xf8401317c0, 0xf840108080, 0xf8400e7060, 0xf840155800, 0xf840166300, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:489 +0x90
-net/rpc.(*Server).ServeCodec(0xf8401317c0, 0xf840108080, 0xf8400e7060, 0xf840108080)
-	/usr/local/go/src/pkg/net/rpc/server.go:408 +0x69
-net/rpc.(*Server).ServeConn(0xf8401317c0, 0xf8400d1800, 0xf84021a0f0, 0x0)
-	/usr/local/go/src/pkg/net/rpc/server.go:400 +0x146
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos._func_001
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:767 +0x45d
-
-goroutine 1235 [syscall]:
-syscall.Syscall()
-	/usr/local/go/src/pkg/syscall/asm_linux_amd64.s:15 +0x5
-syscall.Read(0xf800000016, 0xf84010a000, 0x100000001000, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/syscall/zerrors_linux_amd64.go:2262 +0x78
-net.(*netFD).Read(0xf840374480, 0xf84010a000, 0x100000001000, 0xf800000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/fd.go:424 +0x107
-net.(*UnixConn).Read(0xf8403b8868, 0xf84010a000, 0x100000001000, 0xf3700000000, 0x0, ...)
-	/usr/local/go/src/pkg/net/unixsock_posix.go:128 +0xce
-bufio.(*Reader).fill(0xf840173f80, 0xf840291018)
-	/usr/local/go/src/pkg/bufio/bufio.go:77 +0xf0
-bufio.(*Reader).Read(0xf840173f80, 0xf8401451a0, 0x900000001, 0xf800000001, 0x0, ...)
-	/usr/local/go/src/pkg/bufio/bufio.go:142 +0x188
-encoding/gob.decodeUintReader(0xf8400e7210, 0xf840173f80, 0xf8401451a0, 0x900000009, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decode.go:65 +0x87
-encoding/gob.(*Decoder).recvMessage(0xf840291000, 0x410425, 0xf840224928, 0x7f6ca8a76b20)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:73 +0x43
-encoding/gob.(*Decoder).decodeTypeSequence(0xf840291000, 0xf84019de00, 0x160, 0x0, 0x64be68, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:142 +0x57
-encoding/gob.(*Decoder).DecodeValue(0xf840291000, 0x56de00, 0xf84019dee0, 0x160, 0x0, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:206 +0x124
-encoding/gob.(*Decoder).Decode(0xf840291000, 0x56ddf0, 0xf84019dee0, 0xf84019dee0, 0x1, ...)
-	/usr/local/go/src/pkg/encoding/gob/decoder.go:185 +0x20a
-net/rpc.(*gobServerCodec).ReadRequestHeader(0xf8402248d0, 0xf84019dee0, 0x56b268, 0x56b268, 0x7f6ca8a76ce8, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:371 +0x4e
-net/rpc.(*Server).readRequestHeader(0xf8401317c0, 0xf840108080, 0xf8402248d0, 0x0, 0x0, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:522 +0x94
-net/rpc.(*Server).readRequest(0xf8401317c0, 0xf840108080, 0xf8402248d0, 0xf840155800, 0xf840166300, ...)
-	/usr/local/go/src/pkg/net/rpc/server.go:489 +0x90
-net/rpc.(*Server).ServeCodec(0xf8401317c0, 0xf840108080, 0xf8402248d0, 0xf840108080)
-	/usr/local/go/src/pkg/net/rpc/server.go:408 +0x69
-net/rpc.(*Server).ServeConn(0xf8401317c0, 0xf8400d1800, 0xf8403b8868, 0x0)
-	/usr/local/go/src/pkg/net/rpc/server.go:400 +0x146
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos._func_001
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:767 +0x45d
-panic: runtime error: invalid memory address or nil pointer dereference
-[signal 0xb code=0x1 addr=0x10 pc=0x4264a9]
-
-goroutine 907 [running]:
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).save_accepted_proposal(0xf8401565a0, 0xf800000008, 0xf84023c560, 0xf840287801, 0x300000003, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:457 +0x44
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).proposer_role(0xf8401565a0, 0xf800000008, 0x5760d0, 0x3699caf3, 0x0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:296 +0x267
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).Start
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:142 +0x301
-panic: runtime error: invalid memory address or nil pointer dereference
-[signal 0xb code=0x1 addr=0x10 pc=0x4264a9]
-
-goroutine 915 [running]:
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).save_accepted_proposal(0xf8401565f0, 0xf80000000b, 0xf840305280, 0xf84039bd01, 0x300000003, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:457 +0x44
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).proposer_role(0xf8401565f0, 0xf80000000b, 0x5760d0, 0x79fc6568, 0x0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:296 +0x267
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).Start
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:142 +0x301
-panic: runtime error: invalid memory address or nil pointer dereference
-[signal 0xb code=0x1 addr=0x0 pc=0x426381]
-
-goroutine 880 [running]:
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).next_proposal_number(0xf8401565f0, 0x100000001, 0x7478654e00000000, 0x0, 0x0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:416 +0x1d8
-_/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).proposer_role(0xf8401565f0, 0xf800000001, 0x5760d0, 0x1da1d7eb, 0x0, ...)
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:269 +0xf1
-created by _/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos.(*Paxos).Start
-	/home/dghubble/Documents/MIT_Files/6.824/6.824-labs/src/paxos/paxos.go:142 +0x301
+2013/02/28 23:33:55 method Done has wrong number of ins: 2
+2013/02/28 23:33:55 method Kill has wrong number of ins: 1
+2013/02/28 23:33:55 method Max has wrong number of ins: 1
+2013/02/28 23:33:55 method Min has wrong number of ins: 1
+2013/02/28 23:33:55 method Start reply type not a pointer: interface {}
+2013/02/28 23:33:55 method Status has wrong number of ins: 2
+2013/02/28 23:33:55 method Done has wrong number of ins: 2
+2013/02/28 23:33:55 method Kill has wrong number of ins: 1
+2013/02/28 23:33:55 method Max has wrong number of ins: 1
+2013/02/28 23:33:55 method Min has wrong number of ins: 1
+2013/02/28 23:33:55 method Start reply type not a pointer: interface {}
+2013/02/28 23:33:55 method Status has wrong number of ins: 2
+2013/02/28 23:33:55 method Done has wrong number of ins: 2
+2013/02/28 23:33:55 method Kill has wrong number of ins: 1
+2013/02/28 23:33:55 method Max has wrong number of ins: 1
+2013/02/28 23:33:55 method Min has wrong number of ins: 1
+2013/02/28 23:33:55 method Start reply type not a pointer: interface {}
+2013/02/28 23:33:55 method Status has wrong number of ins: 2
+2013/02/28 23:33:55 method Done has wrong number of ins: 2
+2013/02/28 23:33:55 method Kill has wrong number of ins: 1
+2013/02/28 23:33:55 method Max has wrong number of ins: 1
+2013/02/28 23:33:55 method Min has wrong number of ins: 1
+2013/02/28 23:33:55 method Start reply type not a pointer: interface {}
+2013/02/28 23:33:55 method Status has wrong number of ins: 2
+2013/02/28 23:33:55 method Done has wrong number of ins: 2
+2013/02/28 23:33:55 method Kill has wrong number of ins: 1
+2013/02/28 23:33:55 method Max has wrong number of ins: 1
+2013/02/28 23:33:55 method Min has wrong number of ins: 1
+2013/02/28 23:33:55 method Start reply type not a pointer: interface {}
+2013/02/28 23:33:55 method Status has wrong number of ins: 2
+2013/02/28 23:33:55 method Done has wrong number of ins: 2
+2013/02/28 23:33:55 method Kill has wrong number of ins: 1
+2013/02/28 23:33:55 method Max has wrong number of ins: 1
+2013/02/28 23:33:55 method Min has wrong number of ins: 1
+2013/02/28 23:33:55 method Start reply type not a pointer: interface {}
+2013/02/28 23:33:55 method Status has wrong number of ins: 2
+2013/02/28 23:33:55 method Done has wrong number of ins: 2
+2013/02/28 23:33:55 method Kill has wrong number of ins: 1
+2013/02/28 23:33:55 method Max has wrong number of ins: 1
+2013/02/28 23:33:55 method Min has wrong number of ins: 1
+2013/02/28 23:33:55 method Start reply type not a pointer: interface {}
+2013/02/28 23:33:55 method Status has wrong number of ins: 2
+2013/02/28 23:33:55 method Done has wrong number of ins: 2
+2013/02/28 23:33:55 method Kill has wrong number of ins: 1
+2013/02/28 23:33:55 method Max has wrong number of ins: 1
+2013/02/28 23:33:55 method Min has wrong number of ins: 1
+2013/02/28 23:33:55 method Start reply type not a pointer: interface {}
+2013/02/28 23:33:55 method Status has wrong number of ins: 2
+2013/02/28 23:33:57 method Done has wrong number of ins: 2
+2013/02/28 23:33:57 method Kill has wrong number of ins: 1
+2013/02/28 23:33:57 method Max has wrong number of ins: 1
+2013/02/28 23:33:57 method Min has wrong number of ins: 1
+2013/02/28 23:33:57 method Start reply type not a pointer: interface {}
+2013/02/28 23:33:57 method Status has wrong number of ins: 2
+2013/02/28 23:33:57 method Done has wrong number of ins: 2
+2013/02/28 23:33:57 method Kill has wrong number of ins: 1
+2013/02/28 23:33:57 method Max has wrong number of ins: 1
+2013/02/28 23:33:57 method Min has wrong number of ins: 1
+2013/02/28 23:33:57 method Start reply type not a pointer: interface {}
+2013/02/28 23:33:57 method Status has wrong number of ins: 2
+2013/02/28 23:33:57 method Done has wrong number of ins: 2
+2013/02/28 23:33:57 method Kill has wrong number of ins: 1
+2013/02/28 23:33:57 method Max has wrong number of ins: 1
+2013/02/28 23:33:57 method Min has wrong number of ins: 1
+2013/02/28 23:33:57 method Start reply type not a pointer: interface {}
+2013/02/28 23:33:57 method Status has wrong number of ins: 2
+2013/02/28 23:33:57 method Done has wrong number of ins: 2
+2013/02/28 23:33:57 method Kill has wrong number of ins: 1
+2013/02/28 23:33:57 method Max has wrong number of ins: 1
+2013/02/28 23:33:57 method Min has wrong number of ins: 1
+2013/02/28 23:33:57 method Start reply type not a pointer: interface {}
+2013/02/28 23:33:57 method Status has wrong number of ins: 2
+2013/02/28 23:33:57 method Done has wrong number of ins: 2
+2013/02/28 23:33:57 method Kill has wrong number of ins: 1
+2013/02/28 23:33:57 method Max has wrong number of ins: 1
+2013/02/28 23:33:57 method Min has wrong number of ins: 1
+2013/02/28 23:33:57 method Start reply type not a pointer: interface {}
+2013/02/28 23:33:57 method Status has wrong number of ins: 2
+2013/02/28 23:33:57 method Done has wrong number of ins: 2
+2013/02/28 23:33:57 method Kill has wrong number of ins: 1
+2013/02/28 23:33:57 method Max has wrong number of ins: 1
+2013/02/28 23:33:57 method Min has wrong number of ins: 1
+2013/02/28 23:33:57 method Start reply type not a pointer: interface {}
+2013/02/28 23:33:57 method Status has wrong number of ins: 2
+2013/02/28 23:33:59 method Done has wrong number of ins: 2
+2013/02/28 23:33:59 method Kill has wrong number of ins: 1
+2013/02/28 23:33:59 method Max has wrong number of ins: 1
+2013/02/28 23:33:59 method Min has wrong number of ins: 1
+2013/02/28 23:33:59 method Start reply type not a pointer: interface {}
+2013/02/28 23:33:59 method Status has wrong number of ins: 2
+2013/02/28 23:33:59 method Done has wrong number of ins: 2
+2013/02/28 23:33:59 method Kill has wrong number of ins: 1
+2013/02/28 23:33:59 method Max has wrong number of ins: 1
+2013/02/28 23:33:59 method Min has wrong number of ins: 1
+2013/02/28 23:33:59 method Start reply type not a pointer: interface {}
+2013/02/28 23:33:59 method Status has wrong number of ins: 2
+2013/02/28 23:33:59 method Done has wrong number of ins: 2
+2013/02/28 23:33:59 method Kill has wrong number of ins: 1
+2013/02/28 23:33:59 method Max has wrong number of ins: 1
+2013/02/28 23:33:59 method Min has wrong number of ins: 1
+2013/02/28 23:33:59 method Start reply type not a pointer: interface {}
+2013/02/28 23:33:59 method Status has wrong number of ins: 2
+2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-0: connection reset by peer
+2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-0: connection reset by peer
+2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-0: connection reset by peer
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-2: connection reset by peer
+2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-2: connection reset by peer
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-2: connection reset by peer
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-0: connection reset by peer
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-1: connection reset by peer
+2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-0: connection reset by peer
+2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-2: connection reset by peer
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-2: connection reset by peer
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-1: connection reset by peer
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-1: connection reset by peer
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-1: connection reset by peer
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
+2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-2: connection reset by peer
+2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe

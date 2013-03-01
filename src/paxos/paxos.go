@@ -41,60 +41,6 @@ import "fmt"
 //import "math"
 import "math/rand"
 
-/* 
-Representation of a Proposal which is what a proposer proposes to acceptors which 
-has a unique number per Agreement instance and a value that the proposer wants to 
-become the decided value for the agreement instance
-*/
-type Proposal struct {
-  Number int               // proposal number (unqiue per Argeement instance)
-  Value interface{}        // value of the Proposal
-}
-
-/* 
-Represents the state stored by a Paxos library instance per Agreement instance.
-'number_promised' is the number returned in prepare_ok replies to promise not to 
-accept any more proposals numbered less than 'number_promised'
-accepted_proposal is the highest numbered proposal that has been accepted.
-highest_seen is the highest proposal number the paxos library instance has seen - this
-is needed for paxos instances acting as proposers.
-*/
-type AgreementState struct {
-  // Proposer
-  proposal_number int           // Proposal number propser is using currently.
-  // Acceptor
-  highest_promised int          // highest proposal number promised in a prepare_ok reply
-  highest_seen int              // highest proposal number seen
-  accepted_proposal *Proposal   // highest numbered proposal that has been accepted
-}
-
-/*
-Sets the value for the highest_promised field of an AgreementState instance
-Caller is responsible for attaining a lock on the AgreementState in some way
-before calling.
-*/
-func (agrst *AgreementState) set_highest_promised(new_highest_promised int) {
-  agrst.highest_promised = new_highest_promised
-}
-
-/*
-Sets the value for the accepted_proposal field of an AgreementState instance
-Caller is responsible for attaining a lock on the AgreementState in some way
-before calling.
-*/
-func (agrst *AgreementState) set_accepted_proposal(proposal *Proposal) {
-  agrst.accepted_proposal = proposal
-}
-
-/*
-Sets the value for the proposal_number field of the AgreementState instance
-Caller is responsible for attaining a lock of the AgreementState in some way
-before calling.
-*/
-func (agrst *AgreementState) set_proposal_number(number int) {
-  agrst.proposal_number = number
-}
-
 
 type Paxos struct {
   mu sync.Mutex
@@ -236,7 +182,7 @@ func (px *Paxos) Status(agreement_number int) (bool, interface{}) {
   if agreement_number < (px.minimum_done_number() + 1) {
     return false, nil   // Client of Paxos instances indicated result could be deleted
   }
-  fmt.Printf("Paxos state access (%s): %d, %v\n", short_name(px.peers[px.me], 7), agreement_number, px.state)
+  //fmt.Printf("Paxos state access (%s): %d, %v\n", short_name(px.peers[px.me], 7), agreement_number, px.state)
   agreement_state, present := px.state[agreement_number]
   if present && agreement_state.accepted_proposal != nil {
     return true, agreement_state.accepted_proposal.Value
@@ -324,7 +270,7 @@ func (px *Paxos) Prepare_handler(args *PrepareArgs, reply *PrepareReply) error {
   _, present := px.state[agreement_number]
   if !present {
     fmt.Println("Initializing map entry")
-    px.state[agreement_number] = &AgreementState{highest_promised: -1, highest_seen: -1}
+    px.state[agreement_number] = px.make_default_agreementstate()
   } 
 
   if proposal_number > px.state[agreement_number].highest_promised {
@@ -360,7 +306,7 @@ func (px *Paxos) Accept_handler(args *AcceptArgs, reply *AcceptReply) error {
   _, present := px.state[agreement_number]
   if !present {
     fmt.Println("Initializing map entry")
-    px.state[agreement_number] = &AgreementState{highest_promised: -1, highest_seen: -1}
+    px.state[agreement_number] = px.make_default_agreementstate()
   } 
 
   if proposal.Number >= px.state[agreement_number].highest_promised {
@@ -412,7 +358,7 @@ func (px *Paxos) next_proposal_number(agreement_number int, highest_promised int
   px.mu.Lock()
   defer px.mu.Unlock()
 
-  fmt.Printf("next_proposal state access (%s): %d, %v\n", short_name(px.peers[px.me], 7), agreement_number, px.state)
+  //fmt.Printf("next_proposal state access (%s): %d, %v\n", short_name(px.peers[px.me], 7), agreement_number, px.state)
   current_proposal_number := px.state[agreement_number].proposal_number
   next_proposal_number := current_proposal_number + px.peer_count
   px.state[agreement_number].set_proposal_number(next_proposal_number)
@@ -438,8 +384,8 @@ called, the number is incremented by the number of peers.
 */
 func (px *Paxos) make_default_agreementstate() *AgreementState {
   initial_proposal_number := px.me - px.peer_count
-  agrst := AgreementState{highest_promised: -1, 
-                          highest_seen: -1, 
+  agrst := AgreementState{highest_promised: -1,
+                          decided: false,
                           proposal_number: initial_proposal_number} 
   return &agrst
 }
@@ -570,7 +516,7 @@ func (px *Paxos) attempt_free_state() {
   for agreement_number, _ := range px.state {
     if agreement_number < min_done_number {
       fmt.Println("DELETE", agreement_number, short_name(px.peers[px.me], 7))
-      delete(px.state, agreement_number)
+      //delete(px.state, agreement_number)
     }
   }
 

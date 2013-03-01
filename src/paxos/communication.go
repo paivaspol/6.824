@@ -10,6 +10,7 @@ type PrepareArgs struct {
 	Proposal_number int         // proposal number of the proposal
 }
 
+
 type PrepareReply struct {
 	Prepare_ok bool             // was prepare ok'ed?
 	Number_promised int         // promise not to accept any more proposals less than n
@@ -27,3 +28,13 @@ type AcceptReply struct {
 	Accept_ok bool              // whether the accept proposal request was accepted
 	Highest_done int            // sender's highest "done" argument number
 }
+
+type DecisionArgs struct {
+	Agreement_number int        // number of the agreement instance
+	Proposal *Proposal          // Proposal containing the decided upon value
+}
+
+type DecisionReply struct {
+
+}
+
