@@ -123,13 +123,14 @@ func (px *Paxos) Start(agreement_number int, proposal_value interface{}) {
   defer px.mu.Unlock()
 
   // This agreement instance has been decided and forgotten. Ignore Start request.
-  if agreement_number < px.Min() {
+  if agreement_number < (px.minimum_done_number() + 1) {
     return
   }
 
   // Add AgreementState to Paxos instance state, negotiating known to have begun.
+  fmt.Println("Reading state in start")
   _, present := px.state[agreement_number]
-  fmt.Printf("Paxos Start (%s): agreement_number: %d, proposal_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_value)
+  fmt.Printf("Paxos Start (%s): agreement_number: %d, proposal_value: \n", short_name(px.peers[px.me], 7), agreement_number)
   if !present {
     //fmt.Println("Initializing Agreement entry during Start")
     px.state[agreement_number] = px.make_default_agreementstate()
@@ -170,6 +171,9 @@ known to this peer. Returns -1 if no agreement instances are known (i.e. no
 AgreementState entries have been added to the px.state map)
 */
 func (px *Paxos) Max() int {
+  px.mu.Lock()
+  defer px.mu.Unlock()
+
   max_agreement_instance_number := -1
   for index, _ := range px.state {
     if index > max_agreement_instance_number {
@@ -211,14 +215,10 @@ func (px *Paxos) Max() int {
 // instances.
 // 
 func (px *Paxos) Min() int {
-  var min_done int
-  for _, val := range px.done {
-    if val < min_done {
-      min_done = val
-    }
-  }
+  px.mu.Lock()
+  defer px.mu.Unlock()
 
-  return min_done + 1
+  return px.minimum_done_number() + 1
 }
 
 /* The application wants to know whether this peer thinks an Agreement 
@@ -230,9 +230,13 @@ indicated they no longer needed the decided result, the result was deleted and
 false should be returned.
 */
 func (px *Paxos) Status(agreement_number int) (bool, interface{}) {
-  if agreement_number < px.Min() {
+  px.mu.Lock()
+  defer px.mu.Unlock()
+
+  if agreement_number < (px.minimum_done_number() + 1) {
     return false, nil   // Client of Paxos instances indicated result could be deleted
   }
+  fmt.Printf("Paxos state access (%s): %d, %v\n", short_name(px.peers[px.me], 7), agreement_number, px.state)
   agreement_state, present := px.state[agreement_number]
   if present && agreement_state.accepted_proposal != nil {
     return true, agreement_state.accepted_proposal.Value
@@ -261,6 +265,7 @@ func (px *Paxos) proposer_role(agreement_number int, proposal_value interface{})
   for !done_proposing {
     
     // Generate the next number that is larger than highest_number
+    fmt.Println("Next proposal number")
     proposal_number := px.next_proposal_number(agreement_number, highest_number)
 
     // Broadcast prepare request for agreement instance 'agreement_number' to Paxos acceptors.
@@ -291,7 +296,7 @@ func (px *Paxos) proposer_role(agreement_number int, proposal_value interface{})
       px.save_accepted_proposal(agreement_number, proposal)
       // Broadcast decides
       done_proposing = true
-      fmt.Printf("Proposer [DecisionReached] (%s): agree_num: %d, prop: %d, val: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal.Value)
+      fmt.Printf("Proposer [DecisionReached] (%s): agree_num: %d, prop: %d, val: \n", short_name(px.peers[px.me], 7), agreement_number, proposal_number)
     } else {
       fmt.Printf("Proposer [PrepareStage] (%s): agree_num: %d, prop: %d, Majority not reached on accept\n", short_name(px.peers[px.me], 7), agreement_number, proposal.Value)    
       runtime.Gosched()
@@ -318,7 +323,7 @@ func (px *Paxos) Prepare_handler(args *PrepareArgs, reply *PrepareReply) error {
  
   _, present := px.state[agreement_number]
   if !present {
-    //fmt.Println("Initializing map entry")
+    fmt.Println("Initializing map entry")
     px.state[agreement_number] = &AgreementState{highest_promised: -1, highest_seen: -1}
   } 
 
@@ -354,7 +359,7 @@ func (px *Paxos) Accept_handler(args *AcceptArgs, reply *AcceptReply) error {
 
   _, present := px.state[agreement_number]
   if !present {
-    //fmt.Println("Initializing map entry")
+    fmt.Println("Initializing map entry")
     px.state[agreement_number] = &AgreementState{highest_promised: -1, highest_seen: -1}
   } 
 
@@ -364,7 +369,7 @@ func (px *Paxos) Accept_handler(args *AcceptArgs, reply *AcceptReply) error {
     px.state[agreement_number].set_accepted_proposal(proposal)
     reply.Accept_ok = true
     reply.Highest_done = px.done[px.peers[px.me]]
-    fmt.Printf("Accept_ok (%s): agree_num: %d, prop: %d, val: %v, h_done: %d\n", short_name(px.peers[px.me], 7), args.Agreement_number, args.Proposal.Number, args.Proposal.Value, reply.Highest_done)
+    fmt.Printf("Accept_ok (%s): agree_num: %d, prop: %d, val: , h_done: %d\n", short_name(px.peers[px.me], 7), args.Agreement_number, args.Proposal.Number, reply.Highest_done)
     return nil
   }
   reply.Accept_ok = false
@@ -407,7 +412,7 @@ func (px *Paxos) next_proposal_number(agreement_number int, highest_promised int
   px.mu.Lock()
   defer px.mu.Unlock()
 
-  //fmt.Println(highest_promised)
+  fmt.Printf("next_proposal state access (%s): %d, %v\n", short_name(px.peers[px.me], 7), agreement_number, px.state)
   current_proposal_number := px.state[agreement_number].proposal_number
   next_proposal_number := current_proposal_number + px.peer_count
   px.state[agreement_number].set_proposal_number(next_proposal_number)
@@ -532,6 +537,21 @@ func (px *Paxos) update_done_entry(paxos_peer string, highest_done int) {
 }
 
 /*
+Computes the minimum agreement number marked as done among all the done agreement 
+numbers reported back by peers and represented in the px.peers map.
+Callee is responsible for taking out a lock on the paxos instance.
+*/
+func (px *Paxos) minimum_done_number() int {
+  var min_done_number = px.done[px.peers[px.me]]
+  for _, peers_done_number := range px.done {
+    if peers_done_number < min_done_number {
+      min_done_number = peers_done_number
+    }
+  }
+  return min_done_number
+}
+
+/*
 Computes the minimum agreement number in the values of px.done which indicates that
 all Paxos peers have been told by their client server that all prior agreement states
 are no longer needed. Thus, this Paxos instance may delete state corresponding to
@@ -539,22 +559,20 @@ agreements at or before the minimum agreement number in px.done.
 Callee is reponsible for attaining a lock on the px.state map and px.done map.
 */
 func (px *Paxos) attempt_free_state() {
-  var min_done_number = px.done[px.peers[px.me]]
-  for _, peers_done_number := range px.done {
-    if peers_done_number < min_done_number {
-      min_done_number = peers_done_number
-    }
-  }
-  fmt.Printf("Free state (%s): min_done_val: %d\n", short_name(px.peers[px.me],7), min_done_number)
-
-
-  // fmt.Printf("Paxos Free Space (%s): Clear state at and before: %d\n", short_name(px.peers[px.me], 7), min_agreement_number)
-  // for agreement_number, _ := range px.state {
-  //   if agreement_number < min_agreement_number {
-  //     fmt.Println("DELETE", agreement_number, short_name(px.peers[px.me], 7))
-  //     delete(px.state, agreement_number)
+  // var min_done_number = px.done[px.peers[px.me]]
+  // for _, peers_done_number := range px.done {
+  //   if peers_done_number < min_done_number {
+  //     min_done_number = peers_done_number
   //   }
   // }
+  var min_done_number = px.minimum_done_number()
+  fmt.Printf("Free state (%s): min_done_val: %d\n", short_name(px.peers[px.me],7), min_done_number)
+  for agreement_number, _ := range px.state {
+    if agreement_number < min_done_number {
+      fmt.Println("DELETE", agreement_number, short_name(px.peers[px.me], 7))
+      delete(px.state, agreement_number)
+    }
+  }
 
 }
 
@@ -626,10 +644,6 @@ func (px *Paxos) evaluate_accept_replies(replies_array []AcceptReply) (majority 
 }
 
 
-
-
-
-
 /*
 In the tests used by test_test.go, the tail ends of server names are usually unique 
 enough to identify the server in printouts.
@@ -640,8 +654,6 @@ func short_name(server_name string, end int) string {
   }
   return server_name[len(server_name)-end:]
 }
-
-
 
 
 
