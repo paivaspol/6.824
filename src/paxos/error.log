@@ -1,166 +1,48 @@
-2013/02/28 23:33:55 method Done has wrong number of ins: 2
-2013/02/28 23:33:55 method Kill has wrong number of ins: 1
-2013/02/28 23:33:55 method Max has wrong number of ins: 1
-2013/02/28 23:33:55 method Min has wrong number of ins: 1
-2013/02/28 23:33:55 method Start reply type not a pointer: interface {}
-2013/02/28 23:33:55 method Status has wrong number of ins: 2
-2013/02/28 23:33:55 method Done has wrong number of ins: 2
-2013/02/28 23:33:55 method Kill has wrong number of ins: 1
-2013/02/28 23:33:55 method Max has wrong number of ins: 1
-2013/02/28 23:33:55 method Min has wrong number of ins: 1
-2013/02/28 23:33:55 method Start reply type not a pointer: interface {}
-2013/02/28 23:33:55 method Status has wrong number of ins: 2
-2013/02/28 23:33:55 method Done has wrong number of ins: 2
-2013/02/28 23:33:55 method Kill has wrong number of ins: 1
-2013/02/28 23:33:55 method Max has wrong number of ins: 1
-2013/02/28 23:33:55 method Min has wrong number of ins: 1
-2013/02/28 23:33:55 method Start reply type not a pointer: interface {}
-2013/02/28 23:33:55 method Status has wrong number of ins: 2
-2013/02/28 23:33:55 method Done has wrong number of ins: 2
-2013/02/28 23:33:55 method Kill has wrong number of ins: 1
-2013/02/28 23:33:55 method Max has wrong number of ins: 1
-2013/02/28 23:33:55 method Min has wrong number of ins: 1
-2013/02/28 23:33:55 method Start reply type not a pointer: interface {}
-2013/02/28 23:33:55 method Status has wrong number of ins: 2
-2013/02/28 23:33:55 method Done has wrong number of ins: 2
-2013/02/28 23:33:55 method Kill has wrong number of ins: 1
-2013/02/28 23:33:55 method Max has wrong number of ins: 1
-2013/02/28 23:33:55 method Min has wrong number of ins: 1
-2013/02/28 23:33:55 method Start reply type not a pointer: interface {}
-2013/02/28 23:33:55 method Status has wrong number of ins: 2
-2013/02/28 23:33:55 method Done has wrong number of ins: 2
-2013/02/28 23:33:55 method Kill has wrong number of ins: 1
-2013/02/28 23:33:55 method Max has wrong number of ins: 1
-2013/02/28 23:33:55 method Min has wrong number of ins: 1
-2013/02/28 23:33:55 method Start reply type not a pointer: interface {}
-2013/02/28 23:33:55 method Status has wrong number of ins: 2
-2013/02/28 23:33:55 method Done has wrong number of ins: 2
-2013/02/28 23:33:55 method Kill has wrong number of ins: 1
-2013/02/28 23:33:55 method Max has wrong number of ins: 1
-2013/02/28 23:33:55 method Min has wrong number of ins: 1
-2013/02/28 23:33:55 method Start reply type not a pointer: interface {}
-2013/02/28 23:33:55 method Status has wrong number of ins: 2
-2013/02/28 23:33:55 method Done has wrong number of ins: 2
-2013/02/28 23:33:55 method Kill has wrong number of ins: 1
-2013/02/28 23:33:55 method Max has wrong number of ins: 1
-2013/02/28 23:33:55 method Min has wrong number of ins: 1
-2013/02/28 23:33:55 method Start reply type not a pointer: interface {}
-2013/02/28 23:33:55 method Status has wrong number of ins: 2
-2013/02/28 23:33:57 method Done has wrong number of ins: 2
-2013/02/28 23:33:57 method Kill has wrong number of ins: 1
-2013/02/28 23:33:57 method Max has wrong number of ins: 1
-2013/02/28 23:33:57 method Min has wrong number of ins: 1
-2013/02/28 23:33:57 method Start reply type not a pointer: interface {}
-2013/02/28 23:33:57 method Status has wrong number of ins: 2
-2013/02/28 23:33:57 method Done has wrong number of ins: 2
-2013/02/28 23:33:57 method Kill has wrong number of ins: 1
-2013/02/28 23:33:57 method Max has wrong number of ins: 1
-2013/02/28 23:33:57 method Min has wrong number of ins: 1
-2013/02/28 23:33:57 method Start reply type not a pointer: interface {}
-2013/02/28 23:33:57 method Status has wrong number of ins: 2
-2013/02/28 23:33:57 method Done has wrong number of ins: 2
-2013/02/28 23:33:57 method Kill has wrong number of ins: 1
-2013/02/28 23:33:57 method Max has wrong number of ins: 1
-2013/02/28 23:33:57 method Min has wrong number of ins: 1
-2013/02/28 23:33:57 method Start reply type not a pointer: interface {}
-2013/02/28 23:33:57 method Status has wrong number of ins: 2
-2013/02/28 23:33:57 method Done has wrong number of ins: 2
-2013/02/28 23:33:57 method Kill has wrong number of ins: 1
-2013/02/28 23:33:57 method Max has wrong number of ins: 1
-2013/02/28 23:33:57 method Min has wrong number of ins: 1
-2013/02/28 23:33:57 method Start reply type not a pointer: interface {}
-2013/02/28 23:33:57 method Status has wrong number of ins: 2
-2013/02/28 23:33:57 method Done has wrong number of ins: 2
-2013/02/28 23:33:57 method Kill has wrong number of ins: 1
-2013/02/28 23:33:57 method Max has wrong number of ins: 1
-2013/02/28 23:33:57 method Min has wrong number of ins: 1
-2013/02/28 23:33:57 method Start reply type not a pointer: interface {}
-2013/02/28 23:33:57 method Status has wrong number of ins: 2
-2013/02/28 23:33:57 method Done has wrong number of ins: 2
-2013/02/28 23:33:57 method Kill has wrong number of ins: 1
-2013/02/28 23:33:57 method Max has wrong number of ins: 1
-2013/02/28 23:33:57 method Min has wrong number of ins: 1
-2013/02/28 23:33:57 method Start reply type not a pointer: interface {}
-2013/02/28 23:33:57 method Status has wrong number of ins: 2
-2013/02/28 23:33:59 method Done has wrong number of ins: 2
-2013/02/28 23:33:59 method Kill has wrong number of ins: 1
-2013/02/28 23:33:59 method Max has wrong number of ins: 1
-2013/02/28 23:33:59 method Min has wrong number of ins: 1
-2013/02/28 23:33:59 method Start reply type not a pointer: interface {}
-2013/02/28 23:33:59 method Status has wrong number of ins: 2
-2013/02/28 23:33:59 method Done has wrong number of ins: 2
-2013/02/28 23:33:59 method Kill has wrong number of ins: 1
-2013/02/28 23:33:59 method Max has wrong number of ins: 1
-2013/02/28 23:33:59 method Min has wrong number of ins: 1
-2013/02/28 23:33:59 method Start reply type not a pointer: interface {}
-2013/02/28 23:33:59 method Status has wrong number of ins: 2
-2013/02/28 23:33:59 method Done has wrong number of ins: 2
-2013/02/28 23:33:59 method Kill has wrong number of ins: 1
-2013/02/28 23:33:59 method Max has wrong number of ins: 1
-2013/02/28 23:33:59 method Min has wrong number of ins: 1
-2013/02/28 23:33:59 method Start reply type not a pointer: interface {}
-2013/02/28 23:33:59 method Status has wrong number of ins: 2
-2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-0: connection reset by peer
-2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-0: connection reset by peer
-2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-0: connection reset by peer
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-2: connection reset by peer
-2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-2: connection reset by peer
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-2: connection reset by peer
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-0: connection reset by peer
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-1: connection reset by peer
-2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-0: connection reset by peer
-2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-2: connection reset by peer
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-2: connection reset by peer
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-1: connection reset by peer
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-1: connection reset by peer
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-1: connection reset by peer
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: client protocol error: unexpected EOF
-2013/02/28 23:33:59 rpc: client protocol error: read unix /var/tmp/824-1000/px-13550-manygc-2: connection reset by peer
-2013/02/28 23:33:59 rpc: writing response: write unix @: broken pipe
+2013/03/01 00:08:12 method Done has wrong number of ins: 2
+2013/03/01 00:08:12 method Kill has wrong number of ins: 1
+2013/03/01 00:08:12 method Max has wrong number of ins: 1
+2013/03/01 00:08:12 method Min has wrong number of ins: 1
+2013/03/01 00:08:12 method Start reply type not a pointer: interface {}
+2013/03/01 00:08:12 method Status has wrong number of ins: 2
+2013/03/01 00:08:12 method Done has wrong number of ins: 2
+2013/03/01 00:08:12 method Kill has wrong number of ins: 1
+2013/03/01 00:08:12 method Max has wrong number of ins: 1
+2013/03/01 00:08:12 method Min has wrong number of ins: 1
+2013/03/01 00:08:12 method Start reply type not a pointer: interface {}
+2013/03/01 00:08:12 method Status has wrong number of ins: 2
+2013/03/01 00:08:12 method Done has wrong number of ins: 2
+2013/03/01 00:08:12 method Kill has wrong number of ins: 1
+2013/03/01 00:08:12 method Max has wrong number of ins: 1
+2013/03/01 00:08:12 method Min has wrong number of ins: 1
+2013/03/01 00:08:12 method Start reply type not a pointer: interface {}
+2013/03/01 00:08:12 method Status has wrong number of ins: 2
+2013/03/01 00:08:43 method Done has wrong number of ins: 2
+2013/03/01 00:08:43 method Kill has wrong number of ins: 1
+2013/03/01 00:08:43 method Max has wrong number of ins: 1
+2013/03/01 00:08:43 method Min has wrong number of ins: 1
+2013/03/01 00:08:43 method Start reply type not a pointer: interface {}
+2013/03/01 00:08:43 method Status has wrong number of ins: 2
+2013/03/01 00:08:43 method Done has wrong number of ins: 2
+2013/03/01 00:08:43 method Kill has wrong number of ins: 1
+2013/03/01 00:08:43 method Max has wrong number of ins: 1
+2013/03/01 00:08:43 method Min has wrong number of ins: 1
+2013/03/01 00:08:43 method Start reply type not a pointer: interface {}
+2013/03/01 00:08:43 method Status has wrong number of ins: 2
+2013/03/01 00:08:43 method Done has wrong number of ins: 2
+2013/03/01 00:08:43 method Kill has wrong number of ins: 1
+2013/03/01 00:08:43 method Max has wrong number of ins: 1
+2013/03/01 00:08:43 method Min has wrong number of ins: 1
+2013/03/01 00:08:43 method Start reply type not a pointer: interface {}
+2013/03/01 00:08:43 method Status has wrong number of ins: 2
+2013/03/01 00:08:43 method Done has wrong number of ins: 2
+2013/03/01 00:08:43 method Kill has wrong number of ins: 1
+2013/03/01 00:08:43 method Max has wrong number of ins: 1
+2013/03/01 00:08:43 method Min has wrong number of ins: 1
+2013/03/01 00:08:43 method Start reply type not a pointer: interface {}
+2013/03/01 00:08:43 method Status has wrong number of ins: 2
+2013/03/01 00:08:43 method Done has wrong number of ins: 2
+2013/03/01 00:08:43 method Kill has wrong number of ins: 1
+2013/03/01 00:08:43 method Max has wrong number of ins: 1
+2013/03/01 00:08:43 method Min has wrong number of ins: 1
+2013/03/01 00:08:43 method Start reply type not a pointer: interface {}
+2013/03/01 00:08:43 method Status has wrong number of ins: 2

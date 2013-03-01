@@ -57,33 +57,30 @@ type Paxos struct {
 
 /*
 The application wants paxos to start agreement instance with agreement_number and 
-proposed value 'value'.
-Add an AgreementState to the Paxos instance state, which indicates that negotiating the
-agreement agreement_number has begun. Spawn a thread to act as the proposer to drive
-the agreement instance to a decision while the main thread handing the request returns
-right away.
+proposed value 'value'. Only agreement_numbers which the Paxos peers have not decided
+to free from memory (i.e. above the minimum_done agreement which has been freed) are 
+allowed.
+If AgreementState for agreement_number not already created (by another proposer calling
+Prepare_handler), it is initialized. 
+Spawns a thread to act as the proposer to drive the agreement instance to a decision 
+while the main thread handing the request returns right away.
 The application will call Status() to find out if/when agreement is reached.
 */
 func (px *Paxos) Start(agreement_number int, proposal_value interface{}) {
   px.mu.Lock()
   defer px.mu.Unlock()
 
-  // This agreement instance has been decided and forgotten. Ignore Start request.
-  if agreement_number < (px.minimum_done_number() + 1) {
-    return
+  if agreement_number <= px.minimum_done_number() {
+    return              // peers decided to free this agreement instance from memory
   }
-
-  // Add AgreementState to Paxos instance state, negotiating known to have begun.
-  fmt.Println("Reading state in start")
   _, present := px.state[agreement_number]
-  fmt.Printf("Paxos Start (%s): agreement_number: %d, proposal_value: \n", short_name(px.peers[px.me], 7), agreement_number)
   if !present {
-    //fmt.Println("Initializing Agreement entry during Start")
     px.state[agreement_number] = px.make_default_agreementstate()
   } else {
     fmt.Println("State already present!")
   }
-  
+  fmt.Printf("Paxos Start (%s): agreement_number: %d, proposal_value: \n", short_name(px.peers[px.me], 7), agreement_number)
+
   // Spawn a thread to construct proposal and act as the proposer
   go px.proposer_role(agreement_number, proposal_value)
 
@@ -96,34 +93,33 @@ needs to call px.Status() for a particular agreement number.
 All replica servers keep track of Done calls they have received since any entries in
 the px.state table for agreement instances below the minimum Done call agreement_number
 can be deleted since all replica servers have indicated they no longer need to retrieve
-the decision that was made for that agreement instance.
-rs have received a 
+the decision that was made for that agreement instance. 
 Client replica server is done with all instances <= agreement_number.
 */
 func (px *Paxos) Done(agreement_number int) {
   px.mu.Lock()
   defer px.mu.Unlock()
-
-  // Update the record the highest agreement_number that has been marked as done by the client of this Paxos instance.
+  // Update record of highest agreement_number marked done by the Paxos client.
   if agreement_number > px.done[px.peers[px.me]] {
     px.done[px.peers[px.me]] = agreement_number
   }
   fmt.Printf("Paxos Done (%s): client_said: %d, my_h_done: %d\n", short_name(px.peers[px.me], 7), agreement_number, px.done[px.peers[px.me]])
 }
 
+
 /* 
-The client application would like to know the highest agreement instance number 
-known to this peer. Returns -1 if no agreement instances are known (i.e. no 
-AgreementState entries have been added to the px.state map)
+Client wants the highest agreement instance number known to this peer. 
+Returns -1 if no agreement instances are known (i.e. no AgreementState entries 
+have been added to the px.state map)
 */
 func (px *Paxos) Max() int {
   px.mu.Lock()
   defer px.mu.Unlock()
 
   max_agreement_instance_number := -1
-  for index, _ := range px.state {
-    if index > max_agreement_instance_number {
-      max_agreement_instance_number = index
+  for agreement_number, _ := range px.state {
+    if agreement_number > max_agreement_instance_number {
+      max_agreement_instance_number = agreement_number
     }
   }
   return max_agreement_instance_number
@@ -163,13 +159,13 @@ func (px *Paxos) Max() int {
 func (px *Paxos) Min() int {
   px.mu.Lock()
   defer px.mu.Unlock()
-
+  // Minimum agreement_number whose agreementstate is still maintained in px.state
   return px.minimum_done_number() + 1
 }
 
 /* The application wants to know whether this peer thinks an Agreement 
 instance has been decided upon, and if so what the agreed value is.
-Status() should just inspect the local peers state; it should not contact 
+Status() should just inspect the local peers AgreementState; it should not contact 
 other Paxos peers.
 If an agreement was reached, but all replica server clients of Paxos instances 
 indicated they no longer needed the decided result, the result was deleted and 
@@ -179,14 +175,13 @@ func (px *Paxos) Status(agreement_number int) (bool, interface{}) {
   px.mu.Lock()
   defer px.mu.Unlock()
 
-  if agreement_number < (px.minimum_done_number() + 1) {
-    return false, nil   // Client of Paxos instances indicated result could be deleted
+  if agreement_number <= px.minimum_done_number() {
+    return false, nil   // Paxos clients all said ok to delete agreement result.
   }
-  //fmt.Printf("Paxos state access (%s): %d, %v\n", short_name(px.peers[px.me], 7), agreement_number, px.state)
-  agreement_state, present := px.state[agreement_number]
-  if present && agreement_state.accepted_proposal != nil {
-    return true, agreement_state.accepted_proposal.Value
-  }
+  _, present := px.state[agreement_number]
+  if present && px.state[agreement_number].decided {
+    return true, px.state[agreement_number].accepted_proposal.Value
+  } 
   return false, nil
 }
 
@@ -405,24 +400,6 @@ func (px *Paxos) save_accepted_proposal(agreement_number int, proposal *Proposal
 
 
 /*
-Checks whether an agreement instance with 'agreement_number' has an accepted proposal
-which means a decision has been reached and the value in the porposal will always be
-the decided value for this agreement instance.
-Note that just because a peer instance has not received an accepted_proposal does not
-mean that the Paxos peers have not reached a decision.
-*/
-func (px *Paxos) has_decision(agreement_number int) bool {
-  agreement_state, present := px.state[agreement_number]
-  if !present {
-    return false     // Paxos instance has not started or observed ngeotation for this agreement. 
-  } else if agreement_state.accepted_proposal != nil {
-    return true      // A proposal has been accepted
-  }
-  return false       // Negotiation started, but this Paxos instance has not set an accepted_proposal
-}
-
-
-/*
 Accepts an agreement instance agreement_number and a reference to a Proposal that should
 be broadcast in a prepare request to all Paxos acceptors. Collects and returns a list 
 of PrepareReply elements.
@@ -464,6 +441,8 @@ func (px *Paxos) broadcast_accept(agreement_number int, proposal *Proposal) []Ac
   }
   return replies_array
 }
+
+
 
 /*
 Accepts a peer string and the latest received highest done agreement number from

@@ -29,12 +29,12 @@ type AcceptReply struct {
 	Highest_done int            // sender's highest "done" argument number
 }
 
-type DecisionArgs struct {
+type DecidedArgs struct {
 	Agreement_number int        // number of the agreement instance
 	Proposal *Proposal          // Proposal containing the decided upon value
 }
 
-type DecisionReply struct {
+type DecidedReply struct {
 
 }
 
