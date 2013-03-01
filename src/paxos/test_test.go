@@ -353,69 +353,69 @@ func TestManyForget(t *testing.T) {
 //
 // does paxos forgetting actually free the memory?
 //
-// func TestForgetMem(t *testing.T) {
-//   runtime.GOMAXPROCS(4)
+func TestForgetMem(t *testing.T) {
+  runtime.GOMAXPROCS(4)
 
-//   fmt.Printf("Test: Paxos frees forgotten instance memory ...\n")
+  fmt.Printf("Test: Paxos frees forgotten instance memory ...\n")
 
-//   const npaxos = 3
-//   var pxa []*Paxos = make([]*Paxos, npaxos)
-//   var pxh []string = make([]string, npaxos)
-//   defer cleanup(pxa)
+  const npaxos = 3
+  var pxa []*Paxos = make([]*Paxos, npaxos)
+  var pxh []string = make([]string, npaxos)
+  defer cleanup(pxa)
   
-//   for i := 0; i < npaxos; i++ {
-//     pxh[i] = port("gcmem", i)
-//   }
-//   for i := 0; i < npaxos; i++ {
-//     pxa[i] = Make(pxh, i, nil)
-//   }
+  for i := 0; i < npaxos; i++ {
+    pxh[i] = port("gcmem", i)
+  }
+  for i := 0; i < npaxos; i++ {
+    pxa[i] = Make(pxh, i, nil)
+  }
 
-//   pxa[0].Start(0, "x")
-//   waitn(t, pxa, 0, npaxos)
+  pxa[0].Start(0, "x")
+  waitn(t, pxa, 0, npaxos)
 
-//   runtime.GC()
-//   var m0 runtime.MemStats
-//   runtime.ReadMemStats(&m0)
-//   // m0.Alloc about a megabyte
+  runtime.GC()
+  var m0 runtime.MemStats
+  runtime.ReadMemStats(&m0)
+  // m0.Alloc about a megabyte
 
-//   for i := 1; i <= 10; i++ {
-//     big := make([]byte, 1000000)
-//     for j := 0; j < len(big); j++ {
-//       big[j] = byte(rand.Int() % 100)
-//     }
-//     pxa[0].Start(i, string(big))
-//     waitn(t, pxa, i, npaxos)
-//   }
+  for i := 1; i <= 10; i++ {
+    big := make([]byte, 1000000)
+    for j := 0; j < len(big); j++ {
+      big[j] = byte(rand.Int() % 100)
+    }
+    pxa[0].Start(i, string(big))
+    waitn(t, pxa, i, npaxos)
+  }
 
-//   runtime.GC()
-//   var m1 runtime.MemStats
-//   runtime.ReadMemStats(&m1)
-//   // m1.Alloc about 90 megabytes
+  runtime.GC()
+  var m1 runtime.MemStats
+  runtime.ReadMemStats(&m1)
+  // m1.Alloc about 90 megabytes
 
-//   for i := 0; i < npaxos; i++ {
-//     pxa[i].Done(10)
-//   }
-//   for i := 0; i < npaxos; i++ {
-//     pxa[i].Start(11 + i, "z")
-//   }
-//   time.Sleep(3 * time.Second)
-//   for i := 0; i < npaxos; i++ {
-//     if pxa[i].Min() != 11 {
-//       t.Fatalf("expected Min() %v, got %v\n", 11, pxa[i].Min())
-//     }
-//   }
+  for i := 0; i < npaxos; i++ {
+    pxa[i].Done(10)
+  }
+  for i := 0; i < npaxos; i++ {
+    pxa[i].Start(11 + i, "z")
+  }
+  time.Sleep(3 * time.Second)
+  for i := 0; i < npaxos; i++ {
+    if pxa[i].Min() != 11 {
+      t.Fatalf("expected Min() %v, got %v\n", 11, pxa[i].Min())
+    }
+  }
 
-//   runtime.GC()
-//   var m2 runtime.MemStats
-//   runtime.ReadMemStats(&m2)
-//   // m2.Alloc about 10 megabytes
+  runtime.GC()
+  var m2 runtime.MemStats
+  runtime.ReadMemStats(&m2)
+  // m2.Alloc about 10 megabytes
 
-//   if m2.Alloc > (m1.Alloc / 2) {
-//     t.Fatalf("memory use did not shrink enough")
-//   }
+  if m2.Alloc > (m1.Alloc / 2) {
+    t.Fatalf("memory use did not shrink enough")
+  }
 
-//   fmt.Printf("  ... Passed\n")
-// }
+  fmt.Printf("  ... Passed\n")
+}
 
 func TestRPCCount(t *testing.T) {
   runtime.GOMAXPROCS(4)

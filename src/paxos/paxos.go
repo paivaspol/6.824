@@ -36,7 +36,8 @@ import "log"
 import "os"
 import "syscall"
 import "sync"
-import "runtime"
+//import "runtime"
+import "time"
 import "fmt"
 //import "math"
 import "math/rand"
@@ -215,9 +216,10 @@ func (px *Paxos) proposer_role(agreement_number int, proposal_value interface{})
 
     majority_prepare, highest_number, high_val_found, high_val = px.evaluate_prepare_replies(replies_from_prepare)
 
-    if !majority_prepare {
-      fmt.Printf("Proposer [PrepareStage] (%s): agree_num: %d, prop: %d, Majority not reached on prepare\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number)    
-      runtime.Gosched()
+    if !majority_prepare || !px.still_deciding(agreement_number) {
+      //fmt.Printf("Proposer [PrepareStage] (%s): agree_num: %d, prop: %d, Majority not reached on prepare\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number)    
+      //runtime.Gosched()
+      time.Sleep(100*time.Millisecond)
       continue
     }
 
@@ -238,7 +240,8 @@ func (px *Paxos) proposer_role(agreement_number int, proposal_value interface{})
       done_proposing = true
     } else {
       fmt.Printf("Proposer [AcceptStage] (%s): agree_num: %d, Majority not reached on accept\n", short_name(px.peers[px.me], 7), agreement_number)    
-      runtime.Gosched()
+      //runtime.Gosched()
+      time.Sleep(100*time.Millisecond)
       continue
     }
 
@@ -652,18 +655,14 @@ agreements at or before the minimum agreement number in px.done.
 Callee is reponsible for attaining a lock on the px.state map and px.done map.
 */
 func (px *Paxos) attempt_free_state() {
-  // var min_done_number = px.done[px.peers[px.me]]
-  // for _, peers_done_number := range px.done {
-  //   if peers_done_number < min_done_number {
-  //     min_done_number = peers_done_number
-  //   }
-  // }
+  
   var min_done_number = px.minimum_done_number()
+
   fmt.Printf("Free state (%s): min_done_val: %d\n", short_name(px.peers[px.me],7), min_done_number)
   for agreement_number, _ := range px.state {
     if agreement_number < min_done_number {
       fmt.Println("DELETE", agreement_number, short_name(px.peers[px.me], 7))
-      //delete(px.state, agreement_number)
+      delete(px.state, agreement_number)
     }
   }
 
