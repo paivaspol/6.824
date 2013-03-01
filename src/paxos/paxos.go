@@ -129,7 +129,7 @@ func (px *Paxos) Start(agreement_number int, proposal_value interface{}) {
 
   // Add AgreementState to Paxos instance state, negotiating known to have begun.
   _, present := px.state[agreement_number]
-  //fmt.Printf("Paxos Start (%s): agreement_number: %d, proposal_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_value)
+  fmt.Printf("Paxos Start (%s): agreement_number: %d, proposal_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_value)
   if !present {
     //fmt.Println("Initializing Agreement entry during Start")
     px.state[agreement_number] = px.make_default_agreementstate()
@@ -161,6 +161,7 @@ func (px *Paxos) Done(agreement_number int) {
   if agreement_number > px.done[px.peers[px.me]] {
     px.done[px.peers[px.me]] = agreement_number
   }
+  fmt.Printf("Paxos Done (%s): client_said: %d, my_h_done: %d\n", short_name(px.peers[px.me], 7), agreement_number, px.done[px.peers[px.me]])
 }
 
 /* 
@@ -216,6 +217,7 @@ func (px *Paxos) Min() int {
       min_done = val
     }
   }
+
   return min_done + 1
 }
 
@@ -287,10 +289,11 @@ func (px *Paxos) proposer_role(agreement_number int, proposal_value interface{})
     //fmt.Println(majority_accept)
     if majority_accept {
       px.save_accepted_proposal(agreement_number, proposal)
+      // Broadcast decides
       done_proposing = true
-      //fmt.Printf("Proposer [DecisionReached] (%s): agreement_number: %d, p_number: %d, p_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal.Value)
+      fmt.Printf("Proposer [DecisionReached] (%s): agree_num: %d, prop: %d, val: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal.Value)
     } else {
-      //fmt.Printf("Proposer [PrepareStage] (%s): agreement_number: %d, p_number: %d, Majority not reached on accept\n", short_name(px.peers[px.me], 7), agreement_number, proposal.Value)    
+      fmt.Printf("Proposer [PrepareStage] (%s): agree_num: %d, prop: %d, Majority not reached on accept\n", short_name(px.peers[px.me], 7), agreement_number, proposal.Value)    
       runtime.Gosched()
       continue
     }
@@ -360,11 +363,13 @@ func (px *Paxos) Accept_handler(args *AcceptArgs, reply *AcceptReply) error {
     px.state[agreement_number].set_highest_promised(proposal.Number)
     px.state[agreement_number].set_accepted_proposal(proposal)
     reply.Accept_ok = true
-    //fmt.Printf("Accept_ok (%s): agreement_number: %d, p_number: %d, p_value: %v\n", short_name(px.peers[px.me], 7), args.Agreement_number, args.Proposal.Number, args.Proposal.Value)
+    reply.Highest_done = px.done[px.peers[px.me]]
+    fmt.Printf("Accept_ok (%s): agree_num: %d, prop: %d, val: %v, h_done: %d\n", short_name(px.peers[px.me], 7), args.Agreement_number, args.Proposal.Number, args.Proposal.Value, reply.Highest_done)
     return nil
   }
   reply.Accept_ok = false
-  //fmt.Printf("Accept_no (%s): agreement_number: %d, p_number: %d\n", short_name(px.peers[px.me], 7), args.Agreement_number, args.Proposal.Number)
+  reply.Highest_done = px.done[px.peers[px.me]]
+  fmt.Printf("Accept_no (%s): agree_num: %d, prop: %d, h_done: %d\n", short_name(px.peers[px.me], 7), args.Agreement_number, args.Proposal.Number, reply.Highest_done)
   return nil
 }
 
@@ -394,7 +399,7 @@ because of the lock taken out.
 The highest_promised parameter is the highest promised number the proposer has seen 
 so continue generating numbers as described above until one it found that is 
 LARGER than highest_promised so the next prepare request has a chance of succeeding.
-Note that the lock is kinda to coarse since we really
+Note that the lock is kinda too coarse since we really
 only need to lock a specific AgreementState, but this is fine.
 */
 func (px *Paxos) next_proposal_number(agreement_number int, highest_promised int) int {
@@ -504,9 +509,54 @@ func (px *Paxos) broadcast_accept(agreement_number int, proposal *Proposal) []Ac
     // Attempt to contact peer. No reply is equivalent to a vote no.
     call(peer, "Paxos.Accept_handler", args, &reply)
     replies_array[index] = reply
+    px.update_done_entry(peer, reply.Highest_done)
   }
   return replies_array
 }
+
+/*
+Accepts a peer string and the latest received highest done agreement number from
+the acceptor. Check that this number is higher than the current highest done value 
+stored in px.done for that server and if it is, update the px.done mapping
+We technically only need to lock px.done, but locking the paxos instance is fine.
+*/
+func (px *Paxos) update_done_entry(paxos_peer string, highest_done int) {
+  px.mu.Lock()
+  defer px.mu.Unlock()
+
+  fmt.Println(px.done[paxos_peer], highest_done)
+  
+  if highest_done > px.done[paxos_peer] {
+    px.done[paxos_peer] = highest_done
+    px.attempt_free_state()
+  }
+}
+
+/*
+Computes the minimum agreement number in the values of px.done which indicates that
+all Paxos peers have been told by their client server that all prior agreement states
+are no longer needed. Thus, this Paxos instance may delete state corresponding to
+agreements at or before the minimum agreement number in px.done.
+Callee is reponsible for attaining a lock on the px.state map and px.done map.
+*/
+func (px *Paxos) attempt_free_state() {
+  var min_agreement_number = px.done[px.peers[px.me]]
+  for _, peers_done_number := range px.done {
+    if peers_done_number < min_agreement_number {
+      min_agreement_number = peers_done_number
+    }
+  }
+
+  fmt.Printf("Paxos Free Space (%s): Clear state at and before: %d\n", short_name(px.peers[px.me], 7), min_agreement_number)
+  for agreement_number, _ := range px.state {
+    if agreement_number < min_agreement_number {
+      fmt.Println("DELETE", agreement_number, short_name(px.peers[px.me], 7))
+      delete(px.state, agreement_number)
+    }
+  }
+
+}
+
 
 
 /*
