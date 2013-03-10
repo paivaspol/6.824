@@ -2,6 +2,7 @@ package kvpaxos
 
 import "net/rpc"
 import "time"
+import "math/rand"
 
 /*
 client.go provides client applications with stubs to make Get and Put RPC 
@@ -24,7 +25,9 @@ continue operating on received requests
 
 type Clerk struct {
   servers []string
-  // You will have to modify this struct.
+  // You'll have to add code here.
+  id int                           // unique clerk_id serves as a client identifier.
+  request_id_generator func() int  // returns unique request id (among requests by this Clerk).
 }
 
 /*
@@ -35,7 +38,24 @@ func MakeClerk(servers []string) *Clerk {
   ck := new(Clerk)
   ck.servers = servers
   // You'll have to add code here.
+  ck.id = rand.Int()
+  ck.request_id_generator = make_id_generator()
   return ck
+}
+
+
+/*
+  make_id_generator returns a function which will generate unique id's based on an enclosed base_id
+  and incrementing the base_id by one each time the id_generator is called.
+  The base_id starts at 0 so the first returned id is 1. This was done since it would be possible to 
+  confuse an id of 0 with a default zero-valued int field (also 0).
+*/
+func make_id_generator() (func() int) {
+  base_id := 0
+  return func() int {
+    base_id += 1
+    return base_id
+  }
 }
 
 
@@ -52,9 +72,11 @@ func (ck *Clerk) Get(key string) string {
   for {
     // try each known server.
     for _, srv := range ck.servers {
-      args := &GetArgs{}
+      args := &GetArgs{}            // declare and init with zero-valued struct fields, return ptr
+      args.Client_id = ck.id        // unique client identifier
+      args.Request_id = ck.request_id_generator()    // unique request id from this client.
       args.Key = key
-      var reply GetReply
+      var reply GetReply            // declare reply, ready to be populated by RPC
       ok := call(srv, "KVPaxos.Get", args, &reply)
       if ok && (reply.Err == OK || reply.Err == ErrNoKey) {
         return reply.Value
@@ -78,10 +100,12 @@ func (ck *Clerk) Put(key string, value string) {
   for {
     // try each known server.
     for _, srv := range ck.servers {
-      args := &PutArgs{}
+      args := &PutArgs{}            // declare and init with zero-valued struct field
+      args.Client_id = ck.id        // unique client identifier
+      args.Request_id = ck.request_id_generator()  // unqiue request id from this client.
       args.Key = key
       args.Value = value
-      var reply PutReply
+      var reply PutReply            // declare reply, ready to be populated by RPC
       ok := call(srv, "KVPaxos.Put", args, &reply)
       if ok && reply.Err == OK {
         return 

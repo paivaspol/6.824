@@ -52,6 +52,11 @@ func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
   // check request logs
 
   // log request
+  client_id := args.get_client_id()
+  request_id := args.get_request_id()
+  fmt.Println(client_id)
+  fmt.Println(request_id)
+
   //kv.log_request()
 
   operation := Op{Kind: "test", Key: "key!", Value: "kitten"}
