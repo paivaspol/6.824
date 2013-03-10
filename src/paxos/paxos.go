@@ -772,6 +772,11 @@ func short_name(server_name string, end int) string {
 // with arguments args, waits for the reply, and leaves the
 // reply in reply. the reply argument should be a pointer
 // to a reply structure.
+// the application wants to know whether this
+// peer thinks an instance has been decided,
+// and if so what the agreed value is. Status()
+// should just inspect the local peer state;
+// it should not contact other Paxos peers.
 //
 // the return value is true if the server responded, and false
 // if call() was not able to contact the server. in particular,
