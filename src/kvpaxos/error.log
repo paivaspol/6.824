@@ -1,0 +1,22 @@
+warning: building out-of-date packages:
+	paxos
+installing these packages with 'go test -i' will speed future tests.
+
+2013/03/09 17:08:35 method Done has wrong number of ins: 2
+2013/03/09 17:08:35 method Kill has wrong number of ins: 1
+2013/03/09 17:08:35 method Max has wrong number of ins: 1
+2013/03/09 17:08:35 method Min has wrong number of ins: 1
+2013/03/09 17:08:35 method Start reply type not a pointer: interface {}
+2013/03/09 17:08:35 method Status has wrong number of ins: 2
+2013/03/09 17:08:35 method Done has wrong number of ins: 2
+2013/03/09 17:08:35 method Kill has wrong number of ins: 1
+2013/03/09 17:08:35 method Max has wrong number of ins: 1
+2013/03/09 17:08:35 method Min has wrong number of ins: 1
+2013/03/09 17:08:35 method Start reply type not a pointer: interface {}
+2013/03/09 17:08:35 method Status has wrong number of ins: 2
+2013/03/09 17:08:35 method Done has wrong number of ins: 2
+2013/03/09 17:08:35 method Kill has wrong number of ins: 1
+2013/03/09 17:08:35 method Max has wrong number of ins: 1
+2013/03/09 17:08:35 method Min has wrong number of ins: 1
+2013/03/09 17:08:35 method Start reply type not a pointer: interface {}
+2013/03/09 17:08:35 method Status has wrong number of ins: 2

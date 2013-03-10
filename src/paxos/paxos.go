@@ -191,9 +191,18 @@ started as a separate thread.
 Acts in the Paxos proposer role to first propose a proposal to the acceptors for 
 agreement instance 'agreement_number' and if a majority reply with prepare_ok then
 the proposer proceeds to phase 2. 
-In phase 2, it sends an accept request for the
-proposal for agreement instance 'sequence_number' to all the acceptors.
-?????
+In phase 2, it sends an accept request to each of the Paxos peers with the proposal
+that was sent in the prepare requests. If a majority of peers accept the proposal
+then a decision has been made and Decided messages are broadcast to all peers. 
+  If a majority was not reached during the prepare phase or the accept phase, execution
+loops back the beginning of the proposer_role and a new (higher, but still unique)
+proposal number is chosen and new proposal with this number created. The only ways
+execution can leave the proposer role without this proposed_role thread making a 
+decision is if 
+* px.still_deciding returns false (indicating a competing proposer role caused a 
+decision to be made)
+* px.dead is true indicating that the test suite has marked the server as dead and 
+thread execution should stop.
 */
 func (px *Paxos) proposer_role(agreement_number int, proposal_value interface{}) {
   var done_proposing = false
@@ -202,7 +211,7 @@ func (px *Paxos) proposer_role(agreement_number int, proposal_value interface{})
   var highest_number = -1
   var high_val interface{}
   
-  for !done_proposing && px.still_deciding(agreement_number) {
+  for !done_proposing && px.still_deciding(agreement_number) && !px.dead {
     
     // Generate the next number that is larger than highest_number
     proposal_number := px.next_proposal_number(agreement_number, highest_number)
