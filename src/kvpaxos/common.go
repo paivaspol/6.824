@@ -21,8 +21,8 @@ type Reply interface {
 type PutArgs struct {
   Client_id int         // client_id
   Request_id int        // request_id unique per client
-  Key string
-  Value string
+  Key string            // assignment specified keys will be strings
+  Value string          // assignment specified values will be strings
 }
 
 func (self *PutArgs) get_client_id() int {
@@ -32,6 +32,16 @@ func (self *PutArgs) get_client_id() int {
 func (self *PutArgs) get_request_id() int {
   return self.Request_id
 }
+
+func (self *PutArgs) get_key() string {
+  return self.Key
+}
+
+func (self *PutArgs) get_value() string {
+  return self.Value
+}
+
+
 
 
 type PutReply struct {

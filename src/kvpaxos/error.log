@@ -1,18 +1,1 @@
-2013/03/10 19:01:29 method Done has wrong number of ins: 2
-2013/03/10 19:01:29 method Kill has wrong number of ins: 1
-2013/03/10 19:01:29 method Max has wrong number of ins: 1
-2013/03/10 19:01:29 method Min has wrong number of ins: 1
-2013/03/10 19:01:29 method Start reply type not a pointer: interface {}
-2013/03/10 19:01:29 method Status has wrong number of ins: 2
-2013/03/10 19:01:29 method Done has wrong number of ins: 2
-2013/03/10 19:01:29 method Kill has wrong number of ins: 1
-2013/03/10 19:01:29 method Max has wrong number of ins: 1
-2013/03/10 19:01:29 method Min has wrong number of ins: 1
-2013/03/10 19:01:29 method Start reply type not a pointer: interface {}
-2013/03/10 19:01:29 method Status has wrong number of ins: 2
-2013/03/10 19:01:29 method Done has wrong number of ins: 2
-2013/03/10 19:01:29 method Kill has wrong number of ins: 1
-2013/03/10 19:01:29 method Max has wrong number of ins: 1
-2013/03/10 19:01:29 method Min has wrong number of ins: 1
-2013/03/10 19:01:29 method Start reply type not a pointer: interface {}
-2013/03/10 19:01:29 method Status has wrong number of ins: 2
+/home/dghubble/6.824/6.824-labs/src/kvpaxos/server.go:14:8: import "error": cannot find package

@@ -10,6 +10,8 @@ import "os"
 import "syscall"
 import "encoding/gob"
 import "math/rand"
+import "time"
+import "errors"
 
 /* The 'values' Paxos will agree on are Op structs */
 type Op struct {
@@ -17,6 +19,36 @@ type Op struct {
   Key string
   Value string          // will be "" for Get operations
 }
+
+type RequestLog struct {
+  internal_log map[int]map[int]*Reply
+}
+
+func (self *RequestLog) entry_for(client_id int, request_id int) bool {
+  _, present := self.internal_log[client_id][request_id]
+  if present {
+    return true
+  }
+  return false
+}
+
+func (self *RequestLog) logged_reply(client_id int, request_id int) (*Reply, error) {
+  logged_reply, present := self.internal_log[client_id][request_id]
+  if present {
+    return logged_reply, nil
+  }
+  return nil, errors.New("no logged reply found")
+}
+
+// func (self *RequestLog) log(client_id int, request_id int, reply *Reply) error {
+//   self.internal_log[client_id][request_id] = reply
+//   if _, present := self.internal_log[client_id][request_id] == reply {
+//     return nil
+//   }
+//   return errors.New("failed add record to RequestLog")
+// }
+
+
 
 type KVPaxos struct {
   mu sync.Mutex
@@ -31,8 +63,8 @@ type KVPaxos struct {
   // Key/Value Storage
   kvstore map[string]string    // Map for Key/Value data stored by the kvpaxos system
   // Prevent duplicate requests due to packet losses by storing replies
-  request_logs map[int]map[int]*interface{}
-
+  //request_logs map[int]map[int]*interface{}
+  request_log RequestLog
 }
 
 
@@ -48,23 +80,48 @@ func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
 func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
   // Your code here.
   fmt.Printf("kvserver Put (server%d): Key: %s Value: %s\n", kv.me, args.Key, args.Value)
-
-  // check request logs
-
-  // log request
   client_id := args.get_client_id()
   request_id := args.get_request_id()
+  key := args.get_key()
+  value := args.get_value()
+
+  // check request logs
+  if kv.request_log.entry_for(client_id, request_id) {
+    fmt.Println("found old log entry")
+    reply, _ := kv.request_log.logged_reply(client_id, request_id)
+    fmt.Println("Reply", reply)
+  }
+
   fmt.Println(client_id)
   fmt.Println(request_id)
+  fmt.Println(key)
+  fmt.Println(value)
+  operation := Op{Kind: "PUTOP", Key: key, Value: value}
+  fmt.Println(operation)
+
+  kv.px.Start(1, operation)
+
+  to := 10 * time.Millisecond
+  for {
+    decided, _ := kv.px.Status(1)
+    if decided {
+      fmt.Println("Woo, decided")
+      return nil 
+    }
+    time.Sleep(to)
+    if to < 10 * time.Second {
+      to *= 2
+    }
+  }
+
+
 
   //kv.log_request()
 
-  operation := Op{Kind: "test", Key: "key!", Value: "kitten"}
-  fmt.Println(operation)
-
-
   return nil
 }
+
+
 
 // tell the server to shut itself down.
 // please do not change this function.
@@ -90,7 +147,7 @@ func StartServer(servers []string, me int) *KVPaxos {
   kv.me = me
   // Your initialization code here.
   kv.kvstore = map[string]string{}        // initialize key/value storage map
-  kv.request_logs = make(map[int]map[int]*interface{})
+  //kv.request_log = make(map[int]map[int]*interface{})
 
   rpcs := rpc.NewServer()
   rpcs.Register(kv)
