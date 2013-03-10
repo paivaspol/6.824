@@ -11,11 +11,11 @@ import "syscall"
 import "encoding/gob"
 import "math/rand"
 
-
+/* The 'values' Paxos will agree on are Op structs */
 type Op struct {
-  // Your definitions here.
-  // Field names must start with capital letters,
-  // otherwise RPC will break.
+  Kind string           // either GET_OP or PUT_OP
+  Key string
+  Value string          // will be "" for Get operations
 }
 
 type KVPaxos struct {
@@ -24,9 +24,15 @@ type KVPaxos struct {
   me int
   dead bool // for testing
   unreliable bool // for testing
+  /* Paxos library instance which negotiates operation ordering and stores 
+  log of recent operations until freed from memory.
+  */
   px *paxos.Paxos
+  // Key/Value Storage
+  kvstore map[string]string    // Map for Key/Value data stored by the kvpaxos system
+  // Prevent duplicate requests due to packet losses by storing replies
+  request_logs map[int]map[int]*interface{}
 
-  // Your definitions here.
 }
 
 
@@ -41,6 +47,15 @@ func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
 
 func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
   // Your code here.
+  fmt.Printf("kvserver Put (server%d): Key: %s Value: %s\n", kv.me, args.Key, args.Value)
+
+  // check request logs
+
+  // log request
+  //kv.log_request()
+
+  operation := Op{Kind: "test", Key: "key!", Value: "kitten"}
+  fmt.Println(operation)
 
 
   return nil
@@ -68,8 +83,9 @@ func StartServer(servers []string, me int) *KVPaxos {
 
   kv := new(KVPaxos)
   kv.me = me
-
   // Your initialization code here.
+  kv.kvstore = map[string]string{}        // initialize key/value storage map
+  kv.request_logs = make(map[int]map[int]*interface{})
 
   rpcs := rpc.NewServer()
   rpcs.Register(kv)
