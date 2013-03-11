@@ -20,6 +20,12 @@ type Op struct {
   Value string          // will be "" for Get operations
 }
 
+/*
+Structure for managing a map of recent request identifiers (client_id, request_id) 
+and the corresponding Replies. This stucture is used as part of the kvpaxos server
+instance to ensure duplicate requests (a result of network unpredictability) are 
+not handled more than once.
+*/
 type RequestLog struct {
   internal_log map[int]map[int]*Reply
 }
@@ -40,7 +46,7 @@ func (self *RequestLog) logged_reply(client_id int, request_id int) (*Reply, err
   return nil, errors.New("no logged reply found")
 }
 
-// func (self *RequestLog) log(client_id int, request_id int, reply *Reply) error {
+// func (self *RequestLog) add_entry(client_id int, request_id int, reply *Reply) error {
 //   self.internal_log[client_id][request_id] = reply
 //   if _, present := self.internal_log[client_id][request_id] == reply {
 //     return nil
@@ -70,7 +76,49 @@ type KVPaxos struct {
 
 
 func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
-  // Your code here.
+  kv.mu.Lock()
+  defer kv.mu.Unlock()
+
+  fmt.Printf("kvserver Get (server%d): Key: %s \n", kv.me, args.Key)
+  client_id := args.get_client_id()
+  request_id := args.get_request_id()
+  key := args.get_key()
+
+  // check request logs
+  if kv.request_log.entry_for(client_id, request_id) {
+    fmt.Println("found old log entry")
+    reply, _ := kv.request_log.logged_reply(client_id, request_id)
+    fmt.Println("Reply", reply)
+  }
+
+  fmt.Println(client_id)
+  fmt.Println(request_id)
+  fmt.Println(key)
+
+  operation := Op{Kind: "GETOP", Key: key, Value: ""}
+
+  fmt.Println(operation)
+
+  kv.px.Start(2, operation)
+
+  to := 10 * time.Millisecond
+  for {
+    decided, _ := kv.px.Status(2)
+    if decided {
+      fmt.Println("Woo, decided")
+      //kv.request_log
+      return nil
+    }
+    time.Sleep(to)
+    if to < 10 * time.Second {
+      to *= 2
+    }
+  }
+
+
+
+
+
 
 
   return nil
@@ -78,7 +126,9 @@ func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
 
 
 func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
-  // Your code here.
+  kv.mu.Lock()
+  defer kv.mu.Unlock()
+
   fmt.Printf("kvserver Put (server%d): Key: %s Value: %s\n", kv.me, args.Key, args.Value)
   client_id := args.get_client_id()
   request_id := args.get_request_id()
@@ -106,7 +156,10 @@ func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
     decided, _ := kv.px.Status(1)
     if decided {
       fmt.Println("Woo, decided")
-      return nil 
+      reply.Err = OK
+
+      //kv.request_log
+      return nil
     }
     time.Sleep(to)
     if to < 10 * time.Second {

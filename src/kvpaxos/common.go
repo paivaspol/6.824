@@ -12,7 +12,7 @@ type Request interface {
 }
 
 type Reply interface {
-  is_error() bool
+  is_ok() bool
 }
 
 // PutArgs and PutReply
@@ -43,9 +43,12 @@ func (self *PutArgs) get_value() string {
 
 
 
-
 type PutReply struct {
-  Err Err
+  Err Err               // string representation of an error. "OK" means no error.
+}
+
+func (self *PutReply) is_ok() bool {
+  return self.Err == OK
 }
 
 
@@ -67,11 +70,20 @@ func (self *GetArgs) get_request_id() int {
   return self.Request_id
 }
 
+func (self *GetArgs) get_key() string {
+  return self.Key
+}
+
 
 type GetReply struct {
-  Err Err
-  Value string
+  Err Err               // string representation of an error. "OK" means no error.
+  Value string          // value corresponding to key or "" if ErrNoKey
 }
+
+func (self *GetReply) is_ok() bool {
+  return self.Err == OK
+}
+
 
 
 /*
