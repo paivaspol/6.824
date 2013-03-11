@@ -97,29 +97,9 @@ func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
 
   operation := Op{Kind: "GETOP", Key: key, Value: ""}
 
-  fmt.Println(operation)
-
-  kv.px.Start(2, operation)
-
-  to := 10 * time.Millisecond
-  for {
-    decided, _ := kv.px.Status(2)
-    if decided {
-      fmt.Println("Woo, decided")
-      //kv.request_log
-      return nil
-    }
-    time.Sleep(to)
-    if to < 10 * time.Second {
-      to *= 2
-    }
-  }
-
-
-
-
-
-
+  agreement_number, decided_operation := kv.agree_on_order(operation)
+  fmt.Println("Got here", agreement_number, decided_operation)
+  reply.Err = OK
 
   return nil
 }
@@ -147,32 +127,81 @@ func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
   fmt.Println(key)
   fmt.Println(value)
   operation := Op{Kind: "PUTOP", Key: key, Value: value}
-  fmt.Println(operation)
 
-  kv.px.Start(1, operation)
-
-  to := 10 * time.Millisecond
-  for {
-    decided, _ := kv.px.Status(1)
-    if decided {
-      fmt.Println("Woo, decided")
-      reply.Err = OK
-
-      //kv.request_log
-      return nil
-    }
-    time.Sleep(to)
-    if to < 10 * time.Second {
-      to *= 2
-    }
-  }
-
-
+  agreement_number, decided_operation := kv.agree_on_order(operation)
+  fmt.Println("Got here", agreement_number, decided_operation)
+  reply.Err = OK
 
   //kv.log_request()
 
   return nil
 }
+
+/*
+Drives Paxos agreement by proposing an Operation value for an agreement instance, 
+awaiting the decision, checking the value of the decided Operation, and retries
+proposing the Operation value with a new agreement instance until the Operation
+value it proposes is the value that is decided upon for some agreement instance 
+(giving the operation an agreed upon position in the operation ordering)
+*/
+func (kv *KVPaxos) agree_on_order(operation Op) (int, Op) {
+  agreement_number := -1
+  decided_operation := Op{}
+  for decided_operation != operation {
+    agreement_number = kv.next_agreement_number()
+    decided_operation = kv.start_await_agreement(agreement_number, operation)
+  }
+  return agreement_number, decided_operation
+}
+
+
+/*
+Starts a Paxos agreement instance and checks whether a decision has been made, 
+making frequent checks at first and less frequent checks with binary backoff
+later. Returns the Op that was decided upon by the Paxos peers.
+*/
+func (kv *KVPaxos) start_await_agreement(agreement_number int, operation Op) Op {
+  kv.px.Start(agreement_number, operation)
+
+  sleep_max := 10 * time.Second
+  sleep_time := 10 * time.Millisecond
+  for {
+    decided, decided_value := kv.px.Status(agreement_number)
+    if decided { 
+      //fmt.Println("Woo, decided", decided_value)
+      //fmt.Printf("%T, %v\n", decided_value, decided_value)
+      decided_operation, ok := decided_value.(Op)    // type assertion. interface{} value in Paxos instance is an Op
+      //fmt.Println(op, ok)
+      if ok {
+        return decided_operation
+      }
+      panic("expected Paxos instances to agree on values of type Op at runtime. Type assertion failed.")
+    }
+    time.Sleep(sleep_time)
+    if sleep_time < sleep_max {
+      sleep_time *= 2
+    }
+  }
+  panic("unreachable")
+}
+
+
+
+
+
+/*
+Next operation should try to be assigned the next next available Paxos agreement 
+instance number. Returns the number from the local Paxos peer for the Max agreement 
+instance number it keeps in its logs plus 1. Note that this may not be the maximum
+agreement instance number known across the system and the operation will have to
+be reproposed when the Paxos peer has learned more.
+*/
+func (kv *KVPaxos) next_agreement_number() int {
+  return kv.px.Max() + 1
+}
+
+
+
 
 
 
