@@ -11,48 +11,33 @@ import "syscall"
 import "encoding/gob"
 import "math/rand"
 import "time"
-import "errors"
+//import "errors"
 
 /* The 'values' Paxos will agree on are Op structs */
 type Op struct {
-  Kind string           // either GET_OP or PUT_OP
-  Key string
-  Value string          // will be "" for Get operations
+  Client_id int         // client id of the the requestor
+  Request_id int        // request id
+  Kind string           // "GET_OP", "PUT_OP", "NO_OP"
+  Key string        
+  Value string          // note: Get operations have Value ""
 }
 
-/*
-Structure for managing a map of recent request identifiers (client_id, request_id) 
-and the corresponding Replies. This stucture is used as part of the kvpaxos server
-instance to ensure duplicate requests (a result of network unpredictability) are 
-not handled more than once.
-*/
-type RequestLog struct {
-  internal_log map[int]map[int]*Reply
+
+
+
+type KVStorage struct {
+  //mu sync.Mutex
+  state map[string]string      // key/value data storage
+  operation_number int         // agreement number of latest applied operation 
 }
 
-func (self *RequestLog) entry_for(client_id int, request_id int) bool {
-  _, present := self.internal_log[client_id][request_id]
+func (self *KVStorage) lookup(key string) (string, error) {
+  value, present := self.state[key]
   if present {
-    return true
+    return value, nil
   }
-  return false
+  return "", fmt.Errorf("no key %s", key)
 }
-
-func (self *RequestLog) logged_reply(client_id int, request_id int) (*Reply, error) {
-  logged_reply, present := self.internal_log[client_id][request_id]
-  if present {
-    return logged_reply, nil
-  }
-  return nil, errors.New("no logged reply found")
-}
-
-// func (self *RequestLog) add_entry(client_id int, request_id int, reply *Reply) error {
-//   self.internal_log[client_id][request_id] = reply
-//   if _, present := self.internal_log[client_id][request_id] == reply {
-//     return nil
-//   }
-//   return errors.New("failed add record to RequestLog")
-// }
 
 
 
@@ -60,17 +45,16 @@ type KVPaxos struct {
   mu sync.Mutex
   l net.Listener
   me int
-  dead bool // for testing
-  unreliable bool // for testing
-  /* Paxos library instance which negotiates operation ordering and stores 
-  log of recent operations until freed from memory.
-  */
+  dead bool          // for testing
+  unreliable bool    // for testing
+  // Paxos library instance; negotiates operation ordering, stores log of recent operations  
   px *paxos.Paxos
   // Key/Value Storage
-  kvstore map[string]string    // Map for Key/Value data stored by the kvpaxos system
+  kvstore KVStorage
+  //kvstore map[string]string    // Map for Key/Value data stored by the kvpaxos system
   // Prevent duplicate requests due to packet losses by storing replies
   //request_logs map[int]map[int]*interface{}
-  request_log RequestLog
+  request_log ReplyCache
 }
 
 
@@ -85,7 +69,7 @@ func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
   key := args.get_key()
 
   // check request logs
-  if kv.request_log.entry_for(client_id, request_id) {
+  if kv.request_log.entry_exists(client_id, request_id) {
     fmt.Println("found old log entry")
     reply, _ := kv.request_log.logged_reply(client_id, request_id)
     fmt.Println("Reply", reply)
@@ -116,7 +100,7 @@ func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
   value := args.get_value()
 
   // check request logs
-  if kv.request_log.entry_for(client_id, request_id) {
+  if kv.request_log.entry_exists(client_id, request_id) {
     fmt.Println("found old log entry")
     reply, _ := kv.request_log.logged_reply(client_id, request_id)
     fmt.Println("Reply", reply)
@@ -228,7 +212,7 @@ func StartServer(servers []string, me int) *KVPaxos {
   kv := new(KVPaxos)
   kv.me = me
   // Your initialization code here.
-  kv.kvstore = map[string]string{}        // initialize key/value storage map
+  //kv.kvstore = map[string]string{}        // initialize key/value storage map
   //kv.request_log = make(map[int]map[int]*interface{})
 
   rpcs := rpc.NewServer()

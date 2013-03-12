@@ -61,20 +61,21 @@ func make_id_generator() (func() int) {
 
 /*
 Client stub for generating a Get RPC request to fetch the current value for
-a given string key. Retries with a different kvpaxos system server if there
-is a failure.
+a given string key. Retries sending the request (with the same client and 
+request identifiers) to different kvpaxos system servers if there is a failure.
 Returns "" if the key does not exist and keeps trying forever in the face of 
 all other errors.
 */
 func (ck *Clerk) Get(key string) string {
-  // You will have to modify this function.
+  client_id := ck.id                        // unqiue client identifier
+  request_id := ck.request_id_generator()   // unique request id
 
   for {
     // try each known server.
     for _, srv := range ck.servers {
       args := &GetArgs{}            // declare and init with zero-valued struct fields, return ptr
-      args.Client_id = ck.id        // unique client identifier
-      args.Request_id = ck.request_id_generator()    // unique request id from this client.
+      args.Client_id = client_id
+      args.Request_id = request_id
       args.Key = key
       var reply GetReply            // declare reply, ready to be populated by RPC
       ok := call(srv, "KVPaxos.Get", args, &reply)
@@ -95,14 +96,15 @@ a failure.
 Continues trying forever in the face of failures.
 */
 func (ck *Clerk) Put(key string, value string) {
-  // You will have to modify this function.
+  client_id := ck.id                        // unqiue client identifier
+  request_id := ck.request_id_generator()   // unique request id
 
   for {
     // try each known server.
     for _, srv := range ck.servers {
       args := &PutArgs{}            // declare and init with zero-valued struct field
-      args.Client_id = ck.id        // unique client identifier
-      args.Request_id = ck.request_id_generator()  // unqiue request id from this client.
+      args.Client_id = client_id
+      args.Request_id = request_id
       args.Key = key
       args.Value = value
       var reply PutReply            // declare reply, ready to be populated by RPC
