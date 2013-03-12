@@ -104,6 +104,7 @@ func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
 
   fmt.Println(agreement_number, decided_operation)
   // TODO attempt to apply operations
+  kv.apply_operations_to_kvstore()
   // TODO log the reply
   reply.Err = OK
   return nil
@@ -168,6 +169,22 @@ func (kv *KVPaxos) next_agreement_number() int {
 }
 
 
+func (kv *KVPaxos) apply_operations_to_kvstore() {
+  next_operation_number := kv.kvstore.get_operation_number() + 1
+  decided, decided_value := kv.px.Status(next_operation_number)
+  decided_operation, _ := decided_value.(Op)    // type assertion. interface{} value in Paxos instance is an Op
+  for decided {
+    fmt.Println("Applying", next_operation_number, decided_operation)
+    // apply operation and increment kvstore's internal operation number
+    kv.kvstore.apply_operation(decided_operation)
+
+    next_operation_number = kv.kvstore.get_operation_number() + 1
+    decided, decided_value = kv.px.Status(next_operation_number)
+    decided_operation, _ = decided_value.(Op)    // type assertion. interface{} value in Paxos instance is an Op
+  }
+}
+
+
 
 
 
@@ -195,6 +212,10 @@ func StartServer(servers []string, me int) *KVPaxos {
   kv := new(KVPaxos)
   kv.me = me
   // Your initialization code here.
+  kv.kvstore = KVStorage{state: map[string]string{}, 
+                         operation_number: -1,
+                        }
+  kv.reply_cache = ReplyCache{state: make(map[int]map[int]*Reply)}
 
 
   rpcs := rpc.NewServer()
