@@ -51,7 +51,7 @@ func MakeClerk(servers []string) *Clerk {
   confuse an id of 0 with a default zero-valued int field (also 0).
 */
 func make_id_generator() (func() int) {
-  base_id := 0
+  base_id := -1
   return func() int {
     base_id += 1
     return base_id

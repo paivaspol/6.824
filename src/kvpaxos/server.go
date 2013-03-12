@@ -47,14 +47,11 @@ type KVPaxos struct {
 func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
   kv.mu.Lock()
   defer kv.mu.Unlock()
-  fmt.Printf("kvserver Get (server%d): Key: %s \n", kv.me, args.Key)
 
   client_id := args.get_client_id()
   request_id := args.get_request_id()
   key := args.get_key()
-  fmt.Println(client_id)
-  fmt.Println(request_id)
-  fmt.Println(key)
+  fmt.Printf("kvserver Get (server%d): Key: %s (req: %d:%d)\n", kv.me, key, client_id, request_id)
 
   // check cached replies for request
   if kv.reply_cache.entry_exists(client_id, request_id) {
@@ -63,16 +60,20 @@ func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
     // TODO construct reply to duplicate
   }
 
-  
-
   operation := makeOp(client_id, request_id, "GET_OP", key, "")
   // negotiate the position of the operation in the ordering
   agreement_number, decided_operation := kv.agree_on_order(operation)
 
   fmt.Println(agreement_number, decided_operation)
   // TODO attempt to apply operations
+  kv.apply_operations_to_kvstore()
+
+  // await application of operation to kvstore
+  value := kv.await_get_operation(agreement_number, decided_operation)
+
   // TODO log the reply
   reply.Err = OK
+  reply.Value = value
   return nil
 }
 
@@ -80,16 +81,12 @@ func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
 func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
   kv.mu.Lock()
   defer kv.mu.Unlock()
-  fmt.Printf("kvserver Put (server%d): Key: %s Value: %s\n", kv.me, args.Key, args.Value)
   
   client_id := args.get_client_id()
   request_id := args.get_request_id()
   key := args.get_key()
   value := args.get_value()
-  fmt.Println(client_id)
-  fmt.Println(request_id)
-  fmt.Println(key)
-  fmt.Println(value)
+  fmt.Printf("kvserver Put (server%d): Key: %s Value: %s (req: %d:%d)\n", kv.me, key, value, client_id, request_id)
 
   // check cached replies for request
   if kv.reply_cache.entry_exists(client_id, request_id) {
@@ -169,6 +166,7 @@ func (kv *KVPaxos) next_agreement_number() int {
 }
 
 
+
 func (kv *KVPaxos) apply_operations_to_kvstore() {
   next_operation_number := kv.kvstore.get_operation_number() + 1
   decided, decided_value := kv.px.Status(next_operation_number)
@@ -176,12 +174,37 @@ func (kv *KVPaxos) apply_operations_to_kvstore() {
   for decided {
     fmt.Println("Applying", next_operation_number, decided_operation)
     // apply operation and increment kvstore's internal operation number
-    kv.kvstore.apply_operation(decided_operation)
+    kv.kvstore.apply_operation(decided_operation, next_operation_number)
 
     next_operation_number = kv.kvstore.get_operation_number() + 1
     decided, decided_value = kv.px.Status(next_operation_number)
     decided_operation, _ = decided_value.(Op)    // type assertion. interface{} value in Paxos instance is an Op
   }
+}
+
+func (kv *KVPaxos) await_get_operation(operation_number int, decided_value interface{}) (value string) {
+
+  sleep_max := 10 * time.Second
+  sleep_time := 10 * time.Millisecond
+  for {
+    if kv.kvstore.get_operation_number() >= operation_number {
+      fmt.Println("Get has been applied already")
+
+      decided_operation, _ := decided_value.(Op)    // type assertion. interface{} value in Paxos instance is an Op
+      if decided_operation.Kind == "GET_OP" {
+        fmt.Println("Perform GET_OP")
+        value, _ := kv.kvstore.lookup(decided_operation.Key)
+        fmt.Println(value)
+        return value
+      }
+    }
+    time.Sleep(sleep_time)
+    if sleep_time < sleep_max {
+      sleep_time *= 2
+    }
+  }
+  panic("unreachable")
+
 }
 
 
