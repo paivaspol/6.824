@@ -3,8 +3,6 @@ package kvpaxos
 //import "fmt"
 import "errors"
 
-
-
 /*
 Structure for managing mappings of request identifiers (client_id, request_id) to 
 replies to ensure that a duplicate request (due to network unpredictability) still
@@ -15,6 +13,10 @@ type ReplyCache struct {
   state map[int]map[int]*Reply    // cache data storage
 }
 
+/*
+Returns boolean of whether or not a reply has been returned for a particular 
+request
+*/
 func (self *ReplyCache) entry_exists(client_id int, request_id int) bool {
   _, present := self.state[client_id][request_id]
   if present {
@@ -23,13 +25,15 @@ func (self *ReplyCache) entry_exists(client_id int, request_id int) bool {
   return false
 }
 
-func (self *ReplyCache) logged_reply(client_id int, request_id int) (*Reply, error) {
+
+func (self *ReplyCache) entry_lookup(client_id int, request_id int) (*Reply, error) {
   logged_reply, present := self.state[client_id][request_id]
   if present {
     return logged_reply, nil
   }
-  return nil, errors.New("no logged reply found")
+  return nil, errors.New("no recorded reply found")
 }
+
 
 // func (self *ReplyCache) add_entry(client_id int, request_id int, reply *Reply) error {
 //   self.internal_log[client_id][request_id] = reply

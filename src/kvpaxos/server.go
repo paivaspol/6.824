@@ -22,24 +22,13 @@ type Op struct {
   Value string          // note: Get operations have Value ""
 }
 
-
-
-
-type KVStorage struct {
-  //mu sync.Mutex
-  state map[string]string      // key/value data storage
-  operation_number int         // agreement number of latest applied operation 
+func makeOp(client_id int, request_id int, kind string, key string, value string) (Op) {
+  return Op{Client_id: client_id, 
+            Request_id: request_id, 
+            Kind: kind, 
+            Key: key, 
+            Value: value}
 }
-
-func (self *KVStorage) lookup(key string) (string, error) {
-  value, present := self.state[key]
-  if present {
-    return value, nil
-  }
-  return "", fmt.Errorf("no key %s", key)
-}
-
-
 
 type KVPaxos struct {
   mu sync.Mutex
@@ -49,12 +38,8 @@ type KVPaxos struct {
   unreliable bool    // for testing
   // Paxos library instance; negotiates operation ordering, stores log of recent operations  
   px *paxos.Paxos
-  // Key/Value Storage
-  kvstore KVStorage
-  //kvstore map[string]string    // Map for Key/Value data stored by the kvpaxos system
-  // Prevent duplicate requests due to packet losses by storing replies
-  //request_logs map[int]map[int]*interface{}
-  request_log ReplyCache
+  kvstore KVStorage           // Key/Value Storage
+  reply_cache ReplyCache
 }
 
 
@@ -62,29 +47,32 @@ type KVPaxos struct {
 func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
   kv.mu.Lock()
   defer kv.mu.Unlock()
-
   fmt.Printf("kvserver Get (server%d): Key: %s \n", kv.me, args.Key)
+
   client_id := args.get_client_id()
   request_id := args.get_request_id()
   key := args.get_key()
-
-  // check request logs
-  if kv.request_log.entry_exists(client_id, request_id) {
-    fmt.Println("found old log entry")
-    reply, _ := kv.request_log.logged_reply(client_id, request_id)
-    fmt.Println("Reply", reply)
-  }
-
   fmt.Println(client_id)
   fmt.Println(request_id)
   fmt.Println(key)
 
-  operation := Op{Kind: "GETOP", Key: key, Value: ""}
+  // check cached replies for request
+  if kv.reply_cache.entry_exists(client_id, request_id) {
+    reply, _ := kv.reply_cache.entry_lookup(client_id, request_id)
+    fmt.Println("Reply", reply)
+    // TODO construct reply to duplicate
+  }
 
+  
+
+  operation := makeOp(client_id, request_id, "GET_OP", key, "")
+  // negotiate the position of the operation in the ordering
   agreement_number, decided_operation := kv.agree_on_order(operation)
-  fmt.Println("Got here", agreement_number, decided_operation)
-  reply.Err = OK
 
+  fmt.Println(agreement_number, decided_operation)
+  // TODO attempt to apply operations
+  // TODO log the reply
+  reply.Err = OK
   return nil
 }
 
@@ -92,32 +80,32 @@ func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
 func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
   kv.mu.Lock()
   defer kv.mu.Unlock()
-
   fmt.Printf("kvserver Put (server%d): Key: %s Value: %s\n", kv.me, args.Key, args.Value)
+  
   client_id := args.get_client_id()
   request_id := args.get_request_id()
   key := args.get_key()
   value := args.get_value()
-
-  // check request logs
-  if kv.request_log.entry_exists(client_id, request_id) {
-    fmt.Println("found old log entry")
-    reply, _ := kv.request_log.logged_reply(client_id, request_id)
-    fmt.Println("Reply", reply)
-  }
-
   fmt.Println(client_id)
   fmt.Println(request_id)
   fmt.Println(key)
   fmt.Println(value)
-  operation := Op{Kind: "PUTOP", Key: key, Value: value}
 
+  // check cached replies for request
+  if kv.reply_cache.entry_exists(client_id, request_id) {
+    reply, _ := kv.reply_cache.entry_lookup(client_id, request_id)
+    fmt.Println("Reply", reply)
+    // TODO construct reply to duplicate
+  }
+
+  operation := makeOp(client_id, request_id, "PUT_OP", key, value)
+  // negotiate the position of the operation in the ordering
   agreement_number, decided_operation := kv.agree_on_order(operation)
-  fmt.Println("Got here", agreement_number, decided_operation)
+
+  fmt.Println(agreement_number, decided_operation)
+  // TODO attempt to apply operations
+  // TODO log the reply
   reply.Err = OK
-
-  //kv.log_request()
-
   return nil
 }
 
@@ -129,8 +117,9 @@ value it proposes is the value that is decided upon for some agreement instance
 (giving the operation an agreed upon position in the operation ordering)
 */
 func (kv *KVPaxos) agree_on_order(operation Op) (int, Op) {
-  agreement_number := -1
-  decided_operation := Op{}
+  var agreement_number int
+  var decided_operation = Op{}
+
   for decided_operation != operation {
     agreement_number = kv.next_agreement_number()
     decided_operation = kv.start_await_agreement(agreement_number, operation)
@@ -152,14 +141,11 @@ func (kv *KVPaxos) start_await_agreement(agreement_number int, operation Op) Op 
   for {
     decided, decided_value := kv.px.Status(agreement_number)
     if decided { 
-      //fmt.Println("Woo, decided", decided_value)
-      //fmt.Printf("%T, %v\n", decided_value, decided_value)
       decided_operation, ok := decided_value.(Op)    // type assertion. interface{} value in Paxos instance is an Op
-      //fmt.Println(op, ok)
       if ok {
         return decided_operation
       }
-      panic("expected Paxos instances to agree on values of type Op at runtime. Type assertion failed.")
+      panic("expected Paxos agreement instance values of type Op at runtime. Type assertion failed.")
     }
     time.Sleep(sleep_time)
     if sleep_time < sleep_max {
@@ -170,15 +156,12 @@ func (kv *KVPaxos) start_await_agreement(agreement_number int, operation Op) Op 
 }
 
 
-
-
-
 /*
 Next operation should try to be assigned the next next available Paxos agreement 
 instance number. Returns the number from the local Paxos peer for the Max agreement 
 instance number it keeps in its logs plus 1. Note that this may not be the maximum
 agreement instance number known across the system and the operation will have to
-be reproposed when the Paxos peer has learned more.
+be re-proposed when the Paxos peer has learned more.
 */
 func (kv *KVPaxos) next_agreement_number() int {
   return kv.px.Max() + 1
@@ -212,8 +195,7 @@ func StartServer(servers []string, me int) *KVPaxos {
   kv := new(KVPaxos)
   kv.me = me
   // Your initialization code here.
-  //kv.kvstore = map[string]string{}        // initialize key/value storage map
-  //kv.request_log = make(map[int]map[int]*interface{})
+
 
   rpcs := rpc.NewServer()
   rpcs.Register(kv)
