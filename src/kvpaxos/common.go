@@ -56,7 +56,6 @@ func (self *PutReply) is_ok() bool {
 ///////////////////////////////////////////////////////////////////////////////
 
 type GetArgs struct {
-  // You'll have to add definitions here. 
   Client_id int         // client_id
   Request_id int        // request_id unique per client    
   Key string

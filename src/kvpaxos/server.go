@@ -38,8 +38,8 @@ type KVPaxos struct {
   unreliable bool    // for testing
   // Paxos library instance; negotiates operation ordering, stores log of recent operations  
   px *paxos.Paxos
-  kvstore KVStorage           // Key/Value Storage
-  reply_cache ReplyCache
+  kvcache KVCache      // Cache replies and applied operations
+  kvstore KVStorage    // Key/Value Storage
 }
 
 
@@ -54,9 +54,9 @@ func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
   fmt.Printf("kvserver Get (server%d): Key: %s (req: %d:%d)\n", kv.me, key, client_id, request_id)
 
   // check cached replies for request
-  if kv.reply_cache.entry_exists(client_id, request_id) {
-    reply, _ := kv.reply_cache.entry_lookup(client_id, request_id)
-    fmt.Println("Reply", reply)
+  if kv.kvcache.entry_exists(client_id, request_id) {
+    reply, _ := kv.kvcache.cached_reply(client_id, request_id)
+    fmt.Println("Cached entry exists", reply)
     // TODO construct reply to duplicate
   }
 
@@ -89,9 +89,9 @@ func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
   fmt.Printf("kvserver Put (server%d): Key: %s Value: %s (req: %d:%d)\n", kv.me, key, value, client_id, request_id)
 
   // check cached replies for request
-  if kv.reply_cache.entry_exists(client_id, request_id) {
-    reply, _ := kv.reply_cache.entry_lookup(client_id, request_id)
-    fmt.Println("Reply", reply)
+  if kv.kvcache.entry_exists(client_id, request_id) {
+    reply, _ := kv.kvcache.cached_reply(client_id, request_id)
+    fmt.Println("Cached entry exists", reply)
     // TODO construct reply to duplicate
   }
 
@@ -137,13 +137,9 @@ func (kv *KVPaxos) start_await_agreement(agreement_number int, operation Op) Op 
   sleep_max := 10 * time.Second
   sleep_time := 10 * time.Millisecond
   for {
-    decided, decided_value := kv.px.Status(agreement_number)
-    if decided { 
-      decided_operation, ok := decided_value.(Op)    // type assertion. interface{} value in Paxos instance is an Op
-      if ok {
-        return decided_operation
-      }
-      panic("expected Paxos agreement instance values of type Op at runtime. Type assertion failed.")
+    has_decided, decided_op := kv.px_status_op_wrap(agreement_number)
+    if has_decided {
+      return decided_op
     }
     time.Sleep(sleep_time)
     if sleep_time < sleep_max {
@@ -166,21 +162,62 @@ func (kv *KVPaxos) next_agreement_number() int {
 }
 
 
+/*
+Checks the Paxos instance log for the operation next expected by the kvstore (it
+expects the operation numbered one higher than the its current 'operation_number' 
+which reflects that it represents operations up to 'operation_number'.
 
+Loops to continue requesting decided upon operations from the paxos instance
+until reaching an agreement number which has not yet been decided. Applies all
+operations it can to the kvstore, updates the kvcache to indicate operations
+were applied. Get handler responsible for caching replies. Calls px.Done(x) after
+applying the operation of each agreement instance to the kvstore since this 
+kvserver will no longer need that entry in its paxos instance.
+
+Assumes that agreements are made in increasing agreement number (starting at 0) 
+order without skipping any numbers. The way kvserver calls kx.px.Start with an 
+agreement number from kx.next_agreement_number() which returns one more than the
+highest agreement number seen by the px paxos instance ensures this.
+)
+*/
 func (kv *KVPaxos) apply_operations_to_kvstore() {
-  next_operation_number := kv.kvstore.get_operation_number() + 1
-  decided, decided_value := kv.px.Status(next_operation_number)
-  decided_operation, _ := decided_value.(Op)    // type assertion. interface{} value in Paxos instance is an Op
-  for decided {
-    fmt.Println("Applying", next_operation_number, decided_operation)
-    // apply operation and increment kvstore's internal operation number
-    kv.kvstore.apply_operation(decided_operation, next_operation_number)
+  op_number_to_apply := kv.kvstore.get_operation_number() + 1
+  has_decided, operation := kv.px_status_op_wrap(op_number_to_apply)
 
-    next_operation_number = kv.kvstore.get_operation_number() + 1
-    decided, decided_value = kv.px.Status(next_operation_number)
-    decided_operation, _ = decided_value.(Op)    // type assertion. interface{} value in Paxos instance is an Op
+  for has_decided {
+    fmt.Printf("(server%d) apply: op_num: %d op: %v\n", kv.me, op_number_to_apply, operation)
+    // apply operation and adjust kvstore's latest applied operation number
+    kv.kvstore.apply_operation(operation, op_number_to_apply)
+
+    op_number_to_apply = kv.kvstore.get_operation_number() + 1
+    has_decided, operation = kv.px_status_op_wrap(op_number_to_apply)
   }
+  fmt.Println("Finished applying operations to kvstore")
 }
+
+
+/*
+Simply calls the paxos instance's Status method to determine whether a value has 
+been decided for a particular agreement instance. However, since kvserver's only
+start Paxos agreement with Op values, it is assumed that the agreed upon values 
+will awlways be Op structs so this method does type assertion work to return an 
+Op rather than a interface{}.
+Returns boolean of whether agreement has been reached on the given agreement_number
+and the agreed upon operation (or a zero-valued operation).
+*/
+func (kv *KVPaxos) px_status_op_wrap(agreement_number int) (bool, Op) {
+  has_decided, decided_val := kv.px.Status(agreement_number)
+  if has_decided {
+    // type assertion. interface{} value should be an Op
+    decided_op, ok := decided_val.(Op)
+    if ok {
+        return true, decided_op
+    }
+    panic("expected Paxos agreement instance values of type Op at runtime. Type assertion failed.")
+  }
+  return false, Op{}
+}
+
 
 func (kv *KVPaxos) await_get_operation(operation_number int, decided_value interface{}) (value string) {
 
@@ -238,7 +275,7 @@ func StartServer(servers []string, me int) *KVPaxos {
   kv.kvstore = KVStorage{state: map[string]string{}, 
                          operation_number: -1,
                         }
-  kv.reply_cache = ReplyCache{state: make(map[int]map[int]*Reply)}
+  kv.kvcache = KVCache{state: make(map[int]map[int]*CacheEntry)}
 
 
   rpcs := rpc.NewServer()

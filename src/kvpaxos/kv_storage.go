@@ -16,16 +16,30 @@ type KVStorage struct {
   operation_number int         // agreement number of latest applied operation 
 }
 
+/*
+Reads and returns the current operation number reflected in the state of the 
+KVStorage key/value pairs.
+*/
 func (self *KVStorage) get_operation_number() int {
+	self.mu.Lock()
+	defer self.mu.Unlock()
+
 	return self.operation_number
 }
 
+/*
+Looks up the value associated with a given string key. Retuns a string value and
+nil error if found or an empty string "" and an error if not found.
+*/
 func (self *KVStorage) lookup(key string) (string, error) {
-  value, present := self.state[key]
-  if present {
-    return value, nil
-  }
-  return "", fmt.Errorf("no key %s", key)
+	self.mu.Lock()
+	defer self.mu.Unlock()
+
+	value, present := self.state[key]
+	if present {
+	return value, nil
+	}
+	return "", fmt.Errorf("no key %s", key)
 }
 
 /*
