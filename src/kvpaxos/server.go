@@ -77,7 +77,23 @@ func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
   return nil
 }
 
+/*
+If the Put request (same client_id and request_id) has been received at this server
+before returns the reply sent last time.
+Constructs a PUT_OP operation, starts paxos ordering negotiation and waits for the
+operation to be assigned an ordering in the paxos instance log. Then incrementally
+applies agreed-upon paxos instance operations until reaching an agreement instance
+that the paxos instance log indicates has not been decided yet. Caches the reply.
 
+Performing duplicate operations more than once is prevented because when an 
+operation is applied, the request with client_id and request_id is marked as 
+aplied in the kvcache. Although a duplicate request will create an operation in the
+paxos log ordering, no kvserver will actually apply the operation more than once. 
+
+!Note: the Put may not actually be applied to the kvstore when this handler returns
+a reply. However, no Get for the modified key/value pair can return until the 
+Put has taken effect so sequential consistency is assured.
+*/
 func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
   kv.mu.Lock()
   defer kv.mu.Unlock()
@@ -86,7 +102,7 @@ func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
   request_id := args.get_request_id()
   key := args.get_key()
   value := args.get_value()
-  fmt.Printf("kvserver Put (server%d): Key: %s Value: %s (req: %d:%d)\n", kv.me, key, value, client_id, request_id)
+  fmt.Printf("(server%d) Put: Key: %s Value: %s (req: %d:%d)\n", kv.me, key, value, client_id, request_id)
 
   // check cached replies for request
   if kv.kvcache.entry_exists(client_id, request_id) {
@@ -97,11 +113,16 @@ func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
 
   operation := makeOp(client_id, request_id, "PUT_OP", key, value)
   // negotiate the position of the operation in the ordering
-  agreement_number, decided_operation := kv.agree_on_order(operation)
+  op_number, decided_op := kv.agree_on_order(operation)
 
-  fmt.Println(agreement_number, decided_operation)
-  // TODO attempt to apply operations
+  fmt.Printf("(server%d) Agreement(Put): op_num: %d op: %v (req: %d:%d)\n", kv.me, op_number, decided_op, client_id, request_id)
+
+  /*
+  Apply agreed-upon operations from paxos instance incrementally, 
+  Mark requests as having been applied to the kvstore
+  */
   kv.apply_operations_to_kvstore()
+
   // TODO log the reply
   reply.Err = OK
   return nil
@@ -181,16 +202,21 @@ highest agreement number seen by the px paxos instance ensures this.
 )
 */
 func (kv *KVPaxos) apply_operations_to_kvstore() {
-  op_number_to_apply := kv.kvstore.get_operation_number() + 1
-  has_decided, operation := kv.px_status_op_wrap(op_number_to_apply)
+  op_number := kv.kvstore.get_operation_number() + 1     // operation number to be applied if it has been decided
+  has_decided, decided_op := kv.px_status_op_wrap(op_number)
 
   for has_decided {
-    fmt.Printf("(server%d) apply: op_num: %d op: %v\n", kv.me, op_number_to_apply, operation)
-    // apply operation and adjust kvstore's latest applied operation number
-    kv.kvstore.apply_operation(operation, op_number_to_apply)
+    fmt.Printf("(server%d) Apply: op_num: %d op: %v\n", kv.me, op_number, decided_op)
+    /* atomically checks whether operation has been applied before (checks kvcache).
+    If not, applies operation to KVStorage, creates an entry in the KVCache for it
+    and marks it as applied in the KVCache.
+    */  
+    // adjusts the kvstore's operation_number to op_number
+    kv.kvstore.apply_operation(decided_op, op_number, &kv.kvcache)
+    kv.px.Done(op_number)
 
-    op_number_to_apply = kv.kvstore.get_operation_number() + 1
-    has_decided, operation = kv.px_status_op_wrap(op_number_to_apply)
+    op_number = kv.kvstore.get_operation_number() + 1
+    has_decided, decided_op = kv.px_status_op_wrap(op_number)
   }
   fmt.Println("Finished applying operations to kvstore")
 }
@@ -274,7 +300,10 @@ func StartServer(servers []string, me int) *KVPaxos {
   // Your initialization code here.
   kv.kvstore = KVStorage{state: map[string]string{}, 
                          operation_number: -1,
-                        }
+  }
+  /* Only makes state map useable (non-nil). Maps nested inside of a state entry
+  like state[5] will be nil maps which need to be initialized when state[5] is
+  set*/
   kv.kvcache = KVCache{state: make(map[int]map[int]*CacheEntry)}
 
 
