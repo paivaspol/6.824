@@ -252,8 +252,8 @@ func (kv *KVPaxos) px_status_op_wrap(agreement_number int) (bool, Op) {
 
 
 func (kv *KVPaxos) await_operation(op_number int, decided_op Op) (value string) {
-  sleep_max := 10 * time.Second
-  sleep_time := 10 * time.Millisecond
+  //sleep_max := 10 * time.Second
+  //sleep_time := 10 * time.Millisecond
   for {
     fmt.Printf("(server%d) AwaitGet: op_num: %d kvstore:%d kvcache:%t (req: %d:%d)\n", kv.me, op_number, kv.kvstore.get_operation_number(), kv.kvcache.was_applied(decided_op.Client_id, decided_op.Request_id), decided_op.Client_id, decided_op.Request_id)
     if kv.kvstore.get_operation_number() >= op_number {
@@ -263,17 +263,18 @@ func (kv *KVPaxos) await_operation(op_number int, decided_op Op) (value string) 
       value, _ := kv.kvstore.lookup(decided_op.Key)
       return value
     }
-    time.Sleep(sleep_time)
-    if sleep_time < sleep_max {
-      sleep_time *= 2
-      // Force Paxos instance to discover next operation or agree on a NO_OP
-      no_op := makeOp(1010101, 0, "NO_OP", "no_op_key", "no_op_value")
-      // the next number after the kvstore operation_number, but not exceeding the passed target op_number
-      no_op_number := kv.crawling_up_op_number(op_number)      
-      fmt.Printf("(server%d) Crawlup: no_op_number:%d (req: %d:%d)\n", kv.me, no_op_number, decided_op.Client_id, decided_op.Request_id)
-      kv.start_await_agreement(no_op_number, no_op)
-      kv.apply_operations_to_kvstore(no_op_number)
-    }
+    //time.Sleep(sleep_time)
+    // if sleep_time < sleep_max {
+    //   sleep_time *= 2
+    // }
+    // Force Paxos instance to discover next operation or agree on a NO_OP
+    no_op := makeOp(1010101, 0, "NO_OP", "no_op_key", "no_op_value")
+    // the next number after the kvstore operation_number, but not exceeding the passed target op_number
+    no_op_number := kv.crawling_up_op_number(op_number)      
+    fmt.Printf("(server%d) Crawlup: no_op_number:%d op_number:%d (req: %d:%d)\n", kv.me, no_op_number, op_number, decided_op.Client_id, decided_op.Request_id)
+    kv.start_await_agreement(no_op_number, no_op)
+    kv.apply_operations_to_kvstore(no_op_number)
+
   }
   panic("unreachable")
 }
