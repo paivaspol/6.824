@@ -45,8 +45,8 @@ type KVPaxos struct {
 
 
 func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
-  kv.mu.Lock()
-  defer kv.mu.Unlock()
+  //kv.mu.Lock()
+  //defer kv.mu.Unlock()
 
   client_id := args.get_client_id()
   request_id := args.get_request_id()
@@ -62,14 +62,20 @@ func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
 
   operation := makeOp(client_id, request_id, "GET_OP", key, "")
   // negotiate the position of the operation in the ordering
-  agreement_number, decided_operation := kv.agree_on_order(operation)
+  op_number, decided_op := kv.agree_on_order(operation)
 
-  fmt.Println(agreement_number, decided_operation)
-  // TODO attempt to apply operations
+  fmt.Printf("(server%d) Agreement(Get): op_num: %d op: %v (req: %d:%d)\n", kv.me, op_number, decided_op, client_id, request_id)
+
+  /*
+  Apply agreed-upon operations from paxos instance incrementally, 
+  Mark requests as having been applied to the kvstore
+  */
   kv.apply_operations_to_kvstore()
 
   // await application of operation to kvstore
-  value := kv.await_get_operation(agreement_number, decided_operation)
+  value := kv.await_operation(op_number, decided_op)
+
+  fmt.Println("Replying to client")
 
   // TODO log the reply
   reply.Err = OK
@@ -95,8 +101,8 @@ a reply. However, no Get for the modified key/value pair can return until the
 Put has taken effect so sequential consistency is assured.
 */
 func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
-  kv.mu.Lock()
-  defer kv.mu.Unlock()
+  //kv.mu.Lock()
+  //defer kv.mu.Unlock()
   
   client_id := args.get_client_id()
   request_id := args.get_request_id()
@@ -110,6 +116,8 @@ func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
     fmt.Println("Cached entry exists", reply)
     // TODO construct reply to duplicate
   }
+
+  fmt.Println("About to make operation")
 
   operation := makeOp(client_id, request_id, "PUT_OP", key, value)
   // negotiate the position of the operation in the ordering
@@ -214,6 +222,8 @@ func (kv *KVPaxos) apply_operations_to_kvstore() {
     // adjusts the kvstore's operation_number to op_number
     kv.kvstore.apply_operation(decided_op, op_number, &kv.kvcache)
     kv.px.Done(op_number)
+    fmt.Printf("(server%d) Applied: op_num: %d op: %v\n", kv.me, op_number, decided_op)
+
 
     op_number = kv.kvstore.get_operation_number() + 1
     has_decided, decided_op = kv.px_status_op_wrap(op_number)
@@ -245,25 +255,42 @@ func (kv *KVPaxos) px_status_op_wrap(agreement_number int) (bool, Op) {
 }
 
 
-func (kv *KVPaxos) await_get_operation(operation_number int, decided_value interface{}) (value string) {
-
+func (kv *KVPaxos) await_operation(op_number int, decided_op Op) (value string) {
   sleep_max := 10 * time.Second
   sleep_time := 10 * time.Millisecond
   for {
-    if kv.kvstore.get_operation_number() >= operation_number {
+    fmt.Printf("(server%d) Agreement(Get): op_num: %d op: %v (req: %d:%d)\n", kv.me, op_number, decided_op, decided_op.Client_id, decided_op.Request_id)
+    if kv.kvstore.get_operation_number() >= op_number {
+      
+      // print state of kvcache
       fmt.Println("Get has been applied already")
 
-      decided_operation, _ := decided_value.(Op)    // type assertion. interface{} value in Paxos instance is an Op
-      if decided_operation.Kind == "GET_OP" {
-        fmt.Println("Perform GET_OP")
-        value, _ := kv.kvstore.lookup(decided_operation.Key)
-        fmt.Println(value)
-        return value
-      }
+      fmt.Println("kvcache", kv.kvcache.was_applied(decided_op.Client_id, decided_op.Request_id))
+
+      value, _ := kv.kvstore.lookup(decided_op.Key)
+      return value
+
+      // has_decided, decided_op := kv.px_status_op_wrap(operation_number)
+      // if has_decided {
+      //   fmt.Println(decided_op)
+      //   value, _ := kv.kvstore.lookup(decided_op.Key)
+      //   return value
+      // } else {
+      //   fmt.Println("weird state")
+      // }
+      // decided_operation, _ := decided_value.(Op)    // type assertion. interface{} value in Paxos instance is an Op
+      // if decided_operation.Kind == "GET_OP" {
+      //   fmt.Println("Perform GET_OP")
+      //   value, _ := kv.kvstore.lookup(decided_operation.Key)
+      //   fmt.Println(value)
+      //   return value
+      // }
     }
     time.Sleep(sleep_time)
     if sleep_time < sleep_max {
       sleep_time *= 2
+      fmt.Println("waiting for operation to be applied", op_number)
+      //kv.apply_operations_to_kvstore()
     }
   }
   panic("unreachable")
