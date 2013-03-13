@@ -45,8 +45,8 @@ type KVPaxos struct {
 
 
 func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
-  //kv.mu.Lock()
-  //defer kv.mu.Unlock()
+  kv.mu.Lock()
+  defer kv.mu.Unlock()
 
   client_id := args.get_client_id()
   request_id := args.get_request_id()
@@ -54,11 +54,11 @@ func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
   fmt.Printf("kvserver Get (server%d): Key: %s (req: %d:%d)\n", kv.me, key, client_id, request_id)
 
   // check cached replies for request
-  if kv.kvcache.entry_exists(client_id, request_id) {
-    reply, _ := kv.kvcache.cached_reply(client_id, request_id)
-    fmt.Println("Cached entry exists", reply)
-    // TODO construct reply to duplicate
-  }
+  // if kv.kvcache.entry_exists(client_id, request_id) {
+  //   reply, _ := kv.kvcache.cached_reply(client_id, request_id)
+  //   fmt.Println("Cached entry exists", reply)
+  //   // TODO construct reply to duplicate
+  // }
 
   operation := makeOp(client_id, request_id, "GET_OP", key, "")
   // negotiate the position of the operation in the ordering
@@ -70,13 +70,12 @@ func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
   Apply agreed-upon operations from paxos instance incrementally, 
   Mark requests as having been applied to the kvstore
   */
-  kv.apply_operations_to_kvstore()
+  kv.apply_operations_to_kvstore(op_number)
 
   // await application of operation to kvstore
   value := kv.await_operation(op_number, decided_op)
 
-  fmt.Println("Replying to client")
-
+  fmt.Printf("(server%d) GetReply: value:%s (req: %d:%d)\n", kv.me, value, client_id, request_id)
   // TODO log the reply
   reply.Err = OK
   reply.Value = value
@@ -101,8 +100,8 @@ a reply. However, no Get for the modified key/value pair can return until the
 Put has taken effect so sequential consistency is assured.
 */
 func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
-  //kv.mu.Lock()
-  //defer kv.mu.Unlock()
+  kv.mu.Lock()
+  defer kv.mu.Unlock()
   
   client_id := args.get_client_id()
   request_id := args.get_request_id()
@@ -111,13 +110,11 @@ func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
   fmt.Printf("(server%d) Put: Key: %s Value: %s (req: %d:%d)\n", kv.me, key, value, client_id, request_id)
 
   // check cached replies for request
-  if kv.kvcache.entry_exists(client_id, request_id) {
-    reply, _ := kv.kvcache.cached_reply(client_id, request_id)
-    fmt.Println("Cached entry exists", reply)
-    // TODO construct reply to duplicate
-  }
-
-  fmt.Println("About to make operation")
+  // if kv.kvcache.entry_exists(client_id, request_id) {
+  //   reply, _ := kv.kvcache.cached_reply(client_id, request_id)
+  //   fmt.Println("Cached entry exists", reply)
+  //   // TODO construct reply to duplicate
+  // }
 
   operation := makeOp(client_id, request_id, "PUT_OP", key, value)
   // negotiate the position of the operation in the ordering
@@ -129,8 +126,9 @@ func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
   Apply agreed-upon operations from paxos instance incrementally, 
   Mark requests as having been applied to the kvstore
   */
-  kv.apply_operations_to_kvstore()
+  //kv.apply_operations_to_kvstore()
 
+  fmt.Printf("(server%d) PutReply (req: %d:%d)\n", kv.me, client_id, request_id)
   // TODO log the reply
   reply.Err = OK
   return nil
@@ -209,26 +207,24 @@ agreement number from kx.next_agreement_number() which returns one more than the
 highest agreement number seen by the px paxos instance ensures this.
 )
 */
-func (kv *KVPaxos) apply_operations_to_kvstore() {
+func (kv *KVPaxos) apply_operations_to_kvstore(limit int) {
   op_number := kv.kvstore.get_operation_number() + 1     // operation number to be applied if it has been decided
   has_decided, decided_op := kv.px_status_op_wrap(op_number)
 
-  for has_decided {
-    fmt.Printf("(server%d) Apply: op_num: %d op: %v\n", kv.me, op_number, decided_op)
+  for has_decided && op_number <= limit {
+    fmt.Printf("(server%d) Apply: op_num:%d limit:%d op:%v (req: %d:%d)\n", kv.me, op_number, limit, decided_op, decided_op.Client_id, decided_op.Request_id)
     /* atomically checks whether operation has been applied before (checks kvcache).
     If not, applies operation to KVStorage, creates an entry in the KVCache for it
     and marks it as applied in the KVCache.
-    */  
-    // adjusts the kvstore's operation_number to op_number
+    */
+    // Adjusts the kvstore's operation_number to op_number
     kv.kvstore.apply_operation(decided_op, op_number, &kv.kvcache)
     kv.px.Done(op_number)
-    fmt.Printf("(server%d) Applied: op_num: %d op: %v\n", kv.me, op_number, decided_op)
-
+    fmt.Printf("(server%d) Applied: op_num:%d op:%v (req: %d:%d)\n", kv.me, op_number, decided_op, decided_op.Client_id, decided_op.Request_id)
 
     op_number = kv.kvstore.get_operation_number() + 1
     has_decided, decided_op = kv.px_status_op_wrap(op_number)
   }
-  fmt.Println("Finished applying operations to kvstore")
 }
 
 
@@ -259,42 +255,40 @@ func (kv *KVPaxos) await_operation(op_number int, decided_op Op) (value string) 
   sleep_max := 10 * time.Second
   sleep_time := 10 * time.Millisecond
   for {
-    fmt.Printf("(server%d) Agreement(Get): op_num: %d op: %v (req: %d:%d)\n", kv.me, op_number, decided_op, decided_op.Client_id, decided_op.Request_id)
+    fmt.Printf("(server%d) AwaitGet: op_num: %d kvstore:%d kvcache:%t (req: %d:%d)\n", kv.me, op_number, kv.kvstore.get_operation_number(), kv.kvcache.was_applied(decided_op.Client_id, decided_op.Request_id), decided_op.Client_id, decided_op.Request_id)
     if kv.kvstore.get_operation_number() >= op_number {
-      
-      // print state of kvcache
-      fmt.Println("Get has been applied already")
 
-      fmt.Println("kvcache", kv.kvcache.was_applied(decided_op.Client_id, decided_op.Request_id))
+      fmt.Printf("(server%d) DoneAwaiting: op_num: %d kvstore:%d kvcache:%t (req: %d:%d)\n", kv.me, op_number, kv.kvstore.get_operation_number(), kv.kvcache.was_applied(decided_op.Client_id, decided_op.Request_id), decided_op.Client_id, decided_op.Request_id)
 
       value, _ := kv.kvstore.lookup(decided_op.Key)
       return value
-
-      // has_decided, decided_op := kv.px_status_op_wrap(operation_number)
-      // if has_decided {
-      //   fmt.Println(decided_op)
-      //   value, _ := kv.kvstore.lookup(decided_op.Key)
-      //   return value
-      // } else {
-      //   fmt.Println("weird state")
-      // }
-      // decided_operation, _ := decided_value.(Op)    // type assertion. interface{} value in Paxos instance is an Op
-      // if decided_operation.Kind == "GET_OP" {
-      //   fmt.Println("Perform GET_OP")
-      //   value, _ := kv.kvstore.lookup(decided_operation.Key)
-      //   fmt.Println(value)
-      //   return value
-      // }
     }
     time.Sleep(sleep_time)
     if sleep_time < sleep_max {
       sleep_time *= 2
-      fmt.Println("waiting for operation to be applied", op_number)
-      //kv.apply_operations_to_kvstore()
+      // Force Paxos instance to discover next operation or agree on a NO_OP
+      no_op := makeOp(1010101, 0, "NO_OP", "no_op_key", "no_op_value")
+      // the next number after the kvstore operation_number, but not exceeding the passed target op_number
+      no_op_number := kv.crawling_up_op_number(op_number)      
+      fmt.Printf("(server%d) Crawlup: no_op_number:%d (req: %d:%d)\n", kv.me, no_op_number, decided_op.Client_id, decided_op.Request_id)
+      kv.start_await_agreement(no_op_number, no_op)
+      kv.apply_operations_to_kvstore(no_op_number)
     }
   }
   panic("unreachable")
+}
 
+/*
+Returns the op_number 1 higher than the kvstore's operation_number until that
+number reaches the target_op_number at which point the target op number will
+always be returned.
+*/
+func (kv *KVPaxos) crawling_up_op_number(target_op_number int) int {
+  next_step_number := kv.kvstore.get_operation_number() + 1
+  if next_step_number < target_op_number {
+    return next_step_number
+  }
+  return target_op_number
 }
 
 
