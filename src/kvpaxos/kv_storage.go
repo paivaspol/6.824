@@ -72,6 +72,7 @@ func (self *KVStorage) apply_operation(op Op, op_number int, kvcache *KVCache) {
 		if kvcache.was_applied(op.Client_id, op.Request_id) {
 			// operation is a duplicate, simply adjust operation_number
 			self.operation_number = op_number
+			fmt.Printf("Already applied requested op: %d (req: %d:%d)\n", op_number, op.Client_id, op.Request_id)
 			return
 		}
 	} else {
