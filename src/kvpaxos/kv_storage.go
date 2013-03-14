@@ -84,21 +84,28 @@ func (self *KVStorage) apply_operation(op Op, op_number int, kvcache *KVCache) {
 	self.operation_number = op_number   // adjust KVStorage operation number
 
 	// kvcache is created if it does not exist
-	kvcache.add_entry_if_not_present(op.Client_id, op.Request_id)
+	create_error := kvcache.add_entry_if_not_present(op.Client_id, op.Request_id)
+	fmt.Println("New cacheentry creation error", create_error)
+	fmt.Printf("op: %d cacheentry: %v (req: %d:%d)\n", op_number, kvcache.state[op.Client_id][op.Request_id], op.Client_id, op.Request_id)
+
 
 	if kvcache.was_applied(op.Client_id, op.Request_id) {
 		// operation is a duplicate, simply adjust operation_number
 		fmt.Printf("Already applied requested op: %d (req: %d:%d)\n", op_number, op.Client_id, op.Request_id)
 		return
-	}	
+	}
 	// Behavior if the operation has not already been applied.
+	fmt.Printf("Novel operation op: %d cacheentry: %v (req: %d:%d)\n", op_number, kvcache.state[op.Client_id][op.Request_id], op.Client_id, op.Request_id)
 
 	// apply operation to KVStorage, do nothing for GET_OP or NO_OP
 	if op.Kind == "PUT_OP" {
 		self.state[op.Key] = op.Value
 	}
 
-	kvcache.mark_as_applied(op.Client_id, op.Request_id)
+	mark_error := kvcache.mark_as_applied(op.Client_id, op.Request_id)
+	if mark_error != nil {
+		fmt.Println("mark_error", mark_error)
+	}
 	var reply Reply
 	if op.Kind == "PUT_OP" {
 		reply = self.reply_from_put(op)
@@ -108,6 +115,7 @@ func (self *KVStorage) apply_operation(op Op, op_number int, kvcache *KVCache) {
 	}
 	fmt.Printf("Reply op: %d (req: %d:%d) %v\n", op_number, op.Client_id, op.Request_id, reply)
 	kvcache.record_reply(op.Client_id, op.Request_id, reply)
+	fmt.Printf("Done applying op: %d cacheentry: %v (req: %d:%d)\n", op_number, kvcache.state[op.Client_id][op.Request_id], op.Client_id, op.Request_id)
 	return	
 }
 

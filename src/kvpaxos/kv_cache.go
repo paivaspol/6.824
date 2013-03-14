@@ -42,8 +42,10 @@ func (self *KVCache) entry_exists(client_id int, request_id int) bool {
     if present {
       return true
     }
+    fmt.Println("Warning, no entry_exists")
     return false
   }
+  fmt.Println("Warning, no entry_exists, 2")
   return false
 }
 
@@ -86,8 +88,14 @@ to a zero-valued CacheEntry. Returns an error if a CacheEntry with the same
 client_id and request_id already exists.
 */
 func (self *KVCache) add_entry_if_not_present(client_id int, request_id int) error {
-  if self.entry_exists(client_id, request_id) {
-    return errors.New("cache entry already exists")
+  _, present := self.state[client_id]
+  if present {
+    _, present = self.state[client_id][request_id]
+    if present {
+      return errors.New("cache entry already exists")
+    }
+    self.state[client_id][request_id] = &CacheEntry{}
+    return nil
   }
   self.state[client_id] = map[int]*CacheEntry{}
   self.state[client_id][request_id] = &CacheEntry{}

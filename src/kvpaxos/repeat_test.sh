@@ -1,5 +1,5 @@
 
-for i in {1..4}
+for i in {1..8}
 do
 	echo "starting test $i"
 	go test >> "test/test$i.log" 2> error.log;
