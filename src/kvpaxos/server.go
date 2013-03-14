@@ -53,11 +53,16 @@ func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
   key := args.get_key()
   fmt.Printf("(server%d) Get: Key: %s (req: %d:%d)\n", kv.me, key, client_id, request_id)
 
-  if kv.kvcache.entry_exists(client_id, request_id) {
-    //reply, _ := kv.kvcache.cached_reply(client_id, request_id)
-    fmt.Println("Cached entry exists", reply)
-    // TODO construct reply to duplicate
+  cached_reply, cache_error := kv.kvcache.cached_reply(client_id, request_id)
+  if cache_error == nil {
+    fmt.Println("Cached entry exists", cached_reply, cache_error)
+
   }
+  // if kv.kvcache.entry_exists(client_id, request_id) {
+  //   //reply, _ := kv.kvcache.cached_reply(client_id, request_id)
+  //   fmt.Println("Cached entry exists", reply)
+  //   // TODO construct reply to duplicate
+  // }
 
   operation := makeOp(client_id, request_id, "GET_OP", key, "")
   // negotiate the position of the operation in the ordering
@@ -119,6 +124,11 @@ func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
     //reply, _ := kv.kvcache.cached_reply(client_id, request_id)
     fmt.Println("Cached entry exists", reply)
     // TODO construct reply to duplicate
+  }
+
+  cached_reply, cache_error := kv.kvcache.cached_reply(client_id, request_id)
+  if cache_error == nil {
+    fmt.Println("Cached entry exists", cached_reply, cache_error)
   }
 
   operation := makeOp(client_id, request_id, "PUT_OP", key, value)

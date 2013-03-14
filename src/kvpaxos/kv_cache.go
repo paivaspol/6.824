@@ -1,6 +1,6 @@
 package kvpaxos
 
-//import "fmt"
+import "fmt"
 import "sync"
 import "errors"
 
@@ -64,6 +64,7 @@ func (self *KVCache) was_applied(client_id int, request_id int) bool {
 }
 
 
+
 func (self *KVCache) cached_reply(client_id int, request_id int) (Reply, error) {
   self.mu.Lock()
   defer self.mu.Unlock()
@@ -74,7 +75,7 @@ func (self *KVCache) cached_reply(client_id int, request_id int) (Reply, error) 
       return *cache_entry.reply, nil
     }
     fmt.Println("Entry exists but no reply yet")
-    return nil, errors.New("no cached reply")
+    return nil, nil   //errors.New("no cached reply")
   }
   return nil, errors.New("no cache entry")
 }
@@ -84,7 +85,7 @@ Attempts to create an entry in the KVCache state mapping client_id and request_i
 to a zero-valued CacheEntry. Returns an error if a CacheEntry with the same
 client_id and request_id already exists.
 */
-func (self *KVCache) add_entry(client_id int, request_id int) error {
+func (self *KVCache) add_entry_if_not_present(client_id int, request_id int) error {
   if self.entry_exists(client_id, request_id) {
     return errors.New("cache entry already exists")
   }
@@ -111,13 +112,13 @@ func (self *KVCache) mark_as_applied(client_id int, request_id int) error {
 }
 
 
-func (self *KVCache) record_reply(client_id int, request_id int, reply *Reply) error {
+func (self *KVCache) record_reply(client_id int, request_id int, reply Reply) error {
   self.mu.Lock()
   defer self.mu.Unlock()
 
   if self.entry_exists(client_id, request_id) {
     cache_entry, _ := self.state[client_id][request_id]
-    cache_entry.reply = reply
+    cache_entry.reply = &reply
     return nil
   }
   return errors.New("no cache entry")
