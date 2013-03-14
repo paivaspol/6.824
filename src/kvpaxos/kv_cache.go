@@ -74,8 +74,8 @@ func (self *KVCache) cached_reply(client_id int, request_id int) (Reply, error) 
     if cache_entry.reply != nil {
       return *cache_entry.reply, nil
     }
-    fmt.Println("Entry exists but no reply yet")
-    return nil, nil   //errors.New("no cached reply")
+    fmt.Println("Should not be possible to have entry without reply")
+    return nil, errors.New("no cached reply")
   }
   return nil, errors.New("no cache entry")
 }

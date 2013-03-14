@@ -55,14 +55,12 @@ func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
 
   cached_reply, cache_error := kv.kvcache.cached_reply(client_id, request_id)
   if cache_error == nil {
-    fmt.Println("Cached entry exists", cached_reply, cache_error)
-
+    getreply := kv.getreply_unwrap(cached_reply)
+    reply.Err = getreply.Err
+    reply.Value = getreply.Value
+    fmt.Printf("(server%d) GetReply(Cached): reply:%v (req: %d:%d)\n", kv.me, reply, client_id, request_id)
+    return nil
   }
-  // if kv.kvcache.entry_exists(client_id, request_id) {
-  //   //reply, _ := kv.kvcache.cached_reply(client_id, request_id)
-  //   fmt.Println("Cached entry exists", reply)
-  //   // TODO construct reply to duplicate
-  // }
 
   operation := makeOp(client_id, request_id, "GET_OP", key, "")
   // negotiate the position of the operation in the ordering
@@ -82,18 +80,19 @@ func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
   // retrieve the cached reply for the decided_op
   reply_to_op, reply_to_op_error := kv.kvcache.cached_reply(client_id, request_id)
   if reply_to_op_error == nil {
-    fmt.Println("Reply entry exists", reply_to_op, reply_to_op_error)
+    fakereply := kv.getreply_unwrap(reply_to_op)
+    fmt.Printf("(server%d) GetReply(fromCache): reply:%v (req: %d:%d)\n", kv.me, fakereply, client_id, request_id)
   }
 
   if error != nil {
     reply.Err = ErrNoKey
     reply.Value = ""
-    fmt.Printf("(server%d) GetReply: value: ErrNoKey (req: %d:%d)\n", kv.me, client_id, request_id)
+    fmt.Printf("(server%d) GetReply: reply:%v (req: %d:%d)\n", kv.me, reply, client_id, request_id)
   }
 
   reply.Err = OK
   reply.Value = value
-  fmt.Printf("(server%d) GetReply: value:%s (req: %d:%d)\n", kv.me, value, client_id, request_id)
+  fmt.Printf("(server%d) GetReply: reply:%v (req: %d:%d)\n", kv.me, reply, client_id, request_id)
   return nil
 }
 
@@ -124,15 +123,12 @@ func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
   value := args.get_value()
   fmt.Printf("(server%d) Put: Key: %s Value: %s (req: %d:%d)\n", kv.me, key, value, client_id, request_id)
 
-  if kv.kvcache.entry_exists(client_id, request_id) {
-    //reply, _ := kv.kvcache.cached_reply(client_id, request_id)
-    fmt.Println("Cached entry exists", reply)
-    // TODO construct reply to duplicate
-  }
-
   cached_reply, cache_error := kv.kvcache.cached_reply(client_id, request_id)
   if cache_error == nil {
-    fmt.Println("Cached entry exists", cached_reply, cache_error)
+    putreply := kv.putreply_unwrap(cached_reply)
+    reply.Err = putreply.Err
+    fmt.Printf("(server%d) PutReply(Cached) (req: %d:%d)\n", kv.me, client_id, request_id)
+    return nil
   }
 
   operation := makeOp(client_id, request_id, "PUT_OP", key, value)
@@ -141,14 +137,9 @@ func (kv *KVPaxos) Put(args *PutArgs, reply *PutReply) error {
 
   fmt.Printf("(server%d) Agreement(Put): op_num: %d op: %v (req: %d:%d)\n", kv.me, op_number, decided_op, client_id, request_id)
 
-  /*
-  Apply agreed-upon operations from paxos instance incrementally, 
-  Mark requests as having been applied to the kvstore
-  */
-  //kv.apply_operations_to_kvstore()
+  // await actual application of Put?
 
   fmt.Printf("(server%d) PutReply (req: %d:%d)\n", kv.me, client_id, request_id)
-  // TODO log the reply
   reply.Err = OK
   return nil
 }
@@ -267,6 +258,22 @@ func (kv *KVPaxos) px_status_op_wrap(agreement_number int) (bool, Op) {
     panic("expected Paxos agreement instance values of type Op at runtime. Type assertion failed.")
   }
   return false, Op{}
+}
+
+func (kv *KVPaxos) getreply_unwrap(reply Reply) *GetReply {
+  get_reply, ok := reply.(*GetReply)
+  if ok {
+    return get_reply
+  }
+  panic("Expected Reply to be a *GetReply")
+}
+
+func (kv *KVPaxos) putreply_unwrap(reply Reply) *PutReply {
+  put_reply, ok := reply.(*PutReply)
+  if ok {
+    return put_reply
+  }
+  panic("Expected Reply to be a *PutReply")
 }
 
 
