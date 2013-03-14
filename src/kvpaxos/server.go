@@ -76,10 +76,14 @@ func (kv *KVPaxos) Get(args *GetArgs, reply *GetReply) error {
   */
   kv.apply_operations_to_kvstore(op_number)
 
-  // await application of operation to kvstore
+  // await application of operation to kvstore and caching of reply
   value, error := kv.await_operation(op_number, decided_op)
 
-  // TODO log the reply
+  // retrieve the cached reply for the decided_op
+  reply_to_op, reply_to_op_error := kv.kvcache.cached_reply(client_id, request_id)
+  if reply_to_op_error == nil {
+    fmt.Println("Reply entry exists", reply_to_op, reply_to_op_error)
+  }
 
   if error != nil {
     reply.Err = ErrNoKey

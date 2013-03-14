@@ -112,10 +112,12 @@ func (self *KVCache) mark_as_applied(client_id int, request_id int) error {
 }
 
 
+/*
+Record a reply for a cached request operation.
+Note that the caller is responsible for taking out a KVCache lock
+*/
 func (self *KVCache) record_reply(client_id int, request_id int, reply Reply) error {
-  self.mu.Lock()
-  defer self.mu.Unlock()
-
+  
   if self.entry_exists(client_id, request_id) {
     cache_entry, _ := self.state[client_id][request_id]
     cache_entry.reply = &reply
