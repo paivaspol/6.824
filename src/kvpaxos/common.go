@@ -1,5 +1,7 @@
 package kvpaxos
 
+import "fmt"
+
 const (
   OK = "OK"
   ErrNoKey = "ErrNoKey"
@@ -94,4 +96,12 @@ func short_name(server_name string, end int) string {
     return server_name
   }
   return server_name[len(server_name)-end:]
+}
+
+
+var debug = false
+func output_debug(debug_message string) {
+  if debug {
+    fmt.Println(debug_message)
+  }
 }

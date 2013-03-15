@@ -1,6 +1,6 @@
 package kvpaxos
 
-import "fmt"
+//import "fmt"
 import "sync"
 import "errors"
 
@@ -42,10 +42,8 @@ func (self *KVCache) entry_exists(client_id int, request_id int) bool {
     if present {
       return true
     }
-    fmt.Println("Warning, no entry_exists")
     return false
   }
-  fmt.Println("Warning, no entry_exists, 2")
   return false
 }
 
@@ -76,7 +74,6 @@ func (self *KVCache) cached_reply(client_id int, request_id int) (Reply, error) 
     if cache_entry.reply != nil {
       return *cache_entry.reply, nil
     }
-    fmt.Println("Should not be possible to have entry without reply")
     return nil, errors.New("no cached reply")
   }
   return nil, errors.New("no cache entry")
