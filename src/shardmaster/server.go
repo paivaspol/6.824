@@ -36,21 +36,23 @@ func makeOp(name string, args Args) (Op) {
 }
 
 
+/*
+Accepts a Join request, starts and awaits Paxos agreement for the op, and performs
+all operations up to and including the requested operation.
+Does not return until requested operation has been applied.
+*/
 func (self *ShardMaster) Join(args *JoinArgs, reply *JoinReply) error {
-  // Your code here.
   output_debug(fmt.Sprintf("(server%d) Join \n", self.me))
   fmt.Println(args.GID)
   fmt.Println(args.Servers)
   fmt.Println(self.configs)
 
   operation := makeOp("join", *args)
-  fmt.Println(operation)
-
+  // synchronous call returns once paxos agreement reached
   agreement_number := self.paxos_agree(operation)
-  fmt.Println(agreement_number)
-
-  self.perform_operations(agreement_number)
-
+  // synchronous call, waits for operations up to limit to be performed
+  self.perform_operations_prior_to(agreement_number)
+  self.perform_operation(agreement_number, operation)    // perform requested op
   return nil
 }
 
@@ -84,6 +86,35 @@ state
 func (self *ShardMaster) last_operation_number() int {
   return self.operation_number
 }
+
+
+func (self *ShardMaster) join(args *JoinArgs) {
+  self.mu.Lock()
+  defer self.mu.Unlock()
+
+ 
+  fmt.Println("Got here")
+  fmt.Println(args.GID)
+  fmt.Println(args.Servers)
+
+  fmt.Println(self.configs)
+  fmt.Println(len(self.configs))
+
+  current_config := len(self.configs)
+  config := self.configs[current_config-1]
+  fmt.Println(config)
+
+  config2 := config.copy()
+  config2.add_replica_group(args.GID, args.Servers)
+  fmt.Println(config2)
+  fmt.Println(config)
+
+}
+
+
+
+// Methods for Using the Paxos Library
+///////////////////////////////////////////////////////////////////////////////
 
 /*
 Accepts an operation struct and drives agreement among Shardmaster paxos peers.
@@ -132,20 +163,6 @@ func (self *ShardMaster) available_agreement_number() int {
   return self.px.Max() + 1
 }
 
-func (self *ShardMaster) perform_operations(limit int) {
-  op_number := self.last_operation_number() + 1    // op number currently being performed
-  has_decided, operation := paxos_status_op(self.px, op_number)
-
-  for has_decided && op_number <= limit {
-    output_debug(fmt.Sprintf("(server%d) Performing: op_num:%d lim:%d op:%v\n", self.me, op_number, limit, operation))
-    self.perform_operation(operation)
-    output_debug(fmt.Sprintf("(server%d) Applied: op_num:%d \n", self.me, op_number))
-    op_number = self.last_operation_number() + 1
-    has_decided, operation = paxos_status_op(self.px, op_number)
-  }
-  // next operation not yet known to local paxos instance be decided or limit reached
-}
-
 /*
 Takes a paxos instance and an agreement number and calls px.Status to retrieve
 the value that has been decided upon by the paxos peers.
@@ -166,14 +183,42 @@ func paxos_status_op(px *paxos.Paxos, agreement_number int) (bool, Op){
   return false, Op{}
 }
 
+
+// Methods for Performing ShardMaster Operations
+///////////////////////////////////////////////////////////////////////////////
+
+/*
+Synchronously performs all operations up to but NOT including the 'limit' op_number.
+The set of operations to be performed may not all yet be known to the local paxos
+instance so it will propose No_Ops to discover missing operations.
+*/
+func (self *ShardMaster) perform_operations_prior_to(limit int) {
+  op_number := self.last_operation_number() + 1    // op number currently being performed
+  has_decided, operation := paxos_status_op(self.px, op_number)
+
+  for has_decided && op_number < limit {
+    output_debug(fmt.Sprintf("(server%d) Performing: op_num:%d lim:%d op:%v\n", self.me, op_number, limit, operation))
+    self.perform_operation(op_number, operation)
+    output_debug(fmt.Sprintf("(server%d) Applied: op_num:%d \n", self.me, op_number))
+    op_number = self.last_operation_number() + 1
+    has_decided, operation = paxos_status_op(self.px, op_number)
+  }
+  // next op not yet known to local paxos instance be decided or limit reached
+}
+
+
 /*
 Accepts an Op operation which should be performed locally, reads the name of the
 operation and calls the appropriate handler
 */
-func (self *ShardMaster) perform_operation(operation Op) {
+func (self *ShardMaster) perform_operation(op_number int, operation Op) {
+  output_debug(fmt.Sprintf("(server%d) Performing: op_num:%d op:%v\n", self.me, op_number, operation))
   switch operation.name {
     case "join":
       fmt.Println("Join!!!!")
+      var join_args = (*operation.args).(JoinArgs) // type assertion
+      fmt.Printf("%T, %v\n", join_args, join_args)
+      self.join(&join_args)
     case "leave":
       fmt.Println("Leave!!!!")
     case "move":

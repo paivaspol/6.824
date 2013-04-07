@@ -28,6 +28,28 @@ type Config struct {
   Groups map[int64][]string // gid -> servers[]
 }
 
+func (self *Config) add_replica_group(gid int64, servers []string) {
+  self.Num += 1
+  self.Groups[gid] = servers
+  //self.rebalance()
+}
+
+/*
+Returns a new Config which has the same values as the Config instance copy was
+called on.
+*/
+func (self *Config) copy() Config {
+  var config = Config{Num: self.Num,
+                      Shards: self.Shards,
+                      Groups: make(map[int64][]string)}
+  for key, value := range self.Groups {
+    config.Groups[key] = value
+  }
+  return config
+}
+
+
+
 type Args interface {
 
 }
