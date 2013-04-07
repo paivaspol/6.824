@@ -28,8 +28,16 @@ type Config struct {
   Groups map[int64][]string // gid -> servers[]
 }
 
+type Args interface {
+
+}
+
+type Reply interface {
+
+}
+
 type JoinArgs struct {
-  GID int64       // unique replica group ID
+  GID int64        // unique replica group ID
   Servers []string // group server ports
 }
 
