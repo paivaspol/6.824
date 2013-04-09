@@ -145,6 +145,9 @@ func TestBasic(t *testing.T) {
       t.Fatalf("historical Num wrong")
     }
     if c.Shards != cfa[i].Shards {
+      fmt.Println(i)
+      fmt.Println(c.Shards)
+      fmt.Println(cfa[i].Shards)
       t.Fatalf("historical Shards wrong")
     }
     if len(c.Groups) != len(cfa[i].Groups) {

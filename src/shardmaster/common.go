@@ -58,7 +58,13 @@ Removes a replica group (RG) with the given non-zero GID. Be sure you've reassig
 shards this RG was handling before removing it.
 */
 func (self *Config) remove_replica_group(gid int64) {
+  self.Num += 1
   delete(self.Groups, gid)
+}
+
+func (self *Config) explicit_move(shard_index int, gid int64) {
+  self.Num += 1
+  self.move(shard_index, gid)
 }
 
 /*
@@ -153,6 +159,20 @@ func (self *Config) migrate_lonely_shards() {
   }
   fmt.Println("Done migrating lonely shards")
   return
+}
+
+/*
+Iterates through the Shards array, checking whether any shards were assigned to the passed
+gid. Any that are found are moved to a minimally loaded replica group in preparation for 
+the removal of the specified replica group.
+*/
+func (self *Config) shards_to_invalid(bad_gid int64) {
+  for shard_index, gid := range self.Shards {
+    if gid == bad_gid {
+      min_rg, _ := self.minimally_loaded()
+      self.move(shard_index, min_rg)
+    }
+  }
 }
 
 /*

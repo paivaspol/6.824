@@ -91,18 +91,38 @@ func (self *ShardMaster) Join(args *JoinArgs, reply *JoinReply) error {
   return nil
 }
 
-func (sm *ShardMaster) Leave(args *LeaveArgs, reply *LeaveReply) error {
-  // Your code here.
-  output_debug(fmt.Sprintf("(server%d) Leave \n", sm.me))
+func (self *ShardMaster) Leave(args *LeaveArgs, reply *LeaveReply) error {
+  var operation Op
+  var agreement_number int
+
+  output_debug(fmt.Sprintf("(server%d) Leave %d\n", self.me, args.GID))
+  operation = makeOp(Leave, *args)
+
+  // synchronous call returns once paxos agreement reached
+  agreement_number = self.paxos_agree(operation)
+  output_debug(fmt.Sprintf("(server%d) Leave agreement \n", self.me))
+  // synchronous call, waits for operations up to limit to be performed
+  self.perform_operations_prior_to(agreement_number)
+  self.perform_operation(agreement_number, operation)    // perform requested op
 
 
   return nil
 }
 
-func (sm *ShardMaster) Move(args *MoveArgs, reply *MoveReply) error {
+func (self *ShardMaster) Move(args *MoveArgs, reply *MoveReply) error {
   // Your code here.
-  output_debug(fmt.Sprintf("(server%d) Move \n", sm.me))
+  output_debug(fmt.Sprintf("(server%d) Move Shard:%d, GID:%d\n", self.me, args.Shard, args.GID))
+  var operation Op
+  var agreement_number int
 
+  operation = makeOp(Move, *args)
+
+  // synchronous call returns once paxos agreement reached
+  agreement_number = self.paxos_agree(operation)
+  output_debug(fmt.Sprintf("(server%d) Move agreement \n", self.me))
+  // synchronous call, waits for operations up to limit to be performed
+  self.perform_operations_prior_to(agreement_number)
+  self.perform_operation(agreement_number, operation)    // perform requested op
 
   return nil
 }
@@ -145,26 +165,41 @@ func (self *ShardMaster) join(args *JoinArgs) Result {
 }
 
 func (self *ShardMaster) leave(args *LeaveArgs) Result {
+  fmt.Println("Performing Leave", args.GID)
+  prior_config := self.configs[len(self.configs)-1]   // previous Config in ShardMaster.configs
+  config := prior_config.copy()                       // newly created Config
+  config.remove_replica_group(args.GID)
 
-  fmt.Println("Performing Leave!!!!")
+  config.shards_to_invalid(args.GID)
+  config.migrate_lonely_shards()
+  config.rebalance(1)
+  self.configs = append(self.configs, config)
+  fmt.Println(self.configs)
+  return nil
 
   return nil
 }
 
 func (self *ShardMaster) move(args *MoveArgs) Result {
-  
-
   fmt.Println("Performing Move!!!!!")
-
+  prior_config := self.configs[len(self.configs)-1]   // previous Config in ShardMaster.configs
+  config := prior_config.copy()                       // newly created Config
+  config.explicit_move(args.Shard, args.GID)
+  // DO NOT rebalance. An explicit move was made by the administrator.
+  // TODO: figure out exactly when migrate lonely shards should be done
+  self.configs = append(self.configs, config)
+  fmt.Println(self.configs)
   return nil
 }
 
 func (self *ShardMaster) query(args *QueryArgs) Result {
-  
-
   fmt.Println("Performing Query!!!")
-  // Fetch latest Config
-  return self.configs[len(self.configs)-1]
+  if args.Num == -1 {
+    // Fetch latest Config
+    return self.configs[len(self.configs)-1]
+  }
+  // TODO need to check bounds
+  return self.configs[args.Num] 
 }
 
 
