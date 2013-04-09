@@ -28,12 +28,6 @@ type Config struct {
   Groups map[int64][]string // gid -> servers[]
 }
 
-func (self *Config) add_replica_group(gid int64, servers []string) {
-  self.Num += 1
-  self.Groups[gid] = servers
-  //self.rebalance()
-}
-
 /*
 Returns a new Config which has the same values as the Config instance copy was
 called on.
@@ -47,6 +41,18 @@ func (self *Config) copy() Config {
   }
   return config
 }
+
+/*
+Adds a new replica group (RG) with the given non-zero GID and the slice of server ports
+of the replica servers (i.e. shardkv instances) that compose the replica group.
+*/
+func (self *Config) add_replica_group(gid int64, servers []string) {
+  self.Num += 1
+  self.Groups[gid] = servers
+}
+
+
+
 
 
 
