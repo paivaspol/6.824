@@ -127,10 +127,12 @@ func (self *ShardMaster) join(args *JoinArgs) {
 
   fmt.Println("Performing Join", args.GID, args.Servers, self.configs)
   prior_config := self.configs[len(self.configs)-1]   // previous Config in ShardMaster.configs
+
   config := prior_config.copy()                       // newly created Config
 
   config.add_replica_group(args.GID, args.Servers)
-  //config.rebalance()
+  config.migrate_lonely_shards()
+  config.rebalance(1)
   self.configs = append(self.configs, config)
   fmt.Println(self.configs)
 }
