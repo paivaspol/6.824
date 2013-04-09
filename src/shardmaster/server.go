@@ -1,17 +1,19 @@
 package shardmaster
 
-import "net"
-import "fmt"
-import "net/rpc"
-import "log"
-import "paxos"
-import "sync"
-import "os"
-import "syscall"
-import "encoding/gob"
-import "math/rand"
-import "time"
-import "reflect"
+import (
+  "net"
+  "fmt"
+  "net/rpc"
+  "log"
+  "paxos"
+  "sync"
+  "os"
+  "syscall"
+  "encoding/gob"
+  "math/rand"
+  //"reflect"
+  "time"
+)
 
 type ShardMaster struct {
   mu sync.Mutex
@@ -24,30 +26,50 @@ type ShardMaster struct {
   operation_number int  // agreement number of latest applied operation
 }
 
-const = (
+const (
   Join = "Join"
   Leave = "Leave"
   Move = "Move"
   Query = "Query"
+  Noop = "Noop"
 )
 
-// type Op struct {
-//   name string     // Operation name: Join, Leave, Move, Query, Noop
-//   args Args
-// }
-
-// func makeOp(name string, args Args) (Op) {
-//   return Op{name: name,
-//             args: args,
-//             }
-// }
+func strange(business interface{}) interface{} {
+  return business
+}
 
 type Op struct {
-  name string        // Operation name: Join, Leave, Move, Query, Noop
-  gid int64          // Arg for Join, Leave, Move
-  servers []string   // Arg for Join
-  shard int          // Arg for Move
-  num int            // Arg for Query
+  id string       // uuid
+  name string     // Operation name: Join, Leave, Move, Query, Noop
+  args interface{}
+}
+
+func makeOp(name string, args Args) (Op) {
+  return Op{name: name,
+            args: args,
+            }
+}
+
+// type Op struct {
+//   name string        // Operation name: Join, Leave, Move, Query, Noop
+//   gid int64          // Arg for Join, Leave, Move
+//   servers []string   // Arg for Join
+//   shard int          // Arg for Move
+//   num int            // Arg for Query
+// }
+
+/*
+TODO: Does not actually return a UUID according to standards. Just a random
+in which suffices for now.
+*/
+func generate_uuid() int {
+  return rand.Int()
+}
+
+type Food struct {
+  calories int
+  GID int64
+  Servers []string
 }
 
 /*
@@ -56,12 +78,26 @@ all operations up to and including the requested operation.
 Does not return until requested operation has been applied.
 */
 func (self *ShardMaster) Join(args *JoinArgs, reply *JoinReply) error {
-  output_debug(fmt.Sprintf("(server%d) Join \n", self.me))
-  fmt.Println(args.GID, args.Servers, self.configs)
-  operation := makeOp("join", *args)
+  var operation Op
+  var agreement_number int
+  var result interface{}
+
+  output_debug(fmt.Sprintf("(server%d) Join %d %v %v\n", self.me, args.GID, args.Servers, self.configs))
+  //operation = makeOp(Join, *args)
+  var tiger_food = Food{calories: 1000}
+  operation = Op{name: Join, args: tiger_food}
+  // operation := Op{name: "Join",
+  //                 gid: args.GID,
+  //                 servers: args.Servers,
+  //                 }
+
+  result = strange(operation)
+  fmt.Printf("%T, %+v\n", operation, operation)
+  fmt.Printf("%T, %+v\n", result, result)
+  fmt.Println(result.(Op).name == operation.name)
 
   // synchronous call returns once paxos agreement reached
-  agreement_number := self.paxos_agree(operation)
+  agreement_number = self.paxos_agree(operation)
   output_debug(fmt.Sprintf("(server%d) Join agreement \n", self.me))
 
   // synchronous call, waits for operations up to limit to be performed
@@ -145,30 +181,39 @@ the operation. Will not return until agreement is reached.
 */
 func (self *ShardMaster) paxos_agree(operation Op) (int) {
   var agreement_number int
+  var result interface{}
   var decided_operation = Op{}
-  var reflect.Value
+
+  fmt.Printf("%T, %+v\n", operation, operation)
+
 
   for decided_operation != operation {
     fmt.Println("Comparison")
     agreement_number = self.available_agreement_number()
     self.px.Start(agreement_number, operation)
+    //result = self.await_paxos_decision(agreement_number)
+    result = strange(operation)
+
+    fmt.Printf("%T, %+v\n", result, result)
+
+    fmt.Println(result == operation)
+
+
     //decided_operation = self.await_paxos_decision(agreement_number).(Op)  // type assertion
-    decided_operation := self.await_paxos_decision(agreement_number).(Op)
 
-    fmt.Printf("%T, %v\n", operation.args, operation.args)
-    fmt.Printf("%T, %v\n", decided_operation.args, decided_operation.args)
+    // fmt.Printf("%T, %v\n", operation.args, operation.args)
+    // fmt.Printf("%T, %v\n", decided_operation.args, decided_operation.args)
 
-    val = reflect.ValueOf(decided_operation.args)
-    decided_operation = val.(reflect.Typeof
-    fmt.Printf("%T, %v\n", decided_operation.args, decided_operation.args)
+    // val = reflect.ValueOf(decided_operation.args)
+    // decided_operation = val.(reflect.Typeof
+    // fmt.Printf("%T, %v\n", decided_operation.args, decided_operation.args)
 
-    fmt.Println(operation == decided_operation)
-    fmt.Println(operation)
-    fmt.Println(decided_operation)
-    fmt.Println("Success")
-    fmt.Println(reflect.TypeOf(decided_operation))
+    // fmt.Println(operation == decided_operation)
+    // fmt.Println(operation)
+    // fmt.Println(decided_operation)
+    // fmt.Println("Success")
+    // fmt.Println(reflect.TypeOf(decided_operation))
   }
-  fmt.Println("Never made it here")
   return agreement_number
 }
 

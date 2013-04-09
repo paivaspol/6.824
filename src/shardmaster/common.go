@@ -50,9 +50,7 @@ func (self *Config) copy() Config {
 
 
 
-type Args interface {
-
-}
+type Args interface {}
 
 type Reply interface {
 
