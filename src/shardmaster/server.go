@@ -65,11 +65,12 @@ Does not return until requested operation has been applied.
 */
 func (self *ShardMaster) Join(args *JoinArgs, reply *JoinReply) error {
   operation := makeOp(Join, *args)                    // requested Op
-  fmt.Println(operation)
+  output_debug(fmt.Sprintf("(server%d) Join op:%v", self.me, operation))
   agreement_number := self.paxos_agree(operation)     // sync call returns after agreement reached
   output_debug(fmt.Sprintf("(server%d) Join op_num:%d add:%d", self.me, agreement_number, args.GID))
   
   self.perform_operations_prior_to(agreement_number)  // sync call, operations up to limit performed
+  output_debug(fmt.Sprintf("(server%d) Join(completedprior) op_num:%d add:%d", self.me, agreement_number, args.GID))
   self.perform_operation(agreement_number, operation) // perform requested Op
   
   // JoinReply does not have fields that must be populated
@@ -126,10 +127,11 @@ func (self *ShardMaster) paxos_agree(operation Op) (int) {
 
   for decided_operation.id != operation.id {
     agreement_number = self.available_agreement_number()
-    fmt.Printf("Proposing %+v with agreement_number:%d\n", operation, agreement_number)
+    //fmt.Printf("Proposing %+v with agreement_number:%d\n", operation, agreement_number)
     self.px.Start(agreement_number, operation)
     decided_operation = self.await_paxos_decision(agreement_number).(Op)  // type assertion
   }
+  output_debug(fmt.Sprintf("(server%d) Decided op_num:%d op:%v", self.me, agreement_number, decided_operation))
   return agreement_number
 }
 
@@ -171,7 +173,6 @@ panics if the paxos value is not an Op.
 */
 func (self *ShardMaster) px_status_op(agreement_number int) (bool, Op){
   has_decided, value := self.px.Status(agreement_number)
-  fmt.Println(agreement_number, has_decided, value)
   if has_decided {
     operation, ok := value.(Op)    // type assertion, Op expected
     if ok {
@@ -195,10 +196,8 @@ func (self *ShardMaster) perform_operations_prior_to(limit int) {
   op_number := self.last_operation_number() + 1    // op number currently being performed
   has_decided, operation := self.px_status_op(op_number)
 
-  for op_number < limit {       // continue looping until op_number == limit - 1 has been performed
-    fmt.Println(has_decided, operation)
-    
-    output_debug(fmt.Sprintf("(server%d) Performing: op_num:%d lim:%d op:%v\n", self.me, op_number, limit, operation))
+  for op_number < limit {       // continue looping until op_number == limit - 1 has been performed   
+    output_debug(fmt.Sprintf("(server%d) Performing_prior_to:%d op:%d op:%v %t\n", self.me, limit, op_number, operation, has_decided))
     self.perform_operation(op_number, operation)
     output_debug(fmt.Sprintf("(server%d) Applied: op_num:%d \n", self.me, op_number))
     op_number = self.last_operation_number() + 1
@@ -242,7 +241,9 @@ func (self *ShardMaster) perform_operation(op_number int, operation Op) Result {
     default:
       panic(fmt.Sprintf("unexpected Op name '%s' cannot be performed", operation.name))
   }
-  self.operation_number = op_number                   // latest operation that has been applied
+  self.operation_number = op_number     // latest operation that has been applied
+  self.px.Done(op_number)               // local Paxos no longer needs to remember Op
+  output_debug(fmt.Sprintf("(server%d) Preformed: op_num:%d op:%v", self.me, op_number, operation))
   fmt.Println(result)
   return result
 }
