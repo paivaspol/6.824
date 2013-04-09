@@ -11,6 +11,7 @@ import "syscall"
 import "encoding/gob"
 import "math/rand"
 import "time"
+import "reflect"
 
 type ShardMaster struct {
   mu sync.Mutex
@@ -23,18 +24,31 @@ type ShardMaster struct {
   operation_number int  // agreement number of latest applied operation
 }
 
+const = (
+  Join = "Join"
+  Leave = "Leave"
+  Move = "Move"
+  Query = "Query"
+)
+
+// type Op struct {
+//   name string     // Operation name: Join, Leave, Move, Query, Noop
+//   args Args
+// }
+
+// func makeOp(name string, args Args) (Op) {
+//   return Op{name: name,
+//             args: args,
+//             }
+// }
+
 type Op struct {
-  name string     // Operation name: Join, Leave, Move, Query
-  args *Args
-  // Your data here.
+  name string        // Operation name: Join, Leave, Move, Query, Noop
+  gid int64          // Arg for Join, Leave, Move
+  servers []string   // Arg for Join
+  shard int          // Arg for Move
+  num int            // Arg for Query
 }
-
-func makeOp(name string, args Args) (Op) {
-  return Op{name: name,
-            args: &args,
-            }
-}
-
 
 /*
 Accepts a Join request, starts and awaits Paxos agreement for the op, and performs
@@ -43,16 +57,17 @@ Does not return until requested operation has been applied.
 */
 func (self *ShardMaster) Join(args *JoinArgs, reply *JoinReply) error {
   output_debug(fmt.Sprintf("(server%d) Join \n", self.me))
-  fmt.Println(args.GID)
-  fmt.Println(args.Servers)
-  fmt.Println(self.configs)
-
+  fmt.Println(args.GID, args.Servers, self.configs)
   operation := makeOp("join", *args)
+
   // synchronous call returns once paxos agreement reached
   agreement_number := self.paxos_agree(operation)
+  output_debug(fmt.Sprintf("(server%d) Join agreement \n", self.me))
+
   // synchronous call, waits for operations up to limit to be performed
   self.perform_operations_prior_to(agreement_number)
   self.perform_operation(agreement_number, operation)    // perform requested op
+
   return nil
 }
 
@@ -72,9 +87,16 @@ func (sm *ShardMaster) Move(args *MoveArgs, reply *MoveReply) error {
   return nil
 }
 
-func (sm *ShardMaster) Query(args *QueryArgs, reply *QueryReply) error {
-  // Your code here.
-  output_debug(fmt.Sprintf("(server%d) Query \n", sm.me))
+func (self *ShardMaster) Query(args *QueryArgs, reply *QueryReply) error {
+  output_debug(fmt.Sprintf("(server%d) Query \n", self.me))
+  //fmt.Println(args.GID, args.Servers, self.configs)
+  // operation := makeOp("query", *args)
+
+  // // synchronous call returns once paxos agreement reached
+  // agreement_number := self.paxos_agree(operation)
+  // // synchronous call, waits for operations up to limit to be performed
+  // self.perform_operations_prior_to(agreement_number)
+  // self.perform_operation(agreement_number, operation)    // perform requested op
 
   return nil
 }
@@ -124,17 +146,34 @@ the operation. Will not return until agreement is reached.
 func (self *ShardMaster) paxos_agree(operation Op) (int) {
   var agreement_number int
   var decided_operation = Op{}
+  var reflect.Value
 
   for decided_operation != operation {
+    fmt.Println("Comparison")
     agreement_number = self.available_agreement_number()
     self.px.Start(agreement_number, operation)
-    decided_operation = self.await_paxos_decision(agreement_number).(Op)  // type assertion
+    //decided_operation = self.await_paxos_decision(agreement_number).(Op)  // type assertion
+    decided_operation := self.await_paxos_decision(agreement_number).(Op)
+
+    fmt.Printf("%T, %v\n", operation.args, operation.args)
+    fmt.Printf("%T, %v\n", decided_operation.args, decided_operation.args)
+
+    val = reflect.ValueOf(decided_operation.args)
+    decided_operation = val.(reflect.Typeof
+    fmt.Printf("%T, %v\n", decided_operation.args, decided_operation.args)
+
+    fmt.Println(operation == decided_operation)
+    fmt.Println(operation)
+    fmt.Println(decided_operation)
+    fmt.Println("Success")
+    fmt.Println(reflect.TypeOf(decided_operation))
   }
+  fmt.Println("Never made it here")
   return agreement_number
 }
 
 /*
-Returns the decision reached by the paxos peers for the given agreement_number. 
+Returns the decision value reached by the paxos peers for the given agreement_number. 
 This is done by calling the Status method of the local Paxos instance periodically,
 frequently at first and less frequently later, using binary exponential backoff.
 */
@@ -215,16 +254,16 @@ func (self *ShardMaster) perform_operation(op_number int, operation Op) {
   output_debug(fmt.Sprintf("(server%d) Performing: op_num:%d op:%v\n", self.me, op_number, operation))
   switch operation.name {
     case "join":
-      fmt.Println("Join!!!!")
-      var join_args = (*operation.args).(JoinArgs) // type assertion
-      fmt.Printf("%T, %v\n", join_args, join_args)
-      self.join(&join_args)
+      fmt.Println("Performing Join!!!!")
+      //var join_args = (*operation.args).(JoinArgs) // type assertion
+      //fmt.Printf("%T, %v\n", join_args, join_args)
+      //self.join(&join_args)
     case "leave":
-      fmt.Println("Leave!!!!")
+      fmt.Println("Performing Leave!!!!")
     case "move":
-      fmt.Println("Move!!!!!")
+      fmt.Println("Performing Move!!!!!")
     case "query":
-      fmt.Println("Query!!!")
+      fmt.Println("Performing Query!!!")
     default:
       panic("unexpected Op name cannot be performed")
   }
