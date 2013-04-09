@@ -13,8 +13,28 @@ import (
   "math/rand"
   //"reflect"
   "time"
-  "strconv"
 )
+
+const (
+  Join = "Join"
+  Leave = "Leave"
+  Move = "Move"
+  Query = "Query"
+  Noop = "Noop"
+)
+
+type Op struct {
+  id string       // uuid
+  name string     // Operation name: Join, Leave, Move, Query, Noop
+  args Args       // Args may be a JoinArgs, LeaveArgs, MoveArgs, or QueryArgs
+}
+
+func makeOp(name string, args Args) (Op) {
+  return Op{id: generate_uuid(),
+            name: name,
+            args: args,
+            }
+}
 
 type ShardMaster struct {
   mu sync.Mutex
@@ -27,40 +47,6 @@ type ShardMaster struct {
   operation_number int  // agreement number of latest applied operation
 }
 
-const (
-  Join = "Join"
-  Leave = "Leave"
-  Move = "Move"
-  Query = "Query"
-  Noop = "Noop"
-)
-
-func strange(business interface{}) interface{} {
-  return business
-}
-
-type Op struct {
-  id string       // uuid
-  name string     // Operation name: Join, Leave, Move, Query, Noop
-  args Args
-}
-
-func makeOp(name string, args Args) (Op) {
-  return Op{id: generate_uuid(),
-            name: name,
-            args: args,
-            }
-}
-
-
-/*
-TODO: Does not actually return a UUID according to standards. Just a random
-in which suffices for now.
-*/
-func generate_uuid() string {
-  return strconv.Itoa(rand.Int())
-}
-
 /*
 Return the last operation_number that was performed on the local configuration 
 state
@@ -69,140 +55,62 @@ func (self *ShardMaster) last_operation_number() int {
   return self.operation_number
 }
 
+// Exported RPC functions (called by ShardMaster clients)
+////////////////////////////////////////////////////////////////////////////
+
 /*
 Accepts a Join request, starts and awaits Paxos agreement for the op, and performs
 all operations up to and including the requested operation.
 Does not return until requested operation has been applied.
 */
 func (self *ShardMaster) Join(args *JoinArgs, reply *JoinReply) error {
-  var operation Op
-  var agreement_number int
-
-  output_debug(fmt.Sprintf("(server%d) Join %d %v %v\n", self.me, args.GID, args.Servers, self.configs))
-  operation = makeOp(Join, *args)
-
-  // synchronous call returns once paxos agreement reached
-  agreement_number = self.paxos_agree(operation)
-  output_debug(fmt.Sprintf("(server%d) Join agreement \n", self.me))
-  // synchronous call, waits for operations up to limit to be performed
-  self.perform_operations_prior_to(agreement_number)
-  self.perform_operation(agreement_number, operation)    // perform requested op
-
+  operation := makeOp(Join, *args)                    // requested Op
+  fmt.Println(operation)
+  agreement_number := self.paxos_agree(operation)     // sync call returns after agreement reached
+  output_debug(fmt.Sprintf("(server%d) Join op_num:%d add:%d", self.me, agreement_number, args.GID))
+  
+  self.perform_operations_prior_to(agreement_number)  // sync call, operations up to limit performed
+  self.perform_operation(agreement_number, operation) // perform requested Op
+  
+  // JoinReply does not have fields that must be populated
   return nil
 }
 
 func (self *ShardMaster) Leave(args *LeaveArgs, reply *LeaveReply) error {
-  var operation Op
-  var agreement_number int
+  operation := makeOp(Leave, *args)                   // requested Op
+  agreement_number := self.paxos_agree(operation)     // sync call returns after agreement reached
+  output_debug(fmt.Sprintf("(server%d) Leave op_num:%d remove:%d", self.me, agreement_number, args.GID))
 
-  output_debug(fmt.Sprintf("(server%d) Leave %d\n", self.me, args.GID))
-  operation = makeOp(Leave, *args)
-
-  // synchronous call returns once paxos agreement reached
-  agreement_number = self.paxos_agree(operation)
-  output_debug(fmt.Sprintf("(server%d) Leave agreement \n", self.me))
-  // synchronous call, waits for operations up to limit to be performed
-  self.perform_operations_prior_to(agreement_number)
-  self.perform_operation(agreement_number, operation)    // perform requested op
-
-
+  self.perform_operations_prior_to(agreement_number)  // sync call, operations up to limit performed
+  self.perform_operation(agreement_number, operation) // perform requested Op
+  
+  // LeaveReply does not have fields that must be populated
   return nil
 }
 
 func (self *ShardMaster) Move(args *MoveArgs, reply *MoveReply) error {
-  // Your code here.
-  output_debug(fmt.Sprintf("(server%d) Move Shard:%d, GID:%d\n", self.me, args.Shard, args.GID))
-  var operation Op
-  var agreement_number int
+  operation := makeOp(Move, *args)                    // requested Op
+  agreement_number := self.paxos_agree(operation)     // sync call returns after agreement reached
+  output_debug(fmt.Sprintf("(server%d) Move op_num:%d shard:%d moveto:%d", self.me, agreement_number, args.Shard, args.GID))
 
-  operation = makeOp(Move, *args)
-
-  // synchronous call returns once paxos agreement reached
-  agreement_number = self.paxos_agree(operation)
-  output_debug(fmt.Sprintf("(server%d) Move agreement \n", self.me))
-  // synchronous call, waits for operations up to limit to be performed
-  self.perform_operations_prior_to(agreement_number)
-  self.perform_operation(agreement_number, operation)    // perform requested op
-
+  self.perform_operations_prior_to(agreement_number)  // sync call, operations up to limit performed
+  self.perform_operation(agreement_number, operation) // perform requested Op
+  
+  // MoveReply does not have fields that must be populated
   return nil
 }
 
 func (self *ShardMaster) Query(args *QueryArgs, reply *QueryReply) error {
-  var operation Op
-  var agreement_number int
+  operation := makeOp(Query, *args)                   // requested Op
+  agreement_number := self.paxos_agree(operation)     // sync call returns after agreement reached
+  output_debug(fmt.Sprintf("(server%d) Query op_num:%d config_num:%d", self.me, agreement_number, args.Num))
 
-  output_debug(fmt.Sprintf("(server%d) Query %d\n", self.me, args.Num))
-  operation = makeOp(Query, *args)
-
-  // synchronous call returns once paxos agreement reached
-  agreement_number = self.paxos_agree(operation)
-  output_debug(fmt.Sprintf("(server%d) Query agreement", self.me))
-  // synchronous call, waits for operations up to limit to be performed
-  self.perform_operations_prior_to(agreement_number)
-  result := self.perform_operation(agreement_number, operation)    // perform requested op
-
-  fmt.Println(result)
-  reply.Config = result.(Config)   // type assertion
-
-  return nil
- 
-}
-
-
-func (self *ShardMaster) join(args *JoinArgs) Result {
+  self.perform_operations_prior_to(agreement_number)  // sync call, operations up to limit performed
+  config := self.perform_operation(agreement_number, operation) // perform requested Op
   
-  fmt.Println("Performing Join", args.GID, args.Servers, self.configs)
-  prior_config := self.configs[len(self.configs)-1]   // previous Config in ShardMaster.configs
-
-  config := prior_config.copy()                       // newly created Config
-
-  config.add_replica_group(args.GID, args.Servers)
-  config.migrate_lonely_shards()
-  config.rebalance(1)
-  self.configs = append(self.configs, config)
-  fmt.Println(self.configs)
+  reply.Config = config.(Config)                      // type assertion
   return nil
 }
-
-func (self *ShardMaster) leave(args *LeaveArgs) Result {
-  fmt.Println("Performing Leave", args.GID)
-  prior_config := self.configs[len(self.configs)-1]   // previous Config in ShardMaster.configs
-  config := prior_config.copy()                       // newly created Config
-  config.remove_replica_group(args.GID)
-
-  config.shards_to_invalid(args.GID)
-  config.migrate_lonely_shards()
-  config.rebalance(1)
-  self.configs = append(self.configs, config)
-  fmt.Println(self.configs)
-  return nil
-
-  return nil
-}
-
-func (self *ShardMaster) move(args *MoveArgs) Result {
-  fmt.Println("Performing Move!!!!!")
-  prior_config := self.configs[len(self.configs)-1]   // previous Config in ShardMaster.configs
-  config := prior_config.copy()                       // newly created Config
-  config.explicit_move(args.Shard, args.GID)
-  // DO NOT rebalance. An explicit move was made by the administrator.
-  // TODO: figure out exactly when migrate lonely shards should be done
-  self.configs = append(self.configs, config)
-  fmt.Println(self.configs)
-  return nil
-}
-
-func (self *ShardMaster) query(args *QueryArgs) Result {
-  fmt.Println("Performing Query!!!")
-  if args.Num == -1 {
-    // Fetch latest Config
-    return self.configs[len(self.configs)-1]
-  }
-  // TODO need to check bounds
-  return self.configs[args.Num] 
-}
-
-
 
 // Methods for Using the Paxos Library
 ///////////////////////////////////////////////////////////////////////////////
@@ -218,6 +126,7 @@ func (self *ShardMaster) paxos_agree(operation Op) (int) {
 
   for decided_operation.id != operation.id {
     agreement_number = self.available_agreement_number()
+    fmt.Printf("Proposing %+v with agreement_number:%d\n", operation, agreement_number)
     self.px.Start(agreement_number, operation)
     decided_operation = self.await_paxos_decision(agreement_number).(Op)  // type assertion
   }
@@ -262,6 +171,7 @@ panics if the paxos value is not an Op.
 */
 func (self *ShardMaster) px_status_op(agreement_number int) (bool, Op){
   has_decided, value := self.px.Status(agreement_number)
+  fmt.Println(agreement_number, has_decided, value)
   if has_decided {
     operation, ok := value.(Op)    // type assertion, Op expected
     if ok {
@@ -285,7 +195,9 @@ func (self *ShardMaster) perform_operations_prior_to(limit int) {
   op_number := self.last_operation_number() + 1    // op number currently being performed
   has_decided, operation := self.px_status_op(op_number)
 
-  for has_decided && op_number < limit {
+  for op_number < limit {       // continue looping until op_number == limit - 1 has been performed
+    fmt.Println(has_decided, operation)
+    
     output_debug(fmt.Sprintf("(server%d) Performing: op_num:%d lim:%d op:%v\n", self.me, op_number, limit, operation))
     self.perform_operation(op_number, operation)
     output_debug(fmt.Sprintf("(server%d) Applied: op_num:%d \n", self.me, op_number))
@@ -307,8 +219,10 @@ latest operation which has been performed (performed in increasing order).
 func (self *ShardMaster) perform_operation(op_number int, operation Op) Result {
   self.mu.Lock()
   defer self.mu.Unlock()
-  output_debug(fmt.Sprintf("(server%d) Performing: op_num:%d op:%v\n", self.me, op_number, operation))
+
+  output_debug(fmt.Sprintf("(server%d) Performing: op_num:%d op:%v", self.me, op_number, operation))
   var result Result
+
   switch operation.name {
     case "Join":
       var join_args = (operation.args).(JoinArgs)     // type assertion, Args is a JoinArgs
@@ -326,18 +240,79 @@ func (self *ShardMaster) perform_operation(op_number int, operation Op) Result {
       fmt.Println("Performing Noop!!!")
       result = 3
     default:
-      panic("unexpected Op name cannot be performed")
-      //result = 5
+      panic(fmt.Sprintf("unexpected Op name '%s' cannot be performed", operation.name))
   }
   self.operation_number = op_number                   // latest operation that has been applied
+  fmt.Println(result)
   return result
 }
 
+// ShardMaster RPC operations (internal, performed after paxos agreement)
+///////////////////////////////////////////////////////////////////////////////
 
+/*
+Creates a new Config by adding a new replica group, attempts to promote shards on invalid 
+replica groups to valid replica groups (one may be available after adding a RG), and 
+rebalances the shards.
+Mutates ShardMaster.configs slice to append the new Config. Caller responsible for obtaining
+a ShardMaster lock.
+*/
+func (self *ShardMaster) join(args *JoinArgs) Result {
+  prior_config := self.configs[len(self.configs)-1]   // previous Config in ShardMaster.configs
+  config := prior_config.copy()                       // newly created Config
 
+  config.add_replica_group(args.GID, args.Servers)
+  config.promote_shards_from_nonvalids()
+  config.rebalance(1)
+  self.configs = append(self.configs, config)
+  return nil
+}
 
+/*
+Creates a new Config by removing a replica group, reassigning shards that were assigned to
+the RG to minimally loaded RGs, and rebalances the shards.
+Mutates ShardMaster.configs slice to append the new Config. Caller responsible for obtaining
+a ShardMaster lock.
+*/
+func (self *ShardMaster) leave(args *LeaveArgs) Result {
+  prior_config := self.configs[len(self.configs)-1]   // previous Config in ShardMaster.configs
+  config := prior_config.copy()                       // newly created Config
+  
+  config.remove_replica_group(args.GID)
+  config.reassign_shards(args.GID)
+  config.rebalance(1)
+  self.configs = append(self.configs, config)
+  return nil
+}
 
+/*
+Creates a new Config by moving the specified shard to the speicifed replica group gid and
+assumes that the gid is allowed (does not validate against Config.Groups).
+Mutates ShardMaster.configs slice to append the new Config. Caller responsible for obtaining
+a ShardMaster lock.
+*/
+func (self *ShardMaster) move(args *MoveArgs) Result {
+  prior_config := self.configs[len(self.configs)-1]   // previous Config in ShardMaster.configs
+  config := prior_config.copy()                       // newly created Config
+  
+  config.explicit_move(args.Shard, args.GID)
+  // DO NOT rebalance. An explicit move was made by the administrator.
+  // TODO: figure out exactly when migrate lonely shards should be done
+  self.configs = append(self.configs, config)
+  return nil
+}
 
+/*
+Returns the Config numbered with the specified Num or returns the latest Config otherwise,
+such as if Num = -1.
+*/
+func (self *ShardMaster) query(args *QueryArgs) Result {
+  if args.Num >= 0 && args.Num <= (len(self.configs) - 1) {
+    return self.configs[args.Num]
+  } 
+  // Otherwise, fetch the latest Config
+  return self.configs[len(self.configs)-1]
+}
 
 
 
