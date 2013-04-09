@@ -52,13 +52,6 @@ func makeOp(name string, args Args) (Op) {
             }
 }
 
-// type Op struct {
-//   name string        // Operation name: Join, Leave, Move, Query, Noop
-//   gid int64          // Arg for Join, Leave, Move
-//   servers []string   // Arg for Join
-//   shard int          // Arg for Move
-//   num int            // Arg for Query
-// }
 
 /*
 TODO: Does not actually return a UUID according to standards. Just a random
@@ -115,16 +108,29 @@ func (sm *ShardMaster) Move(args *MoveArgs, reply *MoveReply) error {
 }
 
 func (self *ShardMaster) Query(args *QueryArgs, reply *QueryReply) error {
-  output_debug(fmt.Sprintf("(server%d) Query \n", self.me))
- 
+  var operation Op
+  var agreement_number int
+
+  output_debug(fmt.Sprintf("(server%d) Query %d\n", self.me, args.Num))
+  operation = makeOp(Query, *args)
+
+  // synchronous call returns once paxos agreement reached
+  agreement_number = self.paxos_agree(operation)
+  output_debug(fmt.Sprintf("(server%d) Query agreement", self.me))
+  // synchronous call, waits for operations up to limit to be performed
+  self.perform_operations_prior_to(agreement_number)
+  result := self.perform_operation(agreement_number, operation)    // perform requested op
+
+  fmt.Println(result)
+  reply.Config = result.(Config)   // type assertion
+
   return nil
+ 
 }
 
 
-func (self *ShardMaster) join(args *JoinArgs) {
-  self.mu.Lock()
-  defer self.mu.Unlock()
-
+func (self *ShardMaster) join(args *JoinArgs) Result {
+  
   fmt.Println("Performing Join", args.GID, args.Servers, self.configs)
   prior_config := self.configs[len(self.configs)-1]   // previous Config in ShardMaster.configs
 
@@ -135,32 +141,30 @@ func (self *ShardMaster) join(args *JoinArgs) {
   config.rebalance(1)
   self.configs = append(self.configs, config)
   fmt.Println(self.configs)
+  return nil
 }
 
-func (self *ShardMaster) leave(args *LeaveArgs) {
-  self.mu.Lock()
-  defer self.mu.Unlock()
+func (self *ShardMaster) leave(args *LeaveArgs) Result {
 
   fmt.Println("Performing Leave!!!!")
 
-
+  return nil
 }
 
-func (self *ShardMaster) move(args *MoveArgs) {
-  self.mu.Lock()
-  defer self.mu.Unlock()
+func (self *ShardMaster) move(args *MoveArgs) Result {
+  
 
   fmt.Println("Performing Move!!!!!")
 
-
+  return nil
 }
 
-func (self *ShardMaster) query(args *QueryArgs) {
-  self.mu.Lock()
-  defer self.mu.Unlock()
+func (self *ShardMaster) query(args *QueryArgs) Result {
+  
 
   fmt.Println("Performing Query!!!")
-
+  // Fetch latest Config
+  return self.configs[len(self.configs)-1]
 }
 
 
@@ -259,30 +263,39 @@ func (self *ShardMaster) perform_operations_prior_to(limit int) {
 
 /*
 Accepts an Op operation which should be performed locally, reads the name of the
-operation and calls the appropriate handler
+operation and calls the appropriate handler by passing the operation arguments.
+Obtains a Lock on the Server to perform the operation which mutates the Configs slice
+so individual operations do not need to worry about obtaining locks. Returns the Result 
+returned by the called operation and increments the ShardMaster operation_number to the
+latest operation which has been performed (performed in increasing order).
 */
-func (self *ShardMaster) perform_operation(op_number int, operation Op) {
+func (self *ShardMaster) perform_operation(op_number int, operation Op) Result {
+  self.mu.Lock()
+  defer self.mu.Unlock()
   output_debug(fmt.Sprintf("(server%d) Performing: op_num:%d op:%v\n", self.me, op_number, operation))
+  var result Result
   switch operation.name {
     case "Join":
       var join_args = (operation.args).(JoinArgs)     // type assertion, Args is a JoinArgs
-      self.join(&join_args)
+      result = self.join(&join_args)
     case "Leave":
       var leave_args = (operation.args).(LeaveArgs)   // type assertion, Args is a LeaveArgs
-      self.leave(&leave_args)
+      result = self.leave(&leave_args)
     case "Move":
       var move_args = (operation.args).(MoveArgs)     // type assertion, Args is a MoveArgs
-      self.move(&move_args)
+      result = self.move(&move_args)
     case "Query":
       var query_args = (operation.args).(QueryArgs)   // type assertion, Args is a QueryArgs
-      self.query(&query_args)
+      result = self.query(&query_args)
     case "Noop":
       fmt.Println("Performing Noop!!!")
+      result = 3
     default:
       panic("unexpected Op name cannot be performed")
+      //result = 5
   }
-
-
+  self.operation_number = op_number                   // latest operation that has been applied
+  return result
 }
 
 

@@ -140,6 +140,22 @@ func (self *Config) load_diff() int {
 }
 
 /*
+Iterates through the Shards array, checking whether any are assigned to the non-valid RG with
+gid 0. For each that is found, the shard is moved to the minimally loaded RG.
+*/
+func (self *Config) migrate_lonely_shards() {
+  fmt.Println("Migrating lonely shards")
+  for shard_index, gid := range self.Shards {
+    if gid == 0 {                // non-valid RG, used before a Join has occurred.
+      min_rg, _ := self.minimally_loaded()
+      self.move(shard_index, min_rg)
+    }
+  }
+  fmt.Println("Done migrating lonely shards")
+  return
+}
+
+/*
 Performs shard rebalancing using the given migration threshold (diff between max # shards and 
 min # or shards) by moving shards from the maximally loaded RG to the minimally loaded RG in
 order to minimize the number of shard transfers needed to reach a balanced state.
@@ -160,28 +176,8 @@ func (self *Config) rebalance(threshold int) {
         break
       }
     }
-
   }
-  
-
 }
-
-/*
-Iterates through the Shards array, checking whether any are assigned to the non-valid RG with
-gid 0. For each that is found, the shard is moved to the minimally loaded RG.
-*/
-func (self *Config) migrate_lonely_shards() {
-  fmt.Println("Migrating lonely shards")
-  for shard_index, gid := range self.Shards {
-    if gid == 0 {                // non-valid RG, used before a Join has occurred.
-      min_rg, _ := self.minimally_loaded()
-      self.move(shard_index, min_rg)
-    }
-  }
-  fmt.Println("Done migrating lonely shards")
-  return
-}
-
 
 
 
@@ -190,6 +186,8 @@ type Args interface {}
 type Reply interface {
 
 }
+
+type Result interface {}
 
 type JoinArgs struct {
   GID int64        // unique replica group ID
