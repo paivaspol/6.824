@@ -1,5 +1,6 @@
 package paxos
 
+import "fmt"
 
 /* 
 Represents the state stored by a Paxos library instance per Agreement instance.
@@ -15,7 +16,8 @@ type AgreementState struct {
 	proposal_number int           // Proposal number propser is using currently.
 	// Acceptor
 	highest_promised int          // highest proposal number promised in a prepare_ok reply
-	accepted_proposal Proposal   // highest numbered proposal that has been accepted
+	accepted_proposal Proposal    // highest numbered proposal that has been accepted
+	decided_proposal Proposal     // proposal that has been decided on
 }
 
 /*
@@ -46,11 +48,21 @@ func (agrst *AgreementState) set_proposal_number(number int) {
 }
 
 /*
-Sets the value for the decided field of the AgreementState instance
+If decided is false, sets it to true and writes the given proposal as the decided_proposal
+Otherwise, the decision has no effect because a decision has already been reached. Since 
+Paxos should never reach conflicting decisions, this method can be tweaked during debugging
 Caller is responsible for attaining a lock of the AgreementState in some way
 before calling.
 */
-func (agrst *AgreementState) set_decided(decided bool) {
-	agrst.decided = decided
+func (agrst *AgreementState) decision_reached(proposal Proposal) {
+	if !agrst.decided {
+		agrst.decided = true
+		agrst.decided_proposal = proposal
+	} else {
+		if agrst.decided_proposal != proposal {
+			fmt.Println("NOT Equal!!!")
+		}
+	}
+	return
 }
 
