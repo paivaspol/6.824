@@ -15,7 +15,7 @@ type AgreementState struct {
 	proposal_number int           // Proposal number propser is using currently.
 	// Acceptor
 	highest_promised int          // highest proposal number promised in a prepare_ok reply
-	accepted_proposal *Proposal   // highest numbered proposal that has been accepted
+	accepted_proposal Proposal   // highest numbered proposal that has been accepted
 }
 
 /*
@@ -32,7 +32,7 @@ Sets the value for the accepted_proposal field of an AgreementState instance
 Caller is responsible for attaining a lock on the AgreementState in some way
 before calling.
 */
-func (agrst *AgreementState) set_accepted_proposal(proposal *Proposal) {
+func (agrst *AgreementState) set_accepted_proposal(proposal Proposal) {
 	agrst.accepted_proposal = proposal
 }
 

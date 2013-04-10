@@ -78,7 +78,7 @@ func (px *Paxos) Start(agreement_number int, proposal_value interface{}) {
   if !present {
     px.state[agreement_number] = px.make_default_agreementstate()
   }
-  fmt.Printf("Paxos Start (%s): agreement_number: %d, proposal_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_value)
+  //fmt.Printf("Paxos Start (%s): agreement_number: %d, proposal_value: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_value)
 
   // Spawn a thread to construct proposal and act as the proposer
   go px.proposer_role(agreement_number, proposal_value)
@@ -207,9 +207,8 @@ thread execution should stop.
 func (px *Paxos) proposer_role(agreement_number int, proposal_value interface{}) {
   var done_proposing = false
   var majority_prepare bool
-  var high_val_found bool
   var highest_number = -1
-  var high_val interface{}
+  var highest_accepted_proposal Proposal
   
   for !done_proposing && px.still_deciding(agreement_number) && !px.dead {
     
@@ -218,24 +217,23 @@ func (px *Paxos) proposer_role(agreement_number int, proposal_value interface{})
 
     // Broadcast prepare request for agreement instance 'agreement_number' to Paxos acceptors.
     //fmt.Printf("Proposer [PrepareStage] (%s): agree_num: %d, prop: %d, val: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal_value)
-    var proposal = &Proposal{Number: proposal_number, Value: proposal_value}
+    var proposal = Proposal{Number: proposal_number, Value: proposal_value}
     replies_from_prepare := px.broadcast_prepare(agreement_number, proposal)
 
-    majority_prepare, highest_number, high_val_found, high_val = px.evaluate_prepare_replies(replies_from_prepare)
-    fmt.Println(high_val_found, high_val)
+    majority_prepare, highest_number, highest_accepted_proposal = px.evaluate_prepare_replies(replies_from_prepare)
 
     if !majority_prepare || !px.still_deciding(agreement_number) {
-      fmt.Printf("Proposer [PrepareStage] (%s): agree_num: %d, prop: %d, Majority not reached on prepare\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number)    
+      //fmt.Printf("Proposer [PrepareStage] (%s): agree_num: %d, prop: %d, Majority not reached on prepare\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number)    
       //runtime.Gosched()
       time.Sleep(time.Duration(rand.Intn(100)))
       continue
     }
 
-    if high_val_found {
+    var empty_proposal = Proposal{}
+    if highest_accepted_proposal != empty_proposal {
       // Accept request should have value v, where v is the value of highest-number among prepare replies
-      proposal.Value = high_val
+      proposal.Value = highest_accepted_proposal.Value
     }
-    fmt.Println(proposal.Value)
     // Otherwise, the value may be kept at what the application calling px.Start requested.
     //fmt.Printf("Proposer [AcceptStage] (%s): agree_num: %d, prop: %d, val: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal.Value)
     replies_from_accept := px.broadcast_accept(agreement_number, proposal)
@@ -243,11 +241,11 @@ func (px *Paxos) proposer_role(agreement_number int, proposal_value interface{})
 
     if majority_accept {
       // Broadcast decides
-      fmt.Printf("Proposer [DecisionReached] (%s): agree_num: %d, prop: %d, val: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal.Value)
+      //fmt.Printf("Proposer [DecisionReached] (%s): agree_num: %d, prop: %d, val: %v\n", short_name(px.peers[px.me], 7), agreement_number, proposal_number, proposal.Value)
       px.broadcast_decided(agreement_number, proposal)
       done_proposing = true
     } else {
-      fmt.Printf("Proposer [AcceptStage] (%s): agree_num: %d, Majority not reached on accept\n", short_name(px.peers[px.me], 7), agreement_number)    
+      //fmt.Printf("Proposer [AcceptStage] (%s): agree_num: %d, Majority not reached on accept\n", short_name(px.peers[px.me], 7), agreement_number)    
       //runtime.Gosched()
       time.Sleep(time.Duration(rand.Intn(100)))
       continue
@@ -288,13 +286,13 @@ func (px *Paxos) Prepare_handler(args *PrepareArgs, reply *PrepareReply) error {
     reply.Prepare_ok = true
     reply.Number_promised = proposal_number
     reply.Accepted_proposal = px.state[agreement_number].accepted_proposal
-    fmt.Printf("Prepare_ok (%s): agreement_number: %d, proposal: %v\n", short_name(px.peers[px.me], 7), args.Agreement_number, reply.Accepted_proposal)
+    //fmt.Printf("Prepare_ok (%s): agreement_number: %d, proposal: %v\n", short_name(px.peers[px.me], 7), args.Agreement_number, reply.Accepted_proposal)
     return nil
   }
   reply.Prepare_ok = false
   reply.Number_promised = px.state[agreement_number].highest_promised
   reply.Accepted_proposal = px.state[agreement_number].accepted_proposal
-  fmt.Printf("Prepare_no (%s): agreement_number: %d, proposal: %v\n", short_name(px.peers[px.me], 7), args.Agreement_number, reply.Accepted_proposal)
+  //fmt.Printf("Prepare_no (%s): agreement_number: %d, proposal: %v\n", short_name(px.peers[px.me], 7), args.Agreement_number, reply.Accepted_proposal)
   return nil
 }
 
@@ -310,7 +308,6 @@ func (px *Paxos) Accept_handler(args *AcceptArgs, reply *AcceptReply) error {
 
   var agreement_number = args.Agreement_number
   var proposal = args.Proposal
-  fmt.Printf("%+v\n", proposal)
 
   _, present := px.state[agreement_number]
   if present {
@@ -330,12 +327,12 @@ func (px *Paxos) Accept_handler(args *AcceptArgs, reply *AcceptReply) error {
     px.state[agreement_number].set_accepted_proposal(proposal)
     reply.Accept_ok = true
     reply.Highest_done = px.done[px.peers[px.me]]
-    fmt.Printf("Accept_ok (%s): agree_num: %d, prop: %d, val: %v, h_done: %d\n", short_name(px.peers[px.me], 7), args.Agreement_number, args.Proposal.Number, proposal.Value, reply.Highest_done)
+    //fmt.Printf("Accept_ok (%s): agree_num: %d, prop: %d, val: %v, h_done: %d\n", short_name(px.peers[px.me], 7), args.Agreement_number, args.Proposal.Number, proposal.Value, reply.Highest_done)
     return nil
   }
   reply.Accept_ok = false
   reply.Highest_done = px.done[px.peers[px.me]]
-  fmt.Printf("Accept_no (%s): agree_num: %d, prop: %d, h_done: %d\n", short_name(px.peers[px.me], 7), args.Agreement_number, args.Proposal.Number, reply.Highest_done)
+  //fmt.Printf("Accept_no (%s): agree_num: %d, prop: %d, h_done: %d\n", short_name(px.peers[px.me], 7), args.Agreement_number, args.Proposal.Number, reply.Highest_done)
   return nil
 }
 
@@ -375,7 +372,9 @@ func (px *Paxos) make_default_agreementstate() *AgreementState {
   initial_proposal_number := px.me - px.peer_count
   agrst := AgreementState{highest_promised: -1,
                           decided: false,
-                          proposal_number: initial_proposal_number} 
+                          proposal_number: initial_proposal_number,
+                          accepted_proposal: Proposal{},
+                        } 
   return &agrst
 }
 
@@ -458,7 +457,7 @@ be broadcast in a prepare request to all Paxos acceptors. Collects and returns a
 of PrepareReply elements.
 Does NOT mutate local px instance or take out any locks.
 */
-func (px *Paxos) broadcast_prepare(agreement_number int, proposal *Proposal) []PrepareReply {
+func (px *Paxos) broadcast_prepare(agreement_number int, proposal Proposal) []PrepareReply {
   
   var replies_array = make([]PrepareReply, px.peer_count)    // declare and init
   for index, peer := range px.peers {
@@ -484,7 +483,7 @@ be broadcast in an accept request to all Paxos acceptors. Collects and returns a
 of AcceptReply elements.
 Does NOT mutate local px instance or take out any locks.
 */
-func (px *Paxos) broadcast_accept(agreement_number int, proposal *Proposal) []AcceptReply {
+func (px *Paxos) broadcast_accept(agreement_number int, proposal Proposal) []AcceptReply {
   
   var replies_array = make([]AcceptReply, px.peer_count)   // declare and init
   for index, peer := range px.peers {
@@ -510,7 +509,7 @@ Accepts an agreement instance agreement_number and a reference to a Proposal tha
 be broadcast in a decided request to all Paxos learners.
 Does NOT mutate local px instance or take out any locks.
 */
-func (px *Paxos) broadcast_decided(agreement_number int, proposal *Proposal) {
+func (px *Paxos) broadcast_decided(agreement_number int, proposal Proposal) {
   for _, peer := range px.peers {
     if peer == px.peers[px.me] {
       // local_decided can be used instead of RPC
@@ -583,7 +582,7 @@ evaluated together.
 Since it simulates the Accept_handler, it takes out a lock on the current Paxos
 instance.
 */
-func (px *Paxos) local_accept(agreement_number int, proposal *Proposal) *AcceptReply {
+func (px *Paxos) local_accept(agreement_number int, proposal Proposal) *AcceptReply {
   px.mu.Lock()
   defer px.mu.Unlock()
   var reply AcceptReply
@@ -615,7 +614,7 @@ proposal. This method is needed because the deaf proposer prohibits a proposer
 from receiving RPC calls, in which case we must both broadcast decisions and 
 update the local paxos instance.
 */
-func (px *Paxos) local_decided(agreement_number int, proposal *Proposal) {
+func (px *Paxos) local_decided(agreement_number int, proposal Proposal) {
   px.mu.Lock()
   defer px.mu.Unlock()
 
@@ -700,10 +699,10 @@ highest accepted proposal was reported back, the reported highest_value is simpl
 an empty interface instance.
 Does NOT mutate local px instance or take out any locks.
 */
-func (px *Paxos) evaluate_prepare_replies(replies_array []PrepareReply) (bool, int, bool, interface{}){
+func (px *Paxos) evaluate_prepare_replies(replies_array []PrepareReply) (bool, int, Proposal){
   var ok_count = 0                  // number replies with prepare_ok = true
   var highest_number = -1           // highest number observed among replies Number_promised
-  var highest_proposal *Proposal    // highest numbered proposal reported as accepted by a peer, in a reply
+  var highest_proposal Proposal     // highest numbered proposal reported as accepted by a peer, in a reply
   
   for _, reply := range replies_array {
     if reply.Prepare_ok {
@@ -711,27 +710,34 @@ func (px *Paxos) evaluate_prepare_replies(replies_array []PrepareReply) (bool, i
     }
     if reply.Number_promised > highest_number {
       highest_number = reply.Number_promised
+      highest_proposal = reply.Accepted_proposal   // Actual Proposal or zero-valued Proposal
     }
-    /*Note, reply did not need to be prepare_ok for us to use the value in the highest
-    numbered proposal an acceptor reports to have accepted*/
-    if reply.Accepted_proposal != nil {
-      if highest_proposal == nil {
-        // No reply has yet reported a highest proposal accepted
-        highest_proposal = reply.Accepted_proposal
-      } else if reply.Accepted_proposal.Number > highest_proposal.Number {
-        highest_proposal = reply.Accepted_proposal
-      }
-    }
-    // Otherwise, Acceptor has not accepted a proposal.
   }
 
-  if highest_proposal == nil {
-    // No reply reported a highest accepted proposal
-    return px.is_majority(ok_count), highest_number, false, nil
-  }
-  /* At least one Accepted_proposal was reported in a reply. The highest value among
-  these is reported to be used in the accept request.*/
-  return px.is_majority(ok_count), highest_number, true, highest_proposal.Value
+  return px.is_majority(ok_count), highest_number, highest_proposal
+
+
+  //   /*Note, reply did not need to be prepare_ok for us to use the value in the highest
+  //   numbered proposal an acceptor reports to have accepted*/
+  //   if reply.Accepted_proposal.Number > highest_number
+  //   if reply.Accepted_proposal != Proposal{} {
+  //     if highest_proposal == Proposal{} {
+  //       // No reply has yet reported a highest proposal accepted
+  //       highest_proposal = reply.Accepted_proposal
+  //     } else if reply.Accepted_proposal.Number > highest_proposal.Number {
+  //       highest_proposal = reply.Accepted_proposal
+  //     }
+  //   }
+  //   // Otherwise, Acceptor has not accepted a proposal.
+  // }
+
+  // if highest_proposal == nil {
+  //   // No reply reported a highest accepted proposal
+  //   return px.is_majority(ok_count), highest_number, false, nil
+  // }
+  // /* At least one Accepted_proposal was reported in a reply. The highest value among
+  // these is reported to be used in the accept request.*/
+  // return px.is_majority(ok_count), highest_number, true, highest_proposal.Value
 }
 
 
