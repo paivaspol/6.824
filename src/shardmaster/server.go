@@ -23,16 +23,17 @@ const (
   Noop = "Noop"
 )
 
+// field names in Paxos values should be capitalized. Paxos library uses RPC library.
 type Op struct {
-  id string       // uuid
-  name string     // Operation name: Join, Leave, Move, Query, Noop
-  args Args       // Args may be a JoinArgs, LeaveArgs, MoveArgs, or QueryArgs
+  Id string       // uuid
+  Name string     // Operation name: Join, Leave, Move, Query, Noop
+  Args Args       // Args may be a JoinArgs, LeaveArgs, MoveArgs, or QueryArgs
 }
 
 func makeOp(name string, args Args) (Op) {
-  return Op{id: generate_uuid(),
-            name: name,
-            args: args,
+  return Op{Id: generate_uuid(),
+            Name: name,
+            Args: args,
             }
 }
 
@@ -102,6 +103,7 @@ func (self *ShardMaster) Move(args *MoveArgs, reply *MoveReply) error {
 }
 
 func (self *ShardMaster) Query(args *QueryArgs, reply *QueryReply) error {
+  fmt.Println("HERE")
   operation := makeOp(Query, *args)                   // requested Op
   agreement_number := self.paxos_agree(operation)     // sync call returns after agreement reached
   output_debug(fmt.Sprintf("(server%d) Query op_num:%d config_num:%d", self.me, agreement_number, args.Num))
@@ -125,7 +127,7 @@ func (self *ShardMaster) paxos_agree(operation Op) (int) {
   var agreement_number int
   var decided_operation = Op{}
 
-  for decided_operation.id != operation.id {
+  for decided_operation.Id != operation.Id {
     agreement_number = self.available_agreement_number()
     //fmt.Printf("Proposing %+v with agreement_number:%d\n", operation, agreement_number)
     self.px.Start(agreement_number, operation)
@@ -222,24 +224,24 @@ func (self *ShardMaster) perform_operation(op_number int, operation Op) Result {
   output_debug(fmt.Sprintf("(server%d) Performing: op_num:%d op:%v", self.me, op_number, operation))
   var result Result
 
-  switch operation.name {
+  switch operation.Name {
     case "Join":
-      var join_args = (operation.args).(JoinArgs)     // type assertion, Args is a JoinArgs
+      var join_args = (operation.Args).(JoinArgs)     // type assertion, Args is a JoinArgs
       result = self.join(&join_args)
     case "Leave":
-      var leave_args = (operation.args).(LeaveArgs)   // type assertion, Args is a LeaveArgs
+      var leave_args = (operation.Args).(LeaveArgs)   // type assertion, Args is a LeaveArgs
       result = self.leave(&leave_args)
     case "Move":
-      var move_args = (operation.args).(MoveArgs)     // type assertion, Args is a MoveArgs
+      var move_args = (operation.Args).(MoveArgs)     // type assertion, Args is a MoveArgs
       result = self.move(&move_args)
     case "Query":
-      var query_args = (operation.args).(QueryArgs)   // type assertion, Args is a QueryArgs
+      var query_args = (operation.Args).(QueryArgs)   // type assertion, Args is a QueryArgs
       result = self.query(&query_args)
     case "Noop":
       fmt.Println("Performing Noop!!!")
       result = 3
     default:
-      panic(fmt.Sprintf("unexpected Op name '%s' cannot be performed", operation.name))
+      panic(fmt.Sprintf("unexpected Op name '%s' cannot be performed", operation.Name))
   }
   self.operation_number = op_number     // latest operation that has been applied
   self.px.Done(op_number)               // local Paxos no longer needs to remember Op
@@ -333,6 +335,11 @@ func (sm *ShardMaster) Kill() {
 // 
 func StartServer(servers []string, me int) *ShardMaster {
   gob.Register(Op{})
+  // RPC library needs to know how to marshall/unmarshall the different types of Args
+  gob.Register(JoinArgs{})
+  gob.Register(LeaveArgs{})
+  gob.Register(MoveArgs{})
+  gob.Register(QueryArgs{})
 
   sm := new(ShardMaster)
   sm.me = me
