@@ -323,9 +323,6 @@ func (kv *KVPaxos) crawling_up_op_number(target_op_number int) int {
 }
 
 
-
-
-
 // tell the server to shut itself down.
 // please do not change this function.
 func (kv *KVPaxos) kill() {

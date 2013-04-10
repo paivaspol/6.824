@@ -1,7 +1,5 @@
 package shardmaster
 
-//import "fmt"
-
 //
 // Master shard server: assigns shards to replication groups.
 //
@@ -207,29 +205,18 @@ func (self *Config) rebalance(threshold int) {
   }
 }
 
-
+// Communication Types
+///////////////////////////////////////////////////////////////////////////////
 
 type Args interface {}
-
-type Reply interface {}
-
-type Result interface {}
-
-type NoopArgs struct {}
 
 type JoinArgs struct {
   GID int64        // unique replica group ID
   Servers []string // group server ports
 }
 
-type JoinReply struct {
-}
-
 type LeaveArgs struct {
   GID int64
-}
-
-type LeaveReply struct {
 }
 
 type MoveArgs struct {
@@ -237,13 +224,28 @@ type MoveArgs struct {
   GID int64
 }
 
-type MoveReply struct {
-}
-
 type QueryArgs struct {
     Num int // desired config number
+}
+
+type NoopArgs struct {}
+
+
+
+type Reply interface {}
+
+type JoinReply struct {
+}
+
+type LeaveReply struct {
+}
+
+type MoveReply struct {
 }
 
 type QueryReply struct {
   Config Config
 }
+
+type Result interface {}
+

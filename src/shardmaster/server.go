@@ -250,30 +250,24 @@ func (self *ShardMaster) perform_operation(op_number int, operation Op) Result {
   output_debug(fmt.Sprintf("(server%d) Performing: op_num:%d op:%v", self.me, op_number, operation))
   var result Result
 
-  if operation.Name == "Query" {         
-    // idempotent operation
-    var query_args = (operation.Args).(QueryArgs)   // type assertion, Args is a QueryArgs
-    result = self.query(&query_args)
-  } else {
-    // non-idempotent, do not apply operation if already applied. Paxos has marked Done.
-    if op_number <= self.operation_number {
-      return result
-    }
-    switch operation.Name {
-      case "Join":
-        var join_args = (operation.Args).(JoinArgs)     // type assertion, Args is a JoinArgs
-        result = self.join(&join_args)
-      case "Leave":
-        var leave_args = (operation.Args).(LeaveArgs)   // type assertion, Args is a LeaveArgs
-        result = self.leave(&leave_args)
-      case "Move":
-        var move_args = (operation.Args).(MoveArgs)     // type assertion, Args is a MoveArgs
-        result = self.move(&move_args)
-      case "Noop":
-        // zero-valued result of type interface{} is nil
-    }
+  switch operation.Name {
+    case "Join":
+      var join_args = (operation.Args).(JoinArgs)     // type assertion, Args is a JoinArgs
+      result = self.join(&join_args)
+    case "Leave":
+      var leave_args = (operation.Args).(LeaveArgs)   // type assertion, Args is a LeaveArgs
+      result = self.leave(&leave_args)
+    case "Move":
+      var move_args = (operation.Args).(MoveArgs)     // type assertion, Args is a MoveArgs
+      result = self.move(&move_args)
+    case "Query":
+      var query_args = (operation.Args).(QueryArgs)   // type assertion, Args is a QueryArgs
+      result = self.query(&query_args)
+    case "Noop":
+      // zero-valued result of type interface{} is nil
+    default:
+      panic(fmt.Sprintf("unexpected Op name '%s' cannot be performed", operation.Name))
   }
-
   self.operation_number = op_number     // latest operation that has been applied
   self.px.Done(op_number)               // local Paxos no longer needs to remember Op
   output_debug(fmt.Sprintf("(server%d) Performed: op_num:%d op:%v", self.me, op_number, operation))
