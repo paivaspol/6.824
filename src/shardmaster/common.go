@@ -1,6 +1,6 @@
 package shardmaster
 
-import "fmt"
+//import "fmt"
 
 //
 // Master shard server: assigns shards to replication groups.
@@ -80,7 +80,7 @@ was previously assigned to, if any.
 Assumes that the specified gid is an allowed gid.
 */
 func (self *Config) move(shard_index int, gid int64) {
-  fmt.Println("Moving ", shard_index, " from ", self.Shards[shard_index], " to rg ", gid)
+  //fmt.Println("Moving ", shard_index, " from ", self.Shards[shard_index], " to rg ", gid)
   self.Shards[shard_index] = gid
 }
 
@@ -211,11 +211,11 @@ func (self *Config) rebalance(threshold int) {
 
 type Args interface {}
 
-type Reply interface {
-
-}
+type Reply interface {}
 
 type Result interface {}
+
+type NoopArgs struct {}
 
 type JoinArgs struct {
   GID int64        // unique replica group ID

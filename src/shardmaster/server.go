@@ -65,6 +65,9 @@ all operations up to and including the requested operation.
 Does not return until requested operation has been applied.
 */
 func (self *ShardMaster) Join(args *JoinArgs, reply *JoinReply) error {
+  self.mu.Lock()
+  defer self.mu.Unlock()
+
   operation := makeOp(Join, *args)                    // requested Op
   output_debug(fmt.Sprintf("(server%d) Join op:%v", self.me, operation))
   agreement_number := self.paxos_agree(operation)     // sync call returns after agreement reached
@@ -79,6 +82,9 @@ func (self *ShardMaster) Join(args *JoinArgs, reply *JoinReply) error {
 }
 
 func (self *ShardMaster) Leave(args *LeaveArgs, reply *LeaveReply) error {
+  self.mu.Lock()
+  defer self.mu.Unlock()
+
   operation := makeOp(Leave, *args)                   // requested Op
   agreement_number := self.paxos_agree(operation)     // sync call returns after agreement reached
   output_debug(fmt.Sprintf("(server%d) Leave op_num:%d remove:%d", self.me, agreement_number, args.GID))
@@ -91,6 +97,9 @@ func (self *ShardMaster) Leave(args *LeaveArgs, reply *LeaveReply) error {
 }
 
 func (self *ShardMaster) Move(args *MoveArgs, reply *MoveReply) error {
+  self.mu.Lock()
+  defer self.mu.Unlock()
+
   operation := makeOp(Move, *args)                    // requested Op
   agreement_number := self.paxos_agree(operation)     // sync call returns after agreement reached
   output_debug(fmt.Sprintf("(server%d) Move op_num:%d shard:%d moveto:%d", self.me, agreement_number, args.Shard, args.GID))
@@ -103,7 +112,9 @@ func (self *ShardMaster) Move(args *MoveArgs, reply *MoveReply) error {
 }
 
 func (self *ShardMaster) Query(args *QueryArgs, reply *QueryReply) error {
-  fmt.Println("HERE")
+  self.mu.Lock()
+  defer self.mu.Unlock()
+
   operation := makeOp(Query, *args)                   // requested Op
   agreement_number := self.paxos_agree(operation)     // sync call returns after agreement reached
   output_debug(fmt.Sprintf("(server%d) Query op_num:%d config_num:%d", self.me, agreement_number, args.Num))
@@ -133,7 +144,7 @@ func (self *ShardMaster) paxos_agree(operation Op) (int) {
     self.px.Start(agreement_number, operation)
     decided_operation = self.await_paxos_decision(agreement_number).(Op)  // type assertion
   }
-  output_debug(fmt.Sprintf("(server%d) Decided op_num:%d op:%v", self.me, agreement_number, decided_operation))
+  //output_debug(fmt.Sprintf("(server%d) Decided op_num:%d op:%v", self.me, agreement_number, decided_operation))
   return agreement_number
 }
 
@@ -185,6 +196,16 @@ func (self *ShardMaster) px_status_op(agreement_number int) (bool, Op){
   return false, Op{}
 }
 
+/*
+Attempts to use the given operation struct to drive agreement among Shardmaster paxos 
+peers using the given agreement number. Discovers the operation that was decided on
+for the specified agreement number.
+*/
+func (self *ShardMaster) drive_discovery(operation Op, agreement_number int) {
+  self.px.Start(agreement_number, operation)
+  self.await_paxos_decision(agreement_number)
+}
+
 
 // Methods for Performing ShardMaster Operations
 ///////////////////////////////////////////////////////////////////////////////
@@ -200,14 +221,20 @@ func (self *ShardMaster) perform_operations_prior_to(limit int) {
 
   for op_number < limit {       // continue looping until op_number == limit - 1 has been performed   
     output_debug(fmt.Sprintf("(server%d) Performing_prior_to:%d op:%d op:%v %t\n", self.me, limit, op_number, operation, has_decided))
-    self.perform_operation(op_number, operation)
-    output_debug(fmt.Sprintf("(server%d) Applied: op_num:%d \n", self.me, op_number))
-    op_number = self.last_operation_number() + 1
-    has_decided, operation = self.px_status_op(op_number)
+    if has_decided {
+      self.perform_operation(op_number, operation)
+      op_number = self.last_operation_number() + 1
+      has_decided, operation = self.px_status_op(op_number)
+    } else {
+      noop := makeOp(Noop, NoopArgs{})             // Force Paxos instance to discover next operation or agree on a NO_OP
+      self.drive_discovery(noop, op_number)  // proposes Noop or discovers decided operation.
+      has_decided, operation = self.px_status_op(op_number)
+      self.perform_operation(op_number, operation)
+      op_number = self.last_operation_number() + 1
+      has_decided, operation = self.px_status_op(op_number)
+    }
   }
-  // next op not yet known to local paxos instance be decided or limit reached
 }
-
 
 /*
 Accepts an Op operation which should be performed locally, reads the name of the
@@ -218,35 +245,38 @@ returned by the called operation and increments the ShardMaster operation_number
 latest operation which has been performed (performed in increasing order).
 */
 func (self *ShardMaster) perform_operation(op_number int, operation Op) Result {
-  self.mu.Lock()
-  defer self.mu.Unlock()
-
+  //self.mu.Lock()
+  //defer self.mu.Unlock()
   output_debug(fmt.Sprintf("(server%d) Performing: op_num:%d op:%v", self.me, op_number, operation))
   var result Result
 
-  switch operation.Name {
-    case "Join":
-      var join_args = (operation.Args).(JoinArgs)     // type assertion, Args is a JoinArgs
-      result = self.join(&join_args)
-    case "Leave":
-      var leave_args = (operation.Args).(LeaveArgs)   // type assertion, Args is a LeaveArgs
-      result = self.leave(&leave_args)
-    case "Move":
-      var move_args = (operation.Args).(MoveArgs)     // type assertion, Args is a MoveArgs
-      result = self.move(&move_args)
-    case "Query":
-      var query_args = (operation.Args).(QueryArgs)   // type assertion, Args is a QueryArgs
-      result = self.query(&query_args)
-    case "Noop":
-      fmt.Println("Performing Noop!!!")
-      result = 3
-    default:
-      panic(fmt.Sprintf("unexpected Op name '%s' cannot be performed", operation.Name))
+  if operation.Name == "Query" {         
+    // idempotent operation
+    var query_args = (operation.Args).(QueryArgs)   // type assertion, Args is a QueryArgs
+    result = self.query(&query_args)
+  } else {
+    // non-idempotent, do not apply operation if already applied. Paxos has marked Done.
+    if op_number <= self.operation_number {
+      return result
+    }
+    switch operation.Name {
+      case "Join":
+        var join_args = (operation.Args).(JoinArgs)     // type assertion, Args is a JoinArgs
+        result = self.join(&join_args)
+      case "Leave":
+        var leave_args = (operation.Args).(LeaveArgs)   // type assertion, Args is a LeaveArgs
+        result = self.leave(&leave_args)
+      case "Move":
+        var move_args = (operation.Args).(MoveArgs)     // type assertion, Args is a MoveArgs
+        result = self.move(&move_args)
+      case "Noop":
+        // zero-valued result of type interface{} is nil
+    }
   }
+
   self.operation_number = op_number     // latest operation that has been applied
   self.px.Done(op_number)               // local Paxos no longer needs to remember Op
-  output_debug(fmt.Sprintf("(server%d) Preformed: op_num:%d op:%v", self.me, op_number, operation))
-  fmt.Println(result)
+  output_debug(fmt.Sprintf("(server%d) Performed: op_num:%d op:%v", self.me, op_number, operation))
   return result
 }
 
@@ -340,6 +370,7 @@ func StartServer(servers []string, me int) *ShardMaster {
   gob.Register(LeaveArgs{})
   gob.Register(MoveArgs{})
   gob.Register(QueryArgs{})
+  gob.Register(NoopArgs{})
 
   sm := new(ShardMaster)
   sm.me = me
