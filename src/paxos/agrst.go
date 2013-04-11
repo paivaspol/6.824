@@ -59,8 +59,8 @@ func (agrst *AgreementState) decision_reached(proposal Proposal) {
 		agrst.decided = true
 		agrst.decided_proposal = proposal
 	} else {
-		if agrst.decided_proposal != proposal {
-			fmt.Println("NOT Equal!!!")
+		if agrst.decided_proposal.Value != proposal.Value {
+			fmt.Println("NOT Equal Values!!!")
 		}
 	}
 	return

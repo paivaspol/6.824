@@ -228,6 +228,7 @@ func (px *Paxos) proposer_role(agreement_number int, proposal_value interface{})
       continue
     }
 
+    fmt.Println(highest_number, highest_accepted_proposal)
     var empty_proposal = Proposal{}    // compare highest_accepted_proposal to zero-valued Proposal
     if highest_accepted_proposal != empty_proposal {
       proposal.Value = highest_accepted_proposal.Value
@@ -618,6 +619,7 @@ func (px *Paxos) local_decided(agreement_number int, proposal Proposal) {
   //px.state[agreement_number].set_decided(true)
   //px.state[agreement_number].set_accepted_proposal(proposal)
   px.state[agreement_number].decision_reached(proposal)
+  output_debug(fmt.Sprintf("Decided (%s): agree_num: %d, prop: %d, val: %v", short_name(px.peers[px.me], 7), agreement_number, proposal.Number, proposal.Value))
 }
 
 
@@ -692,21 +694,22 @@ an empty interface instance.
 Does NOT mutate local px instance or take out any locks.
 */
 func (px *Paxos) evaluate_prepare_replies(replies_array []PrepareReply) (bool, int, Proposal){
-  var ok_count = 0                  // number replies with prepare_ok = true
-  var highest_number = -1           // highest number observed among replies Number_promised
-  var highest_proposal Proposal     // highest numbered proposal reported as accepted by a peer, in a reply
+  var ok_count = 0              // number replies with prepare_ok = true
+  var high_number = -1          // highest proposal number accepted by a peer that replied
+  var high_proposal Proposal    // highest numbered proposal accepted by a peer that replied
   
   for _, reply := range replies_array {
     if reply.Prepare_ok {
       ok_count += 1
     }
-    if reply.Number_promised > highest_number {
-      highest_number = reply.Number_promised
-      highest_proposal = reply.Accepted_proposal   // Actual Proposal or zero-valued Proposal
+    if reply.Accepted_proposal.Number > high_number {
+      fmt.Println(reply.Accepted_proposal)
+      high_number = reply.Accepted_proposal.Number
+      high_proposal = reply.Accepted_proposal   // default is zero-valued Proposal
     }
   }
 
-  return px.is_majority(ok_count), highest_number, highest_proposal
+  return px.is_majority(ok_count), high_number, high_proposal
 
 
   //   /*Note, reply did not need to be prepare_ok for us to use the value in the highest
