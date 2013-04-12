@@ -56,8 +56,10 @@ before calling.
 func (agrst *AgreementState) decision_reached(proposal Proposal) {
 	if !agrst.decided {
 		agrst.decided = true
+		agrst.accepted_proposal = proposal
 		agrst.decided_proposal = proposal
 	} else {
+
 		// Not all Values support comparison
 		// if agrst.decided_proposal.Value != proposal.Value {
 		// 	panic("Reached multiple decisions about the same agreement instance!")

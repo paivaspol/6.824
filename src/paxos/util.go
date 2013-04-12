@@ -2,7 +2,7 @@ package paxos
 
 import "fmt"
 
-var debug = true
+var debug = false
 
 func output_debug(debug_message string) {
   if debug {
