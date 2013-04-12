@@ -1,6 +1,5 @@
 package paxos
 
-import "fmt"
 
 /* 
 Represents the state stored by a Paxos library instance per Agreement instance.
@@ -59,9 +58,10 @@ func (agrst *AgreementState) decision_reached(proposal Proposal) {
 		agrst.decided = true
 		agrst.decided_proposal = proposal
 	} else {
-		if agrst.decided_proposal.Value != proposal.Value {
-			fmt.Println("NOT Equal Values!!!")
-		}
+		// Not all Values support comparison
+		// if agrst.decided_proposal.Value != proposal.Value {
+		// 	panic("Reached multiple decisions about the same agreement instance!")
+		// }
 	}
 	return
 }

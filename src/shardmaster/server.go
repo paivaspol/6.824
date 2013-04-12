@@ -69,7 +69,6 @@ func (self *ShardMaster) Join(args *JoinArgs, reply *JoinReply) error {
   defer self.mu.Unlock()
 
   operation := makeOp(Join, *args)                    // requested Op
-  output_debug(fmt.Sprintf("(server%d) Join op:%v", self.me, operation))
   agreement_number := self.paxos_agree(operation)     // sync call returns after agreement reached
   output_debug(fmt.Sprintf("(server%d) Join op_num:%d add:%d", self.me, agreement_number, args.GID))
   
@@ -115,6 +114,7 @@ func (self *ShardMaster) Query(args *QueryArgs, reply *QueryReply) error {
   self.mu.Lock()
   defer self.mu.Unlock()
 
+  fmt.Println("Got here")
   operation := makeOp(Query, *args)                   // requested Op
   agreement_number := self.paxos_agree(operation)     // sync call returns after agreement reached
   output_debug(fmt.Sprintf("(server%d) Query op_num:%d config_num:%d", self.me, agreement_number, args.Num))
