@@ -229,7 +229,7 @@ func (px *Paxos) proposer_role(agreement_number int, proposal_value interface{})
     }
 
     fmt.Println(highest_number, highest_accepted_proposal)
-    var empty_proposal = Proposal{}    // compare highest_accepted_proposal to zero-valued Proposal
+    var empty_proposal = Proposal{Number:-1}    // compare highest_accepted_proposal to default Proposal
     if highest_accepted_proposal != empty_proposal {
       proposal.Value = highest_accepted_proposal.Value
     }
@@ -285,13 +285,13 @@ func (px *Paxos) Prepare_handler(args *PrepareArgs, reply *PrepareReply) error {
     reply.Prepare_ok = true
     reply.Number_promised = proposal_number
     reply.Accepted_proposal = px.state[agreement_number].accepted_proposal
-    output_debug(fmt.Sprintf("Prepare_ok (%s): agreement_number: %d, proposal: %v", short_name(px.peers[px.me], 7), args.Agreement_number, reply.Accepted_proposal))
+    output_debug(fmt.Sprintf("Prepare_ok (%s): agreement_number: %d, proposal:%v prop_num:%d", short_name(px.peers[px.me], 7), args.Agreement_number, reply.Accepted_proposal, args.Proposal_number))
     return nil
   }
   reply.Prepare_ok = false
   reply.Number_promised = px.state[agreement_number].highest_promised
   reply.Accepted_proposal = px.state[agreement_number].accepted_proposal
-  output_debug(fmt.Sprintf("Prepare_no (%s): agreement_number: %d, proposal: %v", short_name(px.peers[px.me], 7), args.Agreement_number, reply.Accepted_proposal))
+  output_debug(fmt.Sprintf("Prepare_no (%s): agreement_number: %d, proposal:%v prop_num:%d", short_name(px.peers[px.me], 7), args.Agreement_number, reply.Accepted_proposal, args.Proposal_number))
   return nil
 }
 
@@ -365,7 +365,7 @@ func (px *Paxos) make_default_agreementstate() *AgreementState {
   agrst := AgreementState{highest_promised: -1,
                           decided: false,
                           proposal_number: initial_proposal_number,
-                          accepted_proposal: Proposal{},
+                          accepted_proposal: Proposal{Number: -1},
                         } 
   return &agrst
 }
@@ -552,13 +552,13 @@ func (px *Paxos) local_prepare(agreement_number int, proposal_number int) *Prepa
     reply.Prepare_ok = true
     reply.Number_promised = proposal_number
     reply.Accepted_proposal = px.state[agreement_number].accepted_proposal
-    output_debug(fmt.Sprintf("Prepare_ok (%s): agreement_number: %d, proposal: %v", short_name(px.peers[px.me], 7), agreement_number, reply.Accepted_proposal))
+    output_debug(fmt.Sprintf("Prepare_ok (%s): agreement_number: %d, proposal:%v prop_num:%d ", short_name(px.peers[px.me], 7), agreement_number, reply.Accepted_proposal, proposal_number))
     return &reply
   }
   reply.Prepare_ok = false
   reply.Number_promised = px.state[agreement_number].highest_promised
   reply.Accepted_proposal = px.state[agreement_number].accepted_proposal
-  output_debug(fmt.Sprintf("Prepare_no (%s): agreement_number: %d, proposal: %v", short_name(px.peers[px.me], 7), agreement_number, reply.Accepted_proposal))
+  output_debug(fmt.Sprintf("Prepare_no (%s): agreement_number: %d, proposal:%v prop_num:%d", short_name(px.peers[px.me], 7), agreement_number, reply.Accepted_proposal, proposal_number))
   
   return &reply
 }
@@ -703,7 +703,6 @@ func (px *Paxos) evaluate_prepare_replies(replies_array []PrepareReply) (bool, i
       ok_count += 1
     }
     if reply.Accepted_proposal.Number > high_number {
-      fmt.Println(reply.Accepted_proposal)
       high_number = reply.Accepted_proposal.Number
       high_proposal = reply.Accepted_proposal   // default is zero-valued Proposal
     }

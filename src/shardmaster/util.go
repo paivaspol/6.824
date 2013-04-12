@@ -6,7 +6,7 @@ import (
 	"math/rand"
 )
 
-var debug = false
+var debug = true
 
 func output_debug(debug_message string) {
   if debug {
