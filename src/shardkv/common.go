@@ -16,7 +16,28 @@ const (
 )
 type Err string
 
+
+// GetArgs and GetReply
+///////////////////////////////////////////////////////////////////////////////
+
+type GetArgs struct {
+  Client_id int      // client_id
+  Request_id int     // request_id unique per client
+  Key string
+}
+
+type GetReply struct {
+  Err Err
+  Value string
+}
+
+
+// PutArgs and PutReply
+///////////////////////////////////////////////////////////////////////////////
+
 type PutArgs struct {
+  Client_id int       // client_id
+  Request_id int      // request_id unique per client
   Key string
   Value string
 }
@@ -25,11 +46,5 @@ type PutReply struct {
   Err Err
 }
 
-type GetArgs struct {
-  Key string
-}
 
-type GetReply struct {
-  Err Err
-  Value string
-}
+

@@ -10,9 +10,9 @@ import "math/rand"
 type Clerk struct {
   mu sync.Mutex               // one RPC at a time
   sm *shardmaster.Clerk       // App clients are clients of ShardMaster
-  config shardmaster.Config   // Specifies Configs of replica groups
+  config shardmaster.Config   // client knwon latest Config of replica groups
   id int                      // unique id serves as a client identifier
-  generate_request_id func() int   // returns unique request ids (among requests by this client)
+  get_request_id func() int   // returns unique request ids (among requests by this client)
 }
 
 
@@ -20,71 +20,84 @@ func MakeClerk(shardmasters []string) *Clerk {
   ck := new(Clerk)
   ck.sm = shardmaster.MakeClerk(shardmasters)
   ck.id = rand.Int()
-  ck.generate_request_uuid = make_int_generator()
+  ck.get_request_id = make_int_generator()
   return ck
 }
 
 /*
-Fetch the current value for a key. Returns "" if the key does not exist.
-Keeps trying forever in the face of all other errors.
+Computes the shard the key belongs to and uses the current Config to determine the 
+replica group and servers composing the replica group responsible for the shard. 
+Attempts to fetch the current value for the key from each of the replica group 
+servers until a reply is received which has Err set to OK or ErrNoKey. 
+If trying all the servers in the replica group does not succeed, queries the
+ShardMaster for the current configuration and tries again. Continues trying forever
+until an appropriate reply is received.
 */
 func (ck *Clerk) Get(key string) string {
   ck.mu.Lock()
   defer ck.mu.Unlock()
-
-
-  // You'll have to modify Get().
+  client_id := ck.id
+  request_id := ck.get_request_id()
 
   for {
     shard := key2shard(key)
-
     gid := ck.config.Shards[shard]
-
     servers, ok := ck.config.Groups[gid]
 
     if ok {
       // try each server in the shard's replication group.
       for _, srv := range servers {
-        args := &GetArgs{}
+        args := &GetArgs{}         // declare and init with zero-valued struct fields
+        args.Client_id = client_id
+        args.Request_id = request_id
         args.Key = key
-        var reply GetReply
+        var reply GetReply         // declare reply, ready to be populated in RPC
         ok := call(srv, "ShardKV.Get", args, &reply)
         if ok && (reply.Err == OK || reply.Err == ErrNoKey) {
           return reply.Value
         }
       }
     }
-
     time.Sleep(100 * time.Millisecond)
 
     // ask master for a new configuration.
     ck.config = ck.sm.Query(-1)
   }
+  // should not reach this point
   return ""
 }
 
+
+/*
+Computes the shard the key belongs to and uses the current Config to determine the 
+replica group and servers composing the replica group responsible for the shard. 
+Attempts to put the given key/value pair to each server in the replica group until
+one of the servers replies indicating the operation was accepted and performed (i.e
+reply.Err should be OK)
+If trying all the servers in the replica group does not succeed, queries the
+ShardMaster for the current configuration and tries again. Continues trying forever
+until an appropriate reply is received.
+*/
 func (ck *Clerk) Put(key string, value string) {
   ck.mu.Lock()
   defer ck.mu.Unlock()
-
-
-  // You'll have to modify Put().
+  client_id := ck.id
+  request_id := ck.get_request_id()
 
   for {
     shard := key2shard(key)
-
     gid := ck.config.Shards[shard]
-
     servers, ok := ck.config.Groups[gid]
-
 
     if ok {
       // try each server in the shard's replication group.
       for _, srv := range servers {
-        args := &PutArgs{}
+        args := &PutArgs{}         // declare and init with zero-valued struct fields
+        args.Client_id = client_id
+        args.Request_id = request_id
         args.Key = key
         args.Value = value
-        var reply PutReply
+        var reply PutReply         // declare reply, ready to be populated in RPC
         ok := call(srv, "ShardKV.Put", args, &reply)
         if ok && reply.Err == OK {
           return

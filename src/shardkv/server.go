@@ -22,12 +22,12 @@ type ShardKV struct {
   mu sync.Mutex
   l net.Listener
   me int
-  dead bool // for testing
-  unreliable bool // for testing
+  dead bool               // for testing
+  unreliable bool         // for testing
   sm *shardmaster.Clerk
   px *paxos.Paxos
 
-  gid int64 // my replica group ID
+  gid int64               // my replica group ID
 
   // Your definitions here.
 }
@@ -36,6 +36,7 @@ type ShardKV struct {
 func (kv *ShardKV) Get(args *GetArgs, reply *GetReply) error {
 
   // Your code here.
+  fmt.Println("Received a GET")
 
   return nil
 }
@@ -43,15 +44,27 @@ func (kv *ShardKV) Get(args *GetArgs, reply *GetReply) error {
 func (kv *ShardKV) Put(args *PutArgs, reply *PutReply) error {
   // Your code here.
 
+  fmt.Println("Received a PUT")
+
   return nil
 }
 
-//
-// Ask the shardmaster if there's a new configuration;
-// if so, re-configure.
-//
-func (kv *ShardKV) tick() {
+/*
+Queries the ShardMaster for a new configuraton. If there is one, re-configure this
+shardkv server to conform to the new configuration.
+ShardKV server is a client of the ShardMaster service and can use ShardMaster client
+stubs. 
+*/
+func (self *ShardKV) tick() {
+  fmt.Println("Tick!!!")
+
+  config := self.sm.Query(-1)              // type ShardMaster.Config
+  fmt.Printf("%T,%+v", config, config)
 }
+
+
+
+
 
 
 // tell the server to shut itself down.
