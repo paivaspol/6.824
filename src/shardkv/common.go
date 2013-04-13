@@ -59,7 +59,9 @@ type PutReply struct {
 ///////////////////////////////////////////////////////////////////////////////
 
 type ReceiveShardArgs struct {
-  //kvpairs []KVPair     // slice of Key/Value pairs
+  kvpairs []KVPair     // slice of Key/Value pairs
+  trans_to int         // config number the sender is transitioning to
+  shard_index int      // index 
 }
 
 type ReceiveShardReply struct {

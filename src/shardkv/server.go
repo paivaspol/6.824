@@ -18,6 +18,7 @@ const (
   Get = "Get"
   Put = "Put"
   ReConfigStart = "ReConfigStart"
+  ReceiveShard = "ReceiveShard"
   ReConfigEnd = "ReConfigEnd"
   Noop = "Noop"
 )
@@ -74,7 +75,6 @@ Does not respond until the requested operation has been applied.
 func (self *ShardKV) Get(args *GetArgs, reply *GetReply) error {
   self.mu.Lock()
   defer self.mu.Unlock()
-
   if self.config_now.Num == 0 {
     return nil
   }
@@ -100,7 +100,6 @@ Does not respond until the requested operation has been applied.
 func (self *ShardKV) Put(args *PutArgs, reply *PutReply) error {
   self.mu.Lock()
   defer self.mu.Unlock()
-
   if self.config_now.Num == 0 {
     return nil
   }
@@ -111,9 +110,9 @@ func (self *ShardKV) Put(args *PutArgs, reply *PutReply) error {
 
   self.perform_operations_prior_to(agreement_number)   // sync call, operations up to limit performed
   debug(fmt.Sprintf("(svr:%d,rg:%d) Put(ready2perform): Key:%s Val:%s agree_num:%d (req: %d:%d)", self.me, self.gid, args.Key, args.Value, agreement_number, args.Client_id, args.Request_id))
-  self.perform_operation(agreement_number, operation)  // perform requested Op
-
-  reply.Err = OK
+  op_result := self.perform_operation(agreement_number, operation)  // perform requested Op
+  put_result := op_result.(PutReply)                   // type assertion
+  reply.Err = put_result.Err
   return nil
 }
 
@@ -126,7 +125,19 @@ func (self *ShardKV) ReceiveShard(args *ReceiveShardArgs, reply *ReceiveShardRep
   self.mu.Lock()
   defer self.mu.Unlock()
   debug(fmt.Sprintf("(svr:%d,rg:%d) ReceiveShard:", self.me, self.gid))
+  if self.config_now.Num == 0 {
+    return nil
+  }
 
+  operation := makeOp(ReceiveShard, *args)             // requested Op
+  agreement_number := self.paxos_agree(operation)      // sync call returns after agreement reached
+  debug(fmt.Sprintf("(svr:%d,rg:%d) ReceiveShard: agree_num:%d op:%+v", self.me, self.gid, agreement_number, operation))
+
+  self.perform_operations_prior_to(agreement_number)   // sync call, operations up to limit performed
+  debug(fmt.Sprintf("(svr:%d,rg:%d) ReceiveShard(ready2perform): agree_num:%d op:%+v", self.me, self.gid, agreement_number))
+  op_result := self.perform_operation(agreement_number, operation)  // perform requested Op
+  receive_result := op_result.(ReceiveShardReply)      // type assertion
+  reply.Err = receive_result.Err
   return nil
 }
 
@@ -313,6 +324,9 @@ func (self *ShardKV) perform_operation(op_number int, operation Op) OpResult {
     case "Put":
       var put_args = (operation.Args).(PutArgs)     // type assertion, Args is a PutArgs
       result = self.put(&put_args)
+    case "ReceiveShard":
+      var receive_shard_args = (operation.Args).(ReceiveShardArgs)     // type assertion
+      result = self.receive_shard(&receive_shard_args)
     case "ReConfigStart":
       var re_config_start_args = (operation.Args).(ReConfigStartArgs)  // type assertion
       result = self.re_config_start(&re_config_start_args)
@@ -412,7 +426,7 @@ type KVPair struct {
 }
 
 func (self *ShardKV) send_shard(shard_index int, gid int64) {
-  fmt.Printf("Transferring shard %d to %d\n", shard_index, gid)
+  debug(fmt.Sprintf("(srv%d,rg:%d) Transfering shard:%d to:%d trans_to:%d", self.me, self.gid, shard_index, gid, self.transition_to))
   // collect the key/value pairs that are part of the shard to be transferred
   var kvpairs []KVPair
   for key,value := range self.storage {
@@ -420,24 +434,35 @@ func (self *ShardKV) send_shard(shard_index int, gid int64) {
       kvpairs = append(kvpairs, KVPair{Key: key, Value: value})
     }
   }
-  fmt.Println(kvpairs)
   servers := self.config_now.Groups[gid]
   next_rg_server := servers[rand.Intn(len(servers))]
-  fmt.Println(servers, next_rg_server)
 
   args := &ReceiveShardArgs{}    // declare and init struct with zero-valued fields
-  //args.kvpairs = kvpairs
+  args.kvpairs = kvpairs
+  args.trans_to = self.transition_to
+  args.shard_index = shard_index
   reply := ReceiveShardReply{}  // 
   // Attempt to send shard to random server in replica group now owning the shard
   ok := call(next_rg_server, "ShardKV.ReceiveShard", args, &reply)
-  if ok {
-    fmt.Println("Woo!")
-  } else {
-    fmt.Println("Lame")
+  if ok && reply.Err == OK {
+    self.remove_shard(shard_index)       // successfully sent to next replica group
+    return
   }
+}
 
-
-
+/*
+Used when memory of a shard that was live in the past can be deleted which removes all
+key/value pairs in storage corresponding to the shard and marks the self.shards entry
+for the shard as false since the shard has now been sent and should be the same as the
+goal shards state.
+*/ 
+func (self *ShardKV) remove_shard(shard_index int) {
+  for key, _ := range self.storage {
+    if key2shard(key) == shard_index {
+      delete(self.storage, key)
+    }
+  }
+  self.shards[shard_index] = false    // shard is no longer maintained on shardkv server
 }
 
 // ShardKV RPC operations (internal, performed after paxos agreement)
@@ -556,8 +581,39 @@ func (self *ShardKV) re_config_start(args *ReConfigStartArgs) OpResult {
 }
 
 func (self *ShardKV) receive_shard(args *ReceiveShardArgs) OpResult {
+  // client_request := request_identifier(args.Client_id, args.Request_id) // string
 
-  return nil
+  // reply, present := self.cache[client_request]
+  // if present {
+  //   fmt.Println("Already applied GET")
+  //   return reply       // client requested get has already been performed
+  // }
+
+  // client requested get has not been performed
+  receive_shard_reply := ReceiveShardReply{}
+
+  // not yet transitioning or working on an earlier transition
+  if self.transition_to < args.trans_to {
+    // do not cache the reply, expect sender to resend after we've caught up
+    receive_shard_reply.Err = NotReady
+    return receive_shard_reply
+
+  } else if self.transition_to == args.trans_to {
+    // working on same transition
+    for _, pair := range args.kvpairs {
+      fmt.Println(pair)
+      fmt.Println(pair.Key, pair.Value)
+      self.storage[pair.Key] = pair.Value
+    }
+    self.shards[args.shard_index] = true   // key/value pairs for the shard have been received 
+    receive_shard_reply.Err = OK
+    // cache?
+    return receive_shard_reply
+  } 
+  // self.transition_to > args.trans_to, already received all shards needed.
+  receive_shard_reply.Err = OK
+  // cache?
+  return receive_shard_reply
 }
 
 /*
