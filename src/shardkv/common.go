@@ -20,6 +20,10 @@ type Args interface{}
 type OpResult interface{}
 type Reply interface{}
 
+type NoopArgs struct {
+  
+}
+
 
 // GetArgs and GetReply
 ///////////////////////////////////////////////////////////////////////////////
