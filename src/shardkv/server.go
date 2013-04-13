@@ -12,13 +12,33 @@ import "syscall"
 import "encoding/gob"
 import "math/rand"
 import "shardmaster"
+import "strconv"
+
+const (
+  Get = "Get"
+  Put = "Put"
+)
 
 // field names in Paxos values should be capitalized. Paxos uses Go RPC library.
+/*
+A single client request may create multiple Ops, but Op.Request_id is used in 
+order to only perform the operation once.
+*/
 type Op struct {
-  Id string      // uuid
-  Name string    // Operation name: Get, Put, ConfigChange, Transfer, ConfigDone
-  Args Args      // GetArgs, PutArgs, etc.    
+  Id string          // uuid, identifies the operation itself
+  Request_id string  // combined, stringified client_id:request_id, identifies the client requested operation
+  Name string        // Operation name: Get, Put, ConfigChange, Transfer, ConfigDone
+  Args Args          // GetArgs, PutArgs, etc.    
 }
+
+func makeOp(name string, args Args, client_id int, request_id int) (Op) {
+  return Op{Id: generate_uuid(),
+            Request_id: strconv.Itoa(client_id) + ":" strconv.Itoa(request_id),
+            Name: name,
+            Args: args,
+            }
+}
+
 
 type ShardKV struct {
   mu sync.Mutex
@@ -39,8 +59,15 @@ type ShardKV struct {
 func (self *ShardKV) Get(args *GetArgs, reply *GetReply) error {
   self.mu.Lock()
   defer self.mu.Unlock()
-  debug(fmt.Sprintf("(svr:%d,rg:%d) Get: Key:%s (req: %d:%d)\n", self.me, self.gid, args.Key, args.Client_id, args.Request_id))
 
+  debug(fmt.Sprintf("(svr:%d,rg:%d) Get: Key:%s (req: %d:%d)\n", self.me, self.gid, args.Key, args.Client_id, args.Request_id))
+  operation := makeOp(Get, *args, args.Client_id, args.Request_id)   // requested Op
+  agreement_number := self.paxos_agree(operation)      // sync call returns after agreement reached
+  debug(fmt.Sprintf("(svr:%d,rg:%d) Get: Key:%s agree_num:%d (req: %d:%d)\n", self.me, self.gid, args.Key, agreement_number, args.Client_id, args.Request_id))
+
+  self.perform_operations_prior_to(agreement_number)   // sync call, operations up to limit performed
+  debug(fmt.Sprintf("(svr:%d,rg:%d) Get: Key:%s agree_num:%d (req: %d:%d)\n", self.me, self.gid, args.Key, agreement_number, args.Client_id, args.Request_id))
+  self.perform_operation(agreement_number, operation)  // perform requested Op
 
   return nil
 }
@@ -48,7 +75,16 @@ func (self *ShardKV) Get(args *GetArgs, reply *GetReply) error {
 func (self *ShardKV) Put(args *PutArgs, reply *PutReply) error {
   self.mu.Lock()
   defer self.mu.Unlock()
-  debug(fmt.Sprintf("(svr:%drg:%d) Put: Key:%s Val:%s (req: %d:%d)\n", self.me, self.gid, args.Key, args.Value, args.Client_id, args.Request_id))
+
+  debug(fmt.Sprintf("(svr:%d,rg:%d) Put: Key:%s Val:%s (req: %d:%d)\n", self.me, self.gid, args.Key, args.Value, args.Client_id, args.Request_id))
+  operation := makeOp(Get, *args, args.Client_id, args.Request_id)   // requested Op
+  agreement_number := self.paxos_agree(operation)      // sync call returns after agreement reached
+  debug(fmt.Sprintf("(svr:%d,rg:%d) Put: Key:%s Val:%s agree_num:%d (req: %d:%d)\n", self.me, self.gid, args.Key, args.Value, agreement_number, args.Client_id, args.Request_id))
+
+  self.perform_operations_prior_to(agreement_number)   // sync call, operations up to limit performed
+  debug(fmt.Sprintf("(svr:%d,rg:%d) Get: Key:%s agree_num:%d (req: %d:%d)\n", self.me, self.gid, args.Key, agreement_number, args.Client_id, args.Request_id))
+  self.perform_operation(agreement_number, operation)  // perform requested Op
+
 
 
   return nil
@@ -61,17 +97,160 @@ ShardKV server is a client of the ShardMaster service and can use ShardMaster cl
 stubs. 
 */
 func (self *ShardKV) tick() {
-  debug(fmt.Sprintf("(svr:%d,rg:%d) Tick: %+v \n", self.me, self.gid, self.config_now))
+  // debug(fmt.Sprintf("(svr:%d,rg:%d) Tick: %+v \n", self.me, self.gid, self.config_now.Shards))
 
-  config := self.sm.Query(-1)              // type ShardMaster.Config
-  if config.Num > self.config_now.Num {
-    // ShardMaster reporting a new Config
-    self.config_prior = self.config_now
-    self.config_now = config
-  }
+  // config := self.sm.Query(-1)              // type ShardMaster.Config
+  // if config.Num > self.config_now.Num {
+  //   // ShardMaster reporting a new Config
+  //   self.config_prior = self.config_now
+  //   self.config_now = config
+  // }
 
 
 }
+
+
+// Methods for Using the Paxos Library
+///////////////////////////////////////////////////////////////////////////////
+
+/*
+Accepts an operation struct and drives agreement among Shardkv paxos peers.
+Returns the int agreement number the paxos peers collectively decided to assign 
+the operation. Will not return until agreement is reached.
+*/
+func (self *ShardKV) paxos_agree(operation Op) (int) {
+  var agreement_number int
+  var decided_operation = Op{}
+
+  for decided_operation.Id != operation.Id {
+    agreement_number = self.available_agreement_number()
+    self.px.Start(agreement_number, operation)
+    decided_operation = self.await_paxos_decision(agreement_number).(Op)  // type assertion
+  }
+  return agreement_number
+}
+
+/*
+Returns the decision value reached by the paxos peers for the given agreement_number. 
+This is done by calling the Status method of the local Paxos instance periodically,
+frequently at first and less frequently later, using binary exponential backoff.
+*/
+func (self *ShardKV) await_paxos_decision(agreement_number int) (decided_val interface{}) {
+  sleep_max := 10 * time.Second
+  sleep_time := 10 * time.Millisecond
+  for {
+    has_decided, decided_val := self.px.Status(agreement_number)
+    if has_decided {
+      return decided_val
+    }
+    time.Sleep(sleep_time)
+    if sleep_time < sleep_max {
+      sleep_time *= 2
+    }
+  }
+  panic("unreachable")
+}
+
+/*
+Returns the next available agreement number (i.e. this paxos peer has not observed 
+that a value was decided upon for the agreement number). This agreement number
+may be tried when proposing new operations to peers.
+*/
+func (self *ShardKV) available_agreement_number() int {
+  return self.px.Max() + 1
+}
+
+/*
+Wrapper around the server's paxos instance px.Status call which converts the (bool,
+interface{}) value returned by Paxos into a (bool, Op) pair. 
+Accepts the agreement number which should be passed to the paxos Status call and 
+panics if the paxos value is not an Op.
+*/
+func (self *ShardKV) px_status_op(agreement_number int) (bool, Op){
+  has_decided, value := self.px.Status(agreement_number)
+  if has_decided {
+    operation, ok := value.(Op)    // type assertion, Op expected
+    if ok {
+        return true, operation
+    }
+    panic("expected Paxos agreement instance values of type Op at runtime. Type assertion failed.")
+  }
+  return false, Op{}
+}
+
+/*
+Attempts to use the given operation struct to drive agreement among Shardmaster paxos 
+peers using the given agreement number. Discovers the operation that was decided on
+for the specified agreement number.
+*/
+func (self *ShardKV) drive_discovery(operation Op, agreement_number int) {
+  self.px.Start(agreement_number, operation)
+  self.await_paxos_decision(agreement_number)
+}
+
+
+// Methods for Performing ShardKV Operations
+///////////////////////////////////////////////////////////////////////////////
+
+/*
+Synchronously performs all operations up to but NOT including the 'limit' op_number.
+The set of operations to be performed may not all yet be known to the local paxos
+instance so it will propose No_Ops to discover missing operations.
+*/
+func (self *ShardKV) perform_operations_prior_to(limit int) {
+  op_number := self.operation_number + 1     // op number currently being performed
+  has_decided, operation := self.px_status_op(op_number)
+
+  for op_number < limit {       // continue looping until op_number == limit - 1 has been performed   
+    //output_debug(fmt.Sprintf("(server%d) Performing_prior_to:%d op:%d op:%v %t\n", self.me, limit, op_number, operation, has_decided))
+    if has_decided {
+      self.perform_operation(op_number, operation)   // perform_operation mutates self.operation_number
+      op_number = self.operation_number + 1
+      has_decided, operation = self.px_status_op(op_number)
+    } else {
+      // noop := makeOp(Noop, NoopArgs{})             // Force Paxos instance to discover next operation or agree on a NO_OP
+      // self.drive_discovery(noop, op_number)  // proposes Noop or discovers decided operation.
+      // has_decided, operation = self.px_status_op(op_number)
+      // self.perform_operation(op_number, operation)
+      // op_number = self.last_operation_number() + 1
+      // has_decided, operation = self.px_status_op(op_number)
+    }
+  }
+}
+
+/*
+Accepts an Op operation which should be performed locally, reads the name of the
+operation and calls the appropriate handler by passing the operation arguments.
+Returns OpResult from performing the operation and increments (mutates) the ShardKV
+operation_number field to the latest pperation (performed in increasing order).
+*/
+func (self *ShardKV) perform_operation(op_number int, operation Op) OpResult {
+  debug(fmt.Sprintf("(srv:%d,rg:%d) Performing: op_num:%d op:%v", self.me, self.gid, op_number, operation))
+  var result OpResult
+
+  switch operation.Name {
+    case "Get":
+      fmt.Println("Performing GET!!")
+      //var join_args = (operation.Args).(JoinArgs)     // type assertion, Args is a JoinArgs
+      //result = self.join(&join_args)
+    case "Put":
+      fmt.Println("Performing PUT!!!")
+      //var leave_args = (operation.Args).(LeaveArgs)   // type assertion, Args is a LeaveArgs
+      //result = self.leave(&leave_args)
+    case "Noop":
+      // zero-valued result of type interface{} is nil
+    default:
+      panic(fmt.Sprintf("unexpected Op name '%s' cannot be performed", operation.Name))
+  }
+  self.operation_number = op_number     // latest operation that has been applied
+  self.px.Done(op_number)               // local Paxos no longer needs to remember Op
+  debug(fmt.Sprintf("(srv%d,rg:%d) Performed: op_num:%d op:%v", self.me, self.gid, op_number, operation))
+  return result
+}
+
+
+
+
 
 
 
@@ -104,8 +283,8 @@ func StartServer(gid int64, shardmasters []string,
   kv.sm = shardmaster.MakeClerk(shardmasters)
   // Your initialization code here.
   // Don't call Join().
-  kv.config_prior = ShardMaster.Config{}       // initial prior Config
-  kv.config_prior.Groups = map[int64]string{}  // initialize map
+  kv.config_prior = shardmaster.Config{}       // initial prior Config
+  kv.config_prior.Groups = map[int64][]string{}  // initialize map
   kv.operation_number = -1                     // first agreement number will be 0
 
   rpcs := rpc.NewServer()

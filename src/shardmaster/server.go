@@ -238,14 +238,11 @@ func (self *ShardMaster) perform_operations_prior_to(limit int) {
 /*
 Accepts an Op operation which should be performed locally, reads the name of the
 operation and calls the appropriate handler by passing the operation arguments.
-Obtains a Lock on the Server to perform the operation which mutates the Configs slice
-so individual operations do not need to worry about obtaining locks. Returns the Result 
-returned by the called operation and increments the ShardMaster operation_number to the
-latest operation which has been performed (performed in increasing order).
+Returns the Result returned by the called operation and increments the ShardMaster 
+operation_number to the latest operation which has been performed (performed in 
+increasing order).
 */
 func (self *ShardMaster) perform_operation(op_number int, operation Op) Result {
-  //self.mu.Lock()
-  //defer self.mu.Unlock()
   output_debug(fmt.Sprintf("(server%d) Performing: op_num:%d op:%v", self.me, op_number, operation))
   var result Result
 
