@@ -17,6 +17,8 @@ import "strconv"
 const (
   Get = "Get"
   Put = "Put"
+  ReConfigStart = "ReConfigStart"
+  ReConfigEnd = "ReConfigEnd"
   Noop = "Noop"
 )
 
@@ -49,12 +51,16 @@ type ShardKV struct {
   sm *shardmaster.Clerk   // Shardkv is client of ShardMaster. Can use stubs.
   px *paxos.Paxos         // Shardkv is client of Paxos library.
   gid int64               // my replica group ID
-  // Your definitions here.
+  // Configuration Management
   config_now shardmaster.Config    // latest Config of replica groups
   config_prior shardmaster.Config  // previous Config of replica groups
+  shards []bool                    // whether or not ith shard is present
+  transition_to int                // Num of new Config transitioning to, -1 if not transitioning
+  // Key/Value State
   operation_number int             // agreement number of latest applied operation
   storage map[string]string        // key/value data storage
   cache map[string]Reply           // "client_id:request_id" -> reply cache  
+
 }
 
 // Exported RPC functions (called by ShardKV clients)
@@ -110,12 +116,31 @@ ShardKV server is a client of the ShardMaster service and can use ShardMaster cl
 stubs. 
 */
 func (self *ShardKV) tick() {
-  // debug(fmt.Sprintf("(svr:%d,rg:%d) Tick: %+v \n", self.me, self.gid, self.config_now.Shards))
-  config := self.sm.Query(-1)              // type ShardMaster.Config
-  if config.Num > self.config_now.Num {
-    // ShardMaster reporting a new Config
-    self.config_prior = self.config_now
-    self.config_now = config
+  self.mu.Lock()
+  defer self.mu.Unlock()
+  debug(fmt.Sprintf("(svr:%d,rg:%d) Tick: %+v\n", self.me, self.gid, self.config_now))
+
+  if self.transition_to == -1 {     // Not currently changing Configs
+
+    // are there new Configs we this replica group should be conforming to?
+    config := self.sm.Query(-1)     // type ShardMaster.Config
+    if config.Num > self.config_now.Num {      // ShardMaster reporting a new Config
+      operation := makeOp(ReConfigStart, ReConfigStartArgs{})  // requested Op
+      agreement_number := self.paxos_agree(operation)      // sync call returns after agreement reached
+      debug(fmt.Sprintf("(svr:%d,rg:%d) ReConfigStart: agree_num:%d\n", self.me, self.gid, agreement_number))
+
+      self.perform_operations_prior_to(agreement_number)   // sync call, operations up to limit performed
+      debug(fmt.Sprintf("(svr:%d,rg:%d) ReConfigStart(ready2perform): agree_num:%d\n", self.me, self.gid, agreement_number))
+      self.perform_operation(agreement_number, operation)  // perform requested Op
+    }
+    // Otherwise, no new Config and no action needed
+
+  } else {                           // Currently changing Configs
+    // broadcast
+    // receive
+    // check whether done
+    fmt.Println("Currently changing configs!!")
+
   }
 
 }
@@ -244,8 +269,12 @@ func (self *ShardKV) perform_operation(op_number int, operation Op) OpResult {
       var get_args = (operation.Args).(GetArgs)     // type assertion, Args is a GetArgs
       result = self.get(&get_args)
     case "Put":
-      var put_args = (operation.Args).(PutArgs)   // type assertion, Args is a PutArgs
+      var put_args = (operation.Args).(PutArgs)     // type assertion, Args is a PutArgs
       result = self.put(&put_args)
+    case "ReConfigStart":
+      var re_config_start_args = (operation.Args).(ReConfigStartArgs)  // type assertion
+      result = self.re_config_start(&re_config_start_args)
+
     case "Noop":
       // zero-valued result of type interface{} is nil
     default:
@@ -316,12 +345,91 @@ func (self *ShardKV) put(args *PutArgs) OpResult {
   return put_reply
 }
 
+/*
+Local or fellow ShardKV peer has detected that ShardMaster has a more recent Config.
+All peers have paxos agreed that this operation marks the transition to the next 
+higher Config. Fetch the numerically next Config from the ShardMaster and fire first
+set of shard transfer broadcasts. Also set shard_transition_period to true. The
+shard_transition_period will be over once a peers paxos agree on a ReConfigEnd 
+operation.
+*/
+func (self *ShardKV) re_config_start(args *ReConfigStartArgs) OpResult {
+  fmt.Println("Reconfiguration detected by a peer")
+  if self.transition_to != -1 {      // If currently transitioning
+    // Multiple peers committed ReConfigStart operations, only need to start once
+    return nil
+  }
+  next_config := self.sm.Query(self.config_now.Num + 1)    // next Config
+  self.config_prior = self.config_now
+  self.config_now = next_config
+  self.transition_to = self.config_now.Num
+
+  // Represent the which shards are currently present. Evolves to become goal shard state
+  self.shards = make([]bool, len(self.config_prior.Shards))
+
+  for shard_index, gid := range self.config_prior.Shards {
+    if gid == self.gid {
+      self.shards[shard_index] = true
+    } else {
+      self.shards[shard_index] = false
+    }
+  }
+
+  shard_state(self.config_now.Shards, self.gid)
+
+  // shard_state = make([]bool, len(self.config_prior.Shards))
+  // for shard_index, gid := range self.config_now.Shards {
+  //   if gid == self.gid {
+  //     self.shards[shard_index] = true
+  //   } else {
+  //     self.shards[shard_index] = false
+  //   }
+  // }
+
+  fmt.Println(self.transition_to, self.config_prior, self.config_now, self.shards)
+  return nil
+}
+
+/*
+Local or fellow ShardKV peer has successfully recieved all needed shards for the
+new Config (thus other peers can determine from the paxos log) and has received
+acks from replica groups that were to receive shards from this replica group during
+the transition tofrom all replica groups that 
+*/
+
+// transition period set to false
+// all peers will perform the operations to catch up?? 
+// stop transfering shards to other replica groups
+// start handling requests again
+
+
+
+
 
 // Helpers
 ///////////////////////////////////////////////////////////////////////////////
 
 func request_identifier(client_id int, request_id int) string {
   return strconv.Itoa(client_id) + ":" + strconv.Itoa(request_id)
+}
+
+
+/*
+Converts a shards array of int64 gids (such as Config.Shards) into a slice of
+booleans of the same length where an entry is true if the gid of the given 
+shards array equals my_gid and false otherwise.
+*/
+func shard_state(shards [shardmaster.NShards]int64, my_gid int64) []bool {
+  shard_state := make([]bool, len(shards))
+  for shard_index, gid := range shards {
+    if gid == my_gid {
+      shard_state[shard_index] = true
+    } else {
+      shard_state[shard_index] = false
+    }
+  }
+  fmt.Println(shard_state)
+  return shard_state
 }
 
 
@@ -354,6 +462,9 @@ func StartServer(gid int64, shardmasters []string,
   gob.Register(Op{})
   gob.Register(GetArgs{})
   gob.Register(PutArgs{})
+  gob.Register(ReConfigStartArgs{})
+  gob.Register(ReConfigEndArgs{})
+  gob.Register(NoopArgs{})
 
   kv := new(ShardKV)
   kv.me = me
@@ -363,6 +474,9 @@ func StartServer(gid int64, shardmasters []string,
   // Don't call Join().
   kv.config_prior = shardmaster.Config{}  // initial prior Config
   kv.config_prior.Groups = map[int64][]string{}  // initialize map
+  kv.config_now = shardmaster.Config{}  // initial prior Config
+  kv.config_now.Groups = map[int64][]string{}  // initialize map
+  kv.transition_to = -1
   kv.operation_number = -1                // first agreement number will be 0
   kv.storage = map[string]string{}        // key/value data storage
   kv.cache =  map[string]Reply{}          // "client_id:request_id" -> reply cache  

@@ -20,9 +20,11 @@ type Args interface{}
 type OpResult interface{}
 type Reply interface{}
 
-type NoopArgs struct {
-  
-}
+type ReConfigStartArgs struct {}
+type ReConfigStartReply struct {}
+type ReConfigEndArgs struct {}
+type ReConfigEndReply struct {}
+type NoopArgs struct {}
 
 
 // GetArgs and GetReply
