@@ -16,6 +16,10 @@ const (
 )
 type Err string
 
+type Args interface{}
+type OpResult interface{}
+type Reply interface{}
+
 
 // GetArgs and GetReply
 ///////////////////////////////////////////////////////////////////////////////

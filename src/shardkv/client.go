@@ -10,7 +10,7 @@ import "math/rand"
 type Clerk struct {
   mu sync.Mutex               // one RPC at a time
   sm *shardmaster.Clerk       // App clients are clients of ShardMaster
-  config shardmaster.Config   // client knwon latest Config of replica groups
+  config shardmaster.Config   // client known latest Config of replica groups
   id int                      // unique id serves as a client identifier
   get_request_id func() int   // returns unique request ids (among requests by this client)
 }

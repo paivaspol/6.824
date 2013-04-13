@@ -13,9 +13,11 @@ import "encoding/gob"
 import "math/rand"
 import "shardmaster"
 
-
+// field names in Paxos values should be capitalized. Paxos uses Go RPC library.
 type Op struct {
-  // Your definitions here.
+  Id string      // uuid
+  Name string    // Operation name: Get, Put, ConfigChange, Transfer, ConfigDone
+  Args Args      // GetArgs, PutArgs, etc.    
 }
 
 type ShardKV struct {
@@ -24,27 +26,30 @@ type ShardKV struct {
   me int
   dead bool               // for testing
   unreliable bool         // for testing
-  sm *shardmaster.Clerk
-  px *paxos.Paxos
-
+  sm *shardmaster.Clerk   // Shardkv is client of ShardMaster. Can use stubs.
+  px *paxos.Paxos         // Shardkv is client of Paxos library.
   gid int64               // my replica group ID
-
   // Your definitions here.
+  config_now shardmaster.Config     // latest Config of replica groups
+  config_prior shardmaster.Config   // previous Config of replica groups
+  operation_number int    // agreement number of latest applied operation
 }
 
 
-func (kv *ShardKV) Get(args *GetArgs, reply *GetReply) error {
+func (self *ShardKV) Get(args *GetArgs, reply *GetReply) error {
+  self.mu.Lock()
+  defer self.mu.Unlock()
+  debug(fmt.Sprintf("(svr:%d,rg:%d) Get: Key:%s (req: %d:%d)\n", self.me, self.gid, args.Key, args.Client_id, args.Request_id))
 
-  // Your code here.
-  fmt.Println("Received a GET")
 
   return nil
 }
 
-func (kv *ShardKV) Put(args *PutArgs, reply *PutReply) error {
-  // Your code here.
+func (self *ShardKV) Put(args *PutArgs, reply *PutReply) error {
+  self.mu.Lock()
+  defer self.mu.Unlock()
+  debug(fmt.Sprintf("(svr:%drg:%d) Put: Key:%s Val:%s (req: %d:%d)\n", self.me, self.gid, args.Key, args.Value, args.Client_id, args.Request_id))
 
-  fmt.Println("Received a PUT")
 
   return nil
 }
@@ -56,10 +61,16 @@ ShardKV server is a client of the ShardMaster service and can use ShardMaster cl
 stubs. 
 */
 func (self *ShardKV) tick() {
-  fmt.Println("Tick!!!")
+  debug(fmt.Sprintf("(svr:%d,rg:%d) Tick: %+v \n", self.me, self.gid, self.config_now))
 
   config := self.sm.Query(-1)              // type ShardMaster.Config
-  fmt.Printf("%T,%+v", config, config)
+  if config.Num > self.config_now.Num {
+    // ShardMaster reporting a new Config
+    self.config_prior = self.config_now
+    self.config_now = config
+  }
+
+
 }
 
 
@@ -91,9 +102,11 @@ func StartServer(gid int64, shardmasters []string,
   kv.me = me
   kv.gid = gid
   kv.sm = shardmaster.MakeClerk(shardmasters)
-
   // Your initialization code here.
   // Don't call Join().
+  kv.config_prior = ShardMaster.Config{}       // initial prior Config
+  kv.config_prior.Groups = map[int64]string{}  // initialize map
+  kv.operation_number = -1                     // first agreement number will be 0
 
   rpcs := rpc.NewServer()
   rpcs.Register(kv)
