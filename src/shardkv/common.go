@@ -22,9 +22,7 @@ type OpResult interface{}
 type Reply interface{}
 
 type ReConfigStartArgs struct {}
-type ReConfigStartReply struct {}
 type ReConfigEndArgs struct {}
-type ReConfigEndReply struct {}
 type NoopArgs struct {}
 
 
@@ -54,6 +52,17 @@ type PutArgs struct {
 }
 
 type PutReply struct {
+  Err Err
+}
+
+// ReceiveShardArgs and ReceiveShardReply
+///////////////////////////////////////////////////////////////////////////////
+
+type ReceiveShardArgs struct {
+  //kvpairs []KVPair     // slice of Key/Value pairs
+}
+
+type ReceiveShardReply struct {
   Err Err
 }
 

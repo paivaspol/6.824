@@ -118,6 +118,19 @@ func (self *ShardKV) Put(args *PutArgs, reply *PutReply) error {
 }
 
 /*
+Accepts a ReceiveShard, starts and awaits Paxos agreement for the op, performs all
+operations up to and then including the requested operation.
+Does not respond until the requested operation has been applied.
+*/
+func (self *ShardKV) ReceiveShard(args *ReceiveShardArgs, reply *ReceiveShardReply) error {
+  self.mu.Lock()
+  defer self.mu.Unlock()
+  debug(fmt.Sprintf("(svr:%d,rg:%d) ReceiveShard:", self.me, self.gid))
+
+  return nil
+}
+
+/*
 Queries the ShardMaster for a new configuraton. If there is one, re-configure this
 shardkv server to conform to the new configuration.
 ShardKV server is a client of the ShardMaster service and can use ShardMaster client
@@ -158,11 +171,18 @@ func (self *ShardKV) tick() {
     // Otherwise, no new Config and no action needed
 
   } else {                           // Currently changing Configs
-    // broadcast
-    // receive
-    // check whether done
-    fmt.Println("Currently changing configs!!")
+    debug(fmt.Sprintf("(svr:%d,rg:%d) ConfigTransition: %+v, %+v", self.me, self.gid, self.config_now, self.shards))
+    self.broadcast_shards()
 
+    if self.done_sending_shards() && self.done_receiving_shards() {
+      operation := makeOp(ReConfigEnd, ReConfigEndArgs{})  // requested Op
+      agreement_number := self.paxos_agree(operation)      // sync call returns after agreement reached
+      debug(fmt.Sprintf("(svr:%d,rg:%d) ReConfigEnd: agree_num:%d", self.me, self.gid, agreement_number))
+
+      self.perform_operations_prior_to(agreement_number)   // sync call, operations up to limit performed
+      debug(fmt.Sprintf("(svr:%d,rg:%d) ReConfigEnd(ready2perform): agree_num:%d", self.me, self.gid, agreement_number))
+      self.perform_operation(agreement_number, operation)  // perform requested Op
+    }
   }
 
 }
@@ -296,6 +316,9 @@ func (self *ShardKV) perform_operation(op_number int, operation Op) OpResult {
     case "ReConfigStart":
       var re_config_start_args = (operation.Args).(ReConfigStartArgs)  // type assertion
       result = self.re_config_start(&re_config_start_args)
+    case "ReConfigEnd":
+      var re_config_end_args = (operation.Args).(ReConfigEndArgs)     // type assertion
+      result = self.re_config_end(&re_config_end_args)
     case "Noop":
       // zero-valued result of type interface{} is nil
     default:
@@ -349,6 +372,73 @@ func shard_state(shards [shardmaster.NShards]int64, my_gid int64) []bool {
   return shard_state
 }
 
+func (self *ShardKV) done_sending_shards() bool {
+  goal_shards := shard_state(self.config_now.Shards, self.gid)
+  for shard_index, _ := range self.shards {
+    if self.shards[shard_index] == true && goal_shards[shard_index] == false {
+      // still at least one send has not been acked
+      return false
+    }
+  } 
+  return true
+}
+
+func (self *ShardKV) done_receiving_shards() bool {
+  goal_shards := shard_state(self.config_now.Shards, self.gid)
+  for shard_index, _ := range self.shards {
+    if self.shards[shard_index] == false && goal_shards[shard_index] == true {
+      // still at least one send has not been received
+      return false
+    }
+  } 
+  return true
+}
+
+func (self *ShardKV) broadcast_shards() {
+  goal_shards := shard_state(self.config_now.Shards, self.gid)
+  for shard_index, _ := range self.shards {
+    if self.shards[shard_index] == true && goal_shards[shard_index] == false {
+      // shard_index should be transferred to gid in new config
+      new_replica_group_gid := self.config_now.Shards[shard_index]
+      self.send_shard(shard_index, new_replica_group_gid)
+    }
+  } 
+  return
+}
+
+type KVPair struct {
+  Key string
+  Value string
+}
+
+func (self *ShardKV) send_shard(shard_index int, gid int64) {
+  fmt.Printf("Transferring shard %d to %d\n", shard_index, gid)
+  // collect the key/value pairs that are part of the shard to be transferred
+  var kvpairs []KVPair
+  for key,value := range self.storage {
+    if key2shard(key) == shard_index {
+      kvpairs = append(kvpairs, KVPair{Key: key, Value: value})
+    }
+  }
+  fmt.Println(kvpairs)
+  servers := self.config_now.Groups[gid]
+  next_rg_server := servers[rand.Intn(len(servers))]
+  fmt.Println(servers, next_rg_server)
+
+  args := &ReceiveShardArgs{}    // declare and init struct with zero-valued fields
+  //args.kvpairs = kvpairs
+  reply := ReceiveShardReply{}  // 
+  // Attempt to send shard to random server in replica group now owning the shard
+  ok := call(next_rg_server, "ShardKV.ReceiveShard", args, &reply)
+  if ok {
+    fmt.Println("Woo!")
+  } else {
+    fmt.Println("Lame")
+  }
+
+
+
+}
 
 // ShardKV RPC operations (internal, performed after paxos agreement)
 ///////////////////////////////////////////////////////////////////////////////
@@ -465,20 +555,25 @@ func (self *ShardKV) re_config_start(args *ReConfigStartArgs) OpResult {
   return nil
 }
 
+func (self *ShardKV) receive_shard(args *ReceiveShardArgs) OpResult {
+
+  return nil
+}
+
 /*
 Local or fellow ShardKV peer has successfully recieved all needed shards for the
 new Config (thus other peers can determine from the paxos log) and has received
 acks from replica groups that were to receive shards from this replica group during
 the transition tofrom all replica groups that 
 */
-
-// transition period set to false
-// all peers will perform the operations to catch up?? 
-// stop transfering shards to other replica groups
-// start handling requests again
-
-
-
+func (self *ShardKV) re_config_end(args *ReConfigEndArgs) OpResult {
+  if self.transition_to == -1 {
+    fmt.Println("Already stopped transitioning")
+    return nil
+  }
+  self.transition_to = -1            // no longer in transition to a new config
+  return nil
+}
 
 
 // Helpers
@@ -487,6 +582,12 @@ the transition tofrom all replica groups that
 func request_identifier(client_id int, request_id int) string {
   return strconv.Itoa(client_id) + ":" + strconv.Itoa(request_id)
 }
+
+func internal_request_identifier(client_id int, request_id int) string {
+  return "i" + request_identifier(client_id, request_id)
+}
+
+
 
 
 
@@ -521,6 +622,7 @@ func StartServer(gid int64, shardmasters []string,
   gob.Register(PutArgs{})
   gob.Register(ReConfigStartArgs{})
   gob.Register(ReConfigEndArgs{})
+  gob.Register(ReceiveShardArgs{})
   gob.Register(NoopArgs{})
 
   kv := new(ShardKV)
