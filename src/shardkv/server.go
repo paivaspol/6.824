@@ -12,7 +12,7 @@ import "syscall"
 import "encoding/gob"
 import "math/rand"
 import "shardmaster"
-//import "strconv"
+import "strconv"
 
 const (
   Get = "Get"
@@ -57,7 +57,14 @@ type ShardKV struct {
   cache map[string]Reply           // "client_id:request_id" -> reply cache  
 }
 
+// Exported RPC functions (called by ShardKV clients)
+///////////////////////////////////////////////////////////////////////////////
 
+/*
+Accepts a Get request, starts and awaits Paxos agreement for the op, performs all
+operations up to and then including the requested operation.
+Does not respond until the requested operation has been applied.
+*/
 func (self *ShardKV) Get(args *GetArgs, reply *GetReply) error {
   self.mu.Lock()
   defer self.mu.Unlock()
@@ -67,24 +74,32 @@ func (self *ShardKV) Get(args *GetArgs, reply *GetReply) error {
   debug(fmt.Sprintf("(svr:%d,rg:%d) Get: Key:%s agree_num:%d (req: %d:%d)\n", self.me, self.gid, args.Key, agreement_number, args.Client_id, args.Request_id))
 
   self.perform_operations_prior_to(agreement_number)   // sync call, operations up to limit performed
-  debug(fmt.Sprintf("(svr:%d,rg:%d) Get : Key:%s agree_num:%d (req: %d:%d)\n", self.me, self.gid, args.Key, agreement_number, args.Client_id, args.Request_id))
-  self.perform_operation(agreement_number, operation)  // perform requested Op
-
+  debug(fmt.Sprintf("(svr:%d,rg:%d) Get(ready2perform): Key:%s agree_num:%d (req: %d:%d)\n", self.me, self.gid, args.Key, agreement_number, args.Client_id, args.Request_id))
+  op_result := self.perform_operation(agreement_number, operation)  // perform requested Op
+  get_result := op_result.(GetReply)                   // type assertion
+  reply.Value = get_result.Value
+  reply.Err = get_result.Err
   return nil
 }
 
+/*
+Accepts a Put request, starts and awaits Paxos agreement for the op, performs all
+operations up to and then including the requested operation.
+Does not respond until the requested operation has been applied.
+*/
 func (self *ShardKV) Put(args *PutArgs, reply *PutReply) error {
   self.mu.Lock()
   defer self.mu.Unlock()
 
-  operation := makeOp(Get, *args)                      // requested Op
+  operation := makeOp(Put, *args)                      // requested Op
   agreement_number := self.paxos_agree(operation)      // sync call returns after agreement reached
   debug(fmt.Sprintf("(svr:%d,rg:%d) Put: Key:%s Val:%s agree_num:%d (req: %d:%d)\n", self.me, self.gid, args.Key, args.Value, agreement_number, args.Client_id, args.Request_id))
 
   self.perform_operations_prior_to(agreement_number)   // sync call, operations up to limit performed
-  debug(fmt.Sprintf("(svr:%d,rg:%d) Put: Key:%s agree_num:%d (req: %d:%d)\n", self.me, self.gid, args.Key, agreement_number, args.Client_id, args.Request_id))
+  debug(fmt.Sprintf("(svr:%d,rg:%d) Put(ready2perform): Key:%s Val:%s agree_num:%d (req: %d:%d)\n", self.me, self.gid, args.Key, args.Value, agreement_number, args.Client_id, args.Request_id))
   self.perform_operation(agreement_number, operation)  // perform requested Op
 
+  reply.Err = OK
   return nil
 }
 
@@ -226,13 +241,11 @@ func (self *ShardKV) perform_operation(op_number int, operation Op) OpResult {
 
   switch operation.Name {
     case "Get":
-      fmt.Println("Performing GET!!")
-      //var join_args = (operation.Args).(JoinArgs)     // type assertion, Args is a JoinArgs
-      //result = self.join(&join_args)
+      var get_args = (operation.Args).(GetArgs)     // type assertion, Args is a GetArgs
+      result = self.get(&get_args)
     case "Put":
-      fmt.Println("Performing PUT!!!")
-      //var leave_args = (operation.Args).(LeaveArgs)   // type assertion, Args is a LeaveArgs
-      //result = self.leave(&leave_args)
+      var put_args = (operation.Args).(PutArgs)   // type assertion, Args is a PutArgs
+      result = self.put(&put_args)
     case "Noop":
       // zero-valued result of type interface{} is nil
     default:
@@ -240,7 +253,7 @@ func (self *ShardKV) perform_operation(op_number int, operation Op) OpResult {
   }
   self.operation_number = op_number     // latest operation that has been applied
   self.px.Done(op_number)               // local Paxos no longer needs to remember Op
-  debug(fmt.Sprintf("(srv%d,rg:%d) Performed: op_num:%d op:%v", self.me, self.gid, op_number, operation))
+  debug(fmt.Sprintf("(srv%d,rg:%d) Performed: op_num:%d op:%v result:%+v", self.me, self.gid, op_number, operation, result))
   return result
 }
 
@@ -254,32 +267,61 @@ Mutates Caller responsible for obtaining
 a ShardMaster lock.
 */
 func (self *ShardKV) get(args *GetArgs) OpResult {
-  fmt.Println("Performing GET!")
-  // prior_config := self.configs[len(self.configs)-1]   // previous Config in ShardMaster.configs
-  // config := prior_config.copy()                       // newly created Config
+  client_request := request_identifier(args.Client_id, args.Request_id) // string
 
-  // config.add_replica_group(args.GID, args.Servers)
-  // config.promote_shards_from_nonvalids()
-  // config.rebalance(1)
-  // self.configs = append(self.configs, config)
-  return nil
+  reply, present := self.cache[client_request]
+  if present {
+    fmt.Println("Already applied GET")
+    return reply       // client requested get has already been performed
+  }
+  // client requested get has not been performed
+  get_reply := GetReply{}
+  value, present := self.storage[args.Key]
+  if present {
+    get_reply.Value = value
+    get_reply.Err = OK
+  } else {
+    get_reply.Value = ""
+    get_reply.Err = ErrNoKey
+  }
+
+  // cache put reply so duplicate client requests can be caught and not performed
+  self.cache[client_request] = get_reply    
+  return get_reply
 }
 
 /*
 
 Mutates Caller responsible for obtaining
 a ShardMaster lock.
+Handles duplicate client requests (same client_id and request_id in the PutArgs) by
+returning the cached reply for later duplicated attempts to perform the request.
 */
 func (self *ShardKV) put(args *PutArgs) OpResult {
-  fmt.Println("Performing PUT!!")
-  // prior_config := self.configs[len(self.configs)-1]   // previous Config in ShardMaster.configs
-  // config := prior_config.copy()                       // newly created Config
-  
-  // config.remove_replica_group(args.GID)
-  // config.reassign_shards(args.GID)
-  // config.rebalance(1)
-  // self.configs = append(self.configs, config)
-  return nil
+  client_request := request_identifier(args.Client_id, args.Request_id) // string
+
+  reply, present := self.cache[client_request]
+  // client requested put has already been performed
+  if present {
+    fmt.Println("Already applied PUT")
+    return reply
+  }
+  // client requested put has not been performed
+
+  self.storage[args.Key] = args.Value
+  put_reply := PutReply{Err: OK}             // reply for successful Put request
+
+  // cache put reply so duplicate client requests can be caught and not performed
+  self.cache[client_request] = put_reply    
+  return put_reply
+}
+
+
+// Helpers
+///////////////////////////////////////////////////////////////////////////////
+
+func request_identifier(client_id int, request_id int) string {
+  return strconv.Itoa(client_id) + ":" + strconv.Itoa(request_id)
 }
 
 
@@ -319,9 +361,11 @@ func StartServer(gid int64, shardmasters []string,
   kv.sm = shardmaster.MakeClerk(shardmasters)
   // Your initialization code here.
   // Don't call Join().
-  kv.config_prior = shardmaster.Config{}       // initial prior Config
+  kv.config_prior = shardmaster.Config{}  // initial prior Config
   kv.config_prior.Groups = map[int64][]string{}  // initialize map
-  kv.operation_number = -1                     // first agreement number will be 0
+  kv.operation_number = -1                // first agreement number will be 0
+  kv.storage = map[string]string{}        // key/value data storage
+  kv.cache =  map[string]Reply{}          // "client_id:request_id" -> reply cache  
 
   rpcs := rpc.NewServer()
   rpcs.Register(kv)
