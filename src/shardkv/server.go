@@ -126,9 +126,7 @@ stubs.
 func (self *ShardKV) tick() {
   self.mu.Lock()
   defer self.mu.Unlock()
-
-
-  debug(fmt.Sprintf("(svr:%d,rg:%d) Tick: %+v", self.me, self.gid, self.config_now))
+  //debug(fmt.Sprintf("(svr:%d,rg:%d) Tick: %+v", self.me, self.gid, self.config_now))
 
   if self.transition_to == -1 {         // Not currently changing Configs
     // Special initial case
@@ -376,12 +374,10 @@ func (self *ShardKV) get(args *GetArgs) OpResult {
   // client requested get has not been performed
   get_reply := GetReply{}
 
-  fmt.Println("owns")
   if self.owns_shard(args.Key) {
-    fmt.Println("has")
     // currently or soon to be responsible for the key
     if self.has_shard(args.Key) {
-      // Currently has the needed shard. (note: config transition may still be in progress)
+      // currently has the needed shard (note: config transition may still be in progress)
       value, present := self.storage[args.Key]
       if present {
         get_reply.Value = value
@@ -390,7 +386,7 @@ func (self *ShardKV) get(args *GetArgs) OpResult {
         get_reply.Value = ""
         get_reply.Err = ErrNoKey
       }
-      // cache put reply so duplicate client requests can be caught and not performed
+      // cache get reply so duplicate client requests not performed
       self.cache[client_request] = get_reply    
       return get_reply
     }
@@ -399,35 +395,46 @@ func (self *ShardKV) get(args *GetArgs) OpResult {
     // do not cache, expecting client to retry after transition progress
     return get_reply
   }
-  // Otherwise, not replica group does not own the needed shard
+  // otherwise, the replica group does not own the needed shard
   get_reply.Err = ErrWrongGroup
   self.cache[client_request] = get_reply
   return get_reply   
 }
 
 /*
-
-Mutates Caller responsible for obtaining
-a ShardMaster lock.
-Handles duplicate client requests (same client_id and request_id in the PutArgs) by
-returning the cached reply for later duplicated attempts to perform the request.
 */
 func (self *ShardKV) put(args *PutArgs) OpResult {
   client_request := request_identifier(args.Client_id, args.Request_id) // string
 
   reply, present := self.cache[client_request]
-  // client requested put has already been performed
   if present {
     fmt.Println("Already applied PUT")
-    return reply
+    return reply                   // client requested put has already been performed
   }
+
   // client requested put has not been performed
+  put_reply := PutReply{}
 
-  self.storage[args.Key] = args.Value
-  put_reply := PutReply{Err: OK}             // reply for successful Put request
+  if self.owns_shard(args.Key) {
+    // currently or soon to be responsible for the key
+    if self.has_shard(args.Key) {
+      // currently has the needed shard (note: config transition may still be in progress)
+      self.storage[args.Key] = args.Value
+      put_reply := PutReply{Err: OK}             // reply for successful Put request
 
-  // cache put reply so duplicate client requests can be caught and not performed
-  self.cache[client_request] = put_reply    
+      // cache put reply so duplicate client requests not performed
+      self.cache[client_request] = put_reply    
+      return put_reply
+    }
+    // waiting to receive shard
+    put_reply.Err = NotReady
+    // do not cache, expecting client to retry after transition progress
+    return put_reply
+  }
+
+  // otherwise, the replica group does not own the needed shard
+  put_reply.Err = ErrWrongGroup
+  self.cache[client_request] = put_reply
   return put_reply
 }
 
