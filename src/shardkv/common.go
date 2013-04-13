@@ -11,6 +11,7 @@ package shardkv
 
 const (
   OK = "OK"
+  NotReady = "NotReady"
   ErrNoKey = "ErrNoKey"
   ErrWrongGroup = "ErrWrongGroup"
 )
