@@ -224,7 +224,7 @@ func (px *Paxos) proposer_role(agreement_number int, proposal_value interface{})
 
     if !majority_prepare {             // retry if no majority
       output_debug(fmt.Sprintf("Proposer [PrepareStage] (%s): agree_num: %d, prop_num: %d, Majority not reached on prepare", short_name(px.peers[px.me], 7), agreement_number, proposal_number))   
-      time.Sleep(time.Duration(rand.Intn(400)))
+      time.Sleep(time.Duration(rand.Intn(100)))
       continue
     }
 
@@ -251,7 +251,7 @@ func (px *Paxos) proposer_role(agreement_number int, proposal_value interface{})
       break
     } else {
       output_debug(fmt.Sprintf("Proposer [AcceptStage] (%s): agree_num: %d, Majority not reached on accept", short_name(px.peers[px.me], 7), agreement_number))
-      time.Sleep(time.Duration(rand.Intn(400)))
+      time.Sleep(time.Duration(rand.Intn(100)))
       continue
     }
 

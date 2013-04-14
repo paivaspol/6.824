@@ -18,6 +18,7 @@ const (
   Get = "Get"
   Put = "Put"
   ReConfigStart = "ReConfigStart"
+  SentShard = "SentShard"
   ReceiveShard = "ReceiveShard"
   ReConfigEnd = "ReConfigEnd"
   Noop = "Noop"
@@ -75,9 +76,9 @@ Does not respond until the requested operation has been applied.
 func (self *ShardKV) Get(args *GetArgs, reply *GetReply) error {
   self.mu.Lock()
   defer self.mu.Unlock()
-  // Don't accept if no initial config yet or if a transition is in progress.
-  if self.config_now.Num == 0 || self.transition_to != -1 {
-    fmt.Println("No GET right now")
+  // Don't accept if no initial config yet.
+  if self.config_now.Num == 0 {
+    debug(fmt.Sprintf("No GET right now"))
     return nil
   }
 
@@ -102,9 +103,9 @@ Does not respond until the requested operation has been applied.
 func (self *ShardKV) Put(args *PutArgs, reply *PutReply) error {
   self.mu.Lock()
   defer self.mu.Unlock()
-  // Don't accept if no initial config yet or if a transition is in progress.
-  if self.config_now.Num == 0 || self.transition_to != -1 {
-    fmt.Println("No PUT right now")
+  // Don't accept if no initial config yet.
+  if self.config_now.Num == 0 {
+    debug(fmt.Sprintf("No PUT right now"))
     return nil
   }
 
@@ -128,9 +129,9 @@ Does not respond until the requested operation has been applied.
 func (self *ShardKV) ReceiveShard(args *ReceiveShardArgs, reply *ReceiveShardReply) error {
   self.mu.Lock()
   defer self.mu.Unlock()
-  // Don't accept if no initial config yet or not transitioning.
-  if self.config_now.Num == 0 || self.transition_to == -1 {
-    fmt.Println("No receive right now")
+  // Don't accept if no initial config yet.
+  if self.config_now.Num == 0 {
+    debug(fmt.Sprintf("No receive right now"))
     return nil
   }
 
@@ -155,7 +156,7 @@ stubs.
 func (self *ShardKV) tick() {
   self.mu.Lock()
   defer self.mu.Unlock()
-  //debug(fmt.Sprintf("(svr:%d,rg:%d) Tick: %+v", self.me, self.gid, self.config_now))
+  self.ensure_updated()
 
   if self.transition_to == -1 {         // Not currently changing Configs
     // Special initial case
@@ -183,19 +184,14 @@ func (self *ShardKV) tick() {
       self.perform_operations_prior_to(agreement_number)   // sync call, operations up to limit performed
       debug(fmt.Sprintf("(svr:%d,rg:%d) ReConfigStart(ready2perform): agree_num:%d", self.me, self.gid, agreement_number))
       self.perform_operation(agreement_number, operation)  // perform requested Op
+    } else {
+      // Otherwise, no new Config and no action needed
+      debug(fmt.Sprintf("(svr:%d,rg:%d) NoActionNeeded %+v, %+v, %d", self.me, self.gid, self.config_now, self.shards, self.transition_to))
     }
-    // Otherwise, no new Config and no action needed
-    debug(fmt.Sprintf("(svr:%d,rg:%d) NoActionNeeded %+v, %+v", self.me, self.gid, self.config_now, self.shards))
-
   } else {                           // Currently changing Configs
-    debug(fmt.Sprintf("(svr:%d,rg:%d) ConfigTransition: %+v, %+v, %t, %t", self.me, self.gid, self.config_now, self.shards, self.done_sending_shards(), self.done_receiving_shards()))
+    debug(fmt.Sprintf("(svr:%d,rg:%d) MidTransition: %+v, %+v, %t, %t", self.me, self.gid, self.config_now, self.shards, self.done_sending_shards(), self.done_receiving_shards()))
     self.broadcast_shards()
-    next_op_number := self.operation_number
-    noop := makeOp(Noop, NoopArgs{})                          // Force Paxos instance to discover next operation or agree on a NO_OP
-    discov_operation := self.drive_discovery(noop, next_op_number)  // proposes Noop or discovers decided operation.
-    self.perform_operations_prior_to(next_op_number)          // sync call, operations up to limit performed
-    self.perform_operation(next_op_number, discov_operation)  // perform requested Op
-
+    
     if self.done_sending_shards() && self.done_receiving_shards() {
       operation := makeOp(ReConfigEnd, ReConfigEndArgs{})  // requested Op
       agreement_number := self.paxos_agree(operation)      // sync call returns after agreement reached
@@ -206,7 +202,7 @@ func (self *ShardKV) tick() {
       self.perform_operation(agreement_number, operation)  // perform requested Op
     }
   }
-
+  return
 }
 
 
@@ -289,6 +285,18 @@ func (self *ShardKV) drive_discovery(operation Op, agreement_number int) Op {
   return decided_operation
 }
 
+/*
+Performs Paxos agreement to submit a Noop operation and performs all operations up to
+and including the agreed upon Noop
+*/
+func (self *ShardKV) ensure_updated() {
+  noop := makeOp(Noop, NoopArgs{})                     // requested Op
+  agreement_number := self.paxos_agree(noop)           // sync call returns after agreement reached
+
+  self.perform_operations_prior_to(agreement_number)   // sync call, operations up to limit performed
+  self.perform_operation(agreement_number, noop)       // perform requested Op
+}
+
 
 // Methods for Performing ShardKV Operations
 ///////////////////////////////////////////////////////////////////////////////
@@ -342,6 +350,9 @@ func (self *ShardKV) perform_operation(op_number int, operation Op) OpResult {
     case "ReConfigStart":
       var re_config_start_args = (operation.Args).(ReConfigStartArgs)  // type assertion
       result = self.re_config_start(&re_config_start_args)
+    case "SentShard":
+      var sent_shard_args = (operation.Args).(SentShardArgs)           // type assertion
+      result = self.sent_shard(&sent_shard_args)
     case "ReConfigEnd":
       var re_config_end_args = (operation.Args).(ReConfigEndArgs)     // type assertion
       result = self.re_config_end(&re_config_end_args)
@@ -448,6 +459,22 @@ func (self *ShardKV) send_shard(shard_index int, gid int64) {
   }
 
   servers := self.config_now.Groups[gid]
+  // next_rg_server := servers[rand.Intn(len(servers))]
+  // args := &ReceiveShardArgs{}    // declare and init struct with zero-valued fields
+  //   args.Kvpairs = kvpairs
+  //   args.Trans_to = self.transition_to
+  //   args.Shard_index = shard_index
+  //   var reply ReceiveShardReply
+  //   // Attempt to send shard to random server in replica group now owning the shard
+  //   ok := call(next_rg_server, "ShardKV.ReceiveShard", args, &reply)
+  //   if ok && reply.Err == OK {
+  //     sent_shard_args := SentShardArgs{Shard_index: shard_index, Trans_to: self.transition_to}
+  //     operation := makeOp(SentShard, sent_shard_args)      // requested Op
+  //     agreement_number := self.paxos_agree(operation)      // sync call returns after agreement reached
+  //     self.perform_operations_prior_to(agreement_number)   // sync call, operations up to limit performed
+  //     self.perform_operation(agreement_number, operation)  // perform requested Op
+  //   }
+
   for _, srv := range servers {
     args := &ReceiveShardArgs{}    // declare and init struct with zero-valued fields
     args.Kvpairs = kvpairs
@@ -457,11 +484,14 @@ func (self *ShardKV) send_shard(shard_index int, gid int64) {
     // Attempt to send shard to random server in replica group now owning the shard
     ok := call(srv, "ShardKV.ReceiveShard", args, &reply)
     if ok && reply.Err == OK {
-      self.remove_shard(shard_index)       // successfully sent to next replica group
+      sent_shard_args := SentShardArgs{Shard_index: shard_index, Trans_to: self.transition_to}
+      operation := makeOp(SentShard, sent_shard_args)      // requested Op
+      agreement_number := self.paxos_agree(operation)      // sync call returns after agreement reached
+      self.perform_operations_prior_to(agreement_number)   // sync call, operations up to limit performed
+      self.perform_operation(agreement_number, operation)  // perform requested Op
       return
     }
   }
-  //next_rg_server := servers[rand.Intn(len(servers))]
 }
 
 /*
@@ -496,7 +526,7 @@ func (self *ShardKV) get(args *GetArgs) OpResult {
 
   reply, present := self.cache[client_request]
   if present {
-    fmt.Println("Already applied GET")
+    debug(fmt.Sprintf("Already appplied GET"))
     return reply       // client requested get has already been performed
   }
 
@@ -526,7 +556,7 @@ func (self *ShardKV) get(args *GetArgs) OpResult {
   }
   // otherwise, the replica group does not own the needed shard
   get_reply.Err = ErrWrongGroup
-  //self.cache[client_request] = get_reply
+  // client may know a new config that shardkv doesn't. Don't cache rejection.
   return get_reply   
 }
 
@@ -537,7 +567,7 @@ func (self *ShardKV) put(args *PutArgs) OpResult {
 
   reply, present := self.cache[client_request]
   if present {
-    fmt.Println("Already applied PUT")
+    debug(fmt.Sprintf("Already applied PUT"))
     return reply                   // client requested put has already been performed
   }
 
@@ -563,7 +593,7 @@ func (self *ShardKV) put(args *PutArgs) OpResult {
 
   // otherwise, the replica group does not own the needed shard
   put_reply.Err = ErrWrongGroup
-  //self.cache[client_request] = put_reply
+  // client may know a new config that shardkv doesn't. Don't cache rejection.
   return put_reply
 }
 
@@ -599,7 +629,7 @@ func (self *ShardKV) receive_shard(args *ReceiveShardArgs) OpResult {
 
   reply, present := self.cache[client_request]
   if present {
-    fmt.Println("Already received shard")
+    debug(fmt.Sprintf("Already received shard"))
     return reply       // client requested ReceiveShard has already been performed
   }
 
@@ -609,15 +639,13 @@ func (self *ShardKV) receive_shard(args *ReceiveShardArgs) OpResult {
   // not yet transitioning or working on an earlier transition
   if self.transition_to < args.Trans_to {
     // do not cache the reply, expect sender to resend after we've caught up
-    fmt.Println("need to catch up")
+    debug(fmt.Sprintf("(srv:%d,rg:%d)Need to catch up. at:%d sender_config:%d", self.me, self.gid, self.transition_to, args.Trans_to))
     receive_shard_reply.Err = NotReady
     return receive_shard_reply
 
   } else if self.transition_to == args.Trans_to {
     // working on same transition
     for _, pair := range args.Kvpairs {
-      fmt.Println(pair)
-      fmt.Println(pair.Key, pair.Value)
       self.storage[pair.Key] = pair.Value
     }
     self.shards[args.Shard_index] = true   // key/value pairs for the shard have been received 
@@ -631,6 +659,15 @@ func (self *ShardKV) receive_shard(args *ReceiveShardArgs) OpResult {
   return receive_shard_reply
 }
 
+
+func (self *ShardKV) sent_shard(args *SentShardArgs) OpResult {
+  if self.transition_to == args.Trans_to {
+    self.remove_shard(args.Shard_index)
+  }
+  return nil
+}
+
+
 /*
 Local or fellow ShardKV peer has successfully recieved all needed shards for the
 new Config (thus other peers can determine from the paxos log) and has received
@@ -639,7 +676,7 @@ the transition tofrom all replica groups that
 */
 func (self *ShardKV) re_config_end(args *ReConfigEndArgs) OpResult {
   if self.transition_to == -1 {
-    fmt.Println("Already stopped transitioning")
+    debug(fmt.Sprintf("Already stopped transitioning"))
     return nil
   }
   self.transition_to = -1            // no longer in transition to a new config
@@ -657,16 +694,6 @@ func request_identifier(client_id int, request_id int) string {
 func internal_request_identifier(client_id int, request_id int) string {
   return "i" + request_identifier(client_id, request_id)
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -694,7 +721,9 @@ func StartServer(gid int64, shardmasters []string,
   gob.Register(ReConfigStartArgs{})
   gob.Register(ReConfigEndArgs{})
   gob.Register(ReceiveShardArgs{})
+  gob.Register(SentShardArgs{})
   gob.Register(NoopArgs{})
+  gob.Register(KVPair{})
 
   kv := new(ShardKV)
   kv.me = me
