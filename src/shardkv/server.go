@@ -124,7 +124,6 @@ Does not respond until the requested operation has been applied.
 func (self *ShardKV) ReceiveShard(args *ReceiveShardArgs, reply *ReceiveShardReply) error {
   self.mu.Lock()
   defer self.mu.Unlock()
-  debug(fmt.Sprintf("(svr:%d,rg:%d) ReceiveShard:", self.me, self.gid))
   if self.config_now.Num == 0 {
     return nil
   }
@@ -134,7 +133,7 @@ func (self *ShardKV) ReceiveShard(args *ReceiveShardArgs, reply *ReceiveShardRep
   debug(fmt.Sprintf("(svr:%d,rg:%d) ReceiveShard: agree_num:%d op:%+v", self.me, self.gid, agreement_number, operation))
 
   self.perform_operations_prior_to(agreement_number)   // sync call, operations up to limit performed
-  debug(fmt.Sprintf("(svr:%d,rg:%d) ReceiveShard(ready2perform): agree_num:%d op:%+v", self.me, self.gid, agreement_number))
+  debug(fmt.Sprintf("(svr:%d,rg:%d) ReceiveShard(ready2perform): agree_num:%d op:%+v", self.me, self.gid, agreement_number, operation))
   op_result := self.perform_operation(agreement_number, operation)  // perform requested Op
   receive_result := op_result.(ReceiveShardReply)      // type assertion
   reply.Err = receive_result.Err
@@ -180,6 +179,7 @@ func (self *ShardKV) tick() {
       self.perform_operation(agreement_number, operation)  // perform requested Op
     }
     // Otherwise, no new Config and no action needed
+    debug(fmt.Sprintf("(svr:%d,rg:%d) NoActionNeeded %+v, %+v", self.me, self.gid, self.config_now, self.shards))
 
   } else {                           // Currently changing Configs
     debug(fmt.Sprintf("(svr:%d,rg:%d) ConfigTransition: %+v, %+v", self.me, self.gid, self.config_now, self.shards))
@@ -340,7 +340,7 @@ func (self *ShardKV) perform_operation(op_number int, operation Op) OpResult {
   }
   self.operation_number = op_number     // latest operation that has been applied
   self.px.Done(op_number)               // local Paxos no longer needs to remember Op
-  debug(fmt.Sprintf("(srv%d,rg:%d) Performed: op_num:%d op:%v result:%+v", self.me, self.gid, op_number, operation, result))
+  debug(fmt.Sprintf("(srv:%d,rg:%d) Performed: op_num:%d op:%v result:%+v", self.me, self.gid, op_number, operation, result))
   return result
 }
 
@@ -438,9 +438,9 @@ func (self *ShardKV) send_shard(shard_index int, gid int64) {
   next_rg_server := servers[rand.Intn(len(servers))]
 
   args := &ReceiveShardArgs{}    // declare and init struct with zero-valued fields
-  args.kvpairs = kvpairs
-  args.trans_to = self.transition_to
-  args.shard_index = shard_index
+  args.Kvpairs = kvpairs
+  args.Trans_to = self.transition_to
+  args.Shard_index = shard_index
   reply := ReceiveShardReply{}  // 
   // Attempt to send shard to random server in replica group now owning the shard
   ok := call(next_rg_server, "ShardKV.ReceiveShard", args, &reply)
@@ -593,19 +593,19 @@ func (self *ShardKV) receive_shard(args *ReceiveShardArgs) OpResult {
   receive_shard_reply := ReceiveShardReply{}
 
   // not yet transitioning or working on an earlier transition
-  if self.transition_to < args.trans_to {
+  if self.transition_to < args.Trans_to {
     // do not cache the reply, expect sender to resend after we've caught up
     receive_shard_reply.Err = NotReady
     return receive_shard_reply
 
-  } else if self.transition_to == args.trans_to {
+  } else if self.transition_to == args.Trans_to {
     // working on same transition
-    for _, pair := range args.kvpairs {
+    for _, pair := range args.Kvpairs {
       fmt.Println(pair)
       fmt.Println(pair.Key, pair.Value)
       self.storage[pair.Key] = pair.Value
     }
-    self.shards[args.shard_index] = true   // key/value pairs for the shard have been received 
+    self.shards[args.Shard_index] = true   // key/value pairs for the shard have been received 
     receive_shard_reply.Err = OK
     // cache?
     return receive_shard_reply
