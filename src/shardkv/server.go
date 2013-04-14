@@ -75,7 +75,9 @@ Does not respond until the requested operation has been applied.
 func (self *ShardKV) Get(args *GetArgs, reply *GetReply) error {
   self.mu.Lock()
   defer self.mu.Unlock()
-  if self.config_now.Num == 0 {
+  // Don't accept if no initial config yet or if a transition is in progress.
+  if self.config_now.Num == 0 || self.transition_to != -1 {
+    fmt.Println("No GET right now")
     return nil
   }
 
@@ -100,7 +102,9 @@ Does not respond until the requested operation has been applied.
 func (self *ShardKV) Put(args *PutArgs, reply *PutReply) error {
   self.mu.Lock()
   defer self.mu.Unlock()
-  if self.config_now.Num == 0 {
+  // Don't accept if no initial config yet or if a transition is in progress.
+  if self.config_now.Num == 0 || self.transition_to != -1 {
+    fmt.Println("No PUT right now")
     return nil
   }
 
@@ -124,7 +128,9 @@ Does not respond until the requested operation has been applied.
 func (self *ShardKV) ReceiveShard(args *ReceiveShardArgs, reply *ReceiveShardReply) error {
   self.mu.Lock()
   defer self.mu.Unlock()
-  if self.config_now.Num == 0 {
+  // Don't accept if no initial config yet or not transitioning.
+  if self.config_now.Num == 0 || self.transition_to == -1 {
+    fmt.Println("No receive right now")
     return nil
   }
 
